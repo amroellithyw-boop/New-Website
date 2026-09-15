@@ -18,10 +18,10 @@ Anything unmatched on either side is surfaced, never silently absorbed.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from itertools import combinations
-from typing import Iterable, Sequence
 
 from ..canonical.models import Ledger, Transaction, TransactionLine
 from ..money import Money, msum
@@ -168,7 +168,7 @@ class ReconciliationResult:
 
     @property
     def unmatched_ledger_total(self) -> Money:
-        return msum((l.amount for l in self.unmatched_ledger), self.currency)
+        return msum((line.amount for line in self.unmatched_ledger), self.currency)
 
     @property
     def match_rate(self) -> float:
@@ -214,14 +214,14 @@ def reconcile(
     cur = statement.opening_balance.currency
 
     ledger_items = [
-        LedgerItem(txn=t, line=l)
-        for (t, l) in ledger.postings(acct_id)
+        LedgerItem(txn=t, line=line)
+        for (t, line) in ledger.postings(acct_id)
         if statement.start <= t.txn_date <= statement.end
     ]
     ledger_closing = Money.zero(cur)
-    for t, l in ledger.postings(acct_id):
+    for t, line in ledger.postings(acct_id):
         if t.txn_date <= statement.end:
-            ledger_closing = ledger_closing + l.amount
+            ledger_closing = ledger_closing + line.amount
 
     remaining_stmt: list[StatementLine] = list(statement.lines)
     remaining_ldg: list[LedgerItem] = list(ledger_items)

@@ -7,9 +7,7 @@ described as a rounding issue.
 
 from __future__ import annotations
 
-from datetime import timedelta
-from decimal import Decimal
-from typing import Iterable
+from collections.abc import Iterable
 
 from ...canonical.enums import RiskTier, Severity
 from ...evidence.packet import EvidenceRef

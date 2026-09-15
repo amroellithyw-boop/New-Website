@@ -7,9 +7,9 @@ shape, so they share one implementation with different movement classifiers.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date
-from typing import Callable, Iterable, Sequence
 
 from ..canonical.enums import AccountSubtype
 from ..canonical.models import Ledger, Transaction, TransactionLine
@@ -95,8 +95,8 @@ def build_rollforward(
     opening = balance_of(ledger, account_id, as_of=_day_before(start))
     closing = balance_of(ledger, account_id, as_of=end)
     movements = tuple(
-        Movement(txn=t, line=l, category=classifier(t, l))
-        for (t, l) in sorted(
+        Movement(txn=t, line=line, category=classifier(t, line))
+        for (t, line) in sorted(
             ledger.postings(account_id), key=lambda tl: (tl[0].txn_date, tl[1].line_id)
         )
         if start <= t.txn_date <= end
@@ -174,8 +174,8 @@ def debt_rollforward(ledger: Ledger, debt_id: str, start: date, end: date) -> De
     if debt.interest_account_id:
         interest = msum(
             (
-                l.amount
-                for (t, l) in ledger.postings(debt.interest_account_id)
+                line.amount
+                for (t, line) in ledger.postings(debt.interest_account_id)
                 if start <= t.txn_date <= end
             ),
             cur,

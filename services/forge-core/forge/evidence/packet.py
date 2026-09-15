@@ -19,10 +19,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any
 
 from ..canonical.models import Transaction
 from ..money import Money
@@ -187,11 +188,11 @@ class PacketBuilder:
         self._context: dict[str, Any] = {}
         self._policies: list[str] = []
 
-    def ref(self, ref: EvidenceRef) -> "PacketBuilder":
+    def ref(self, ref: EvidenceRef) -> PacketBuilder:
         self._refs.append(ref)
         return self
 
-    def transaction(self, txn: Transaction, label: str | None = None) -> "PacketBuilder":
+    def transaction(self, txn: Transaction, label: str | None = None) -> PacketBuilder:
         self._refs.append(
             EvidenceRef(
                 kind="transaction",
@@ -208,7 +209,7 @@ class PacketBuilder:
             )
         return self
 
-    def transactions(self, txns: Iterable[Transaction]) -> "PacketBuilder":
+    def transactions(self, txns: Iterable[Transaction]) -> PacketBuilder:
         for t in txns:
             self.transaction(t)
         return self
@@ -219,21 +220,21 @@ class PacketBuilder:
         expression: str,
         result: Money | Decimal | int | str,
         **inputs: Any,
-    ) -> "PacketBuilder":
+    ) -> PacketBuilder:
         self._calcs.append(
             Calculation(name=name, expression=expression, result=result, inputs=inputs)
         )
         return self
 
-    def note(self, origin: str, ref_id: str, text: str) -> "PacketBuilder":
+    def note(self, origin: str, ref_id: str, text: str) -> PacketBuilder:
         self._untrusted.append(UntrustedText(origin=origin, ref_id=ref_id, text=text))
         return self
 
-    def context(self, **values: Any) -> "PacketBuilder":
+    def context(self, **values: Any) -> PacketBuilder:
         self._context.update(values)
         return self
 
-    def policy(self, extract: str) -> "PacketBuilder":
+    def policy(self, extract: str) -> PacketBuilder:
         self._policies.append(extract)
         return self
 

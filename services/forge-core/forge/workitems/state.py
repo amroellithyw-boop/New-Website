@@ -15,14 +15,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from decimal import Decimal
-from typing import Any, Iterable, Sequence
+from typing import Any
 
-from ..canonical.enums import AgentRole, AutonomyLevel, RiskTier, WorkItemState
-from ..evidence.packet import EvidencePacket
-from ..money import Money
-from ..rules.base import Finding
 from ..agents.contracts import AgentCall, CorrectionResponse, PreparerProposal, ReviewDecision
+from ..canonical.enums import AgentRole, AutonomyLevel, WorkItemState
+from ..evidence.packet import EvidencePacket
+from ..rules.base import Finding
 from .risk import ReviewPlan, RiskScore
 
 __all__ = ["TransitionError", "AuditEvent", "WorkItem", "ALLOWED_TRANSITIONS"]
@@ -165,7 +163,7 @@ class WorkItem:
         actor: str,
         detail: str,
         metadata: dict[str, Any] | None = None,
-    ) -> "WorkItem":
+    ) -> WorkItem:
         allowed = ALLOWED_TRANSITIONS[self.state]
         if to not in allowed:
             raise TransitionError(

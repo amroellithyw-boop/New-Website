@@ -10,12 +10,11 @@ repetition.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import RiskTier, Severity, TxnType
 from ...engine.features import find_duplicate_clusters, recurring_profiles
-from ...money import Money
 from ..base import Finding, Rule, RuleContext, register
 
 

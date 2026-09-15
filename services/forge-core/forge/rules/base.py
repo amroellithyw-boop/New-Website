@@ -13,16 +13,22 @@ not mutate the ledger, call a model, or perform I/O.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from decimal import Decimal
-from typing import Any, Callable, Iterable, Iterator, Sequence
+from typing import Any
 
 from ..canonical.enums import RiskTier, Severity
 from ..canonical.models import Ledger, Period
 from ..engine.aging import AgingReport, build_aging
 from ..engine.reconcile import BankStatement, ReconciliationResult, reconcile
-from ..engine.statements import BalanceSheet, IncomeStatement, build_balance_sheet, build_income_statement
+from ..engine.statements import (
+    BalanceSheet,
+    IncomeStatement,
+    build_balance_sheet,
+    build_income_statement,
+)
 from ..engine.trial_balance import TrialBalance, build_trial_balance
 from ..evidence.packet import EvidencePacket, PacketBuilder
 from ..money import Money
@@ -72,7 +78,7 @@ class RuleContext:
     materiality: Materiality = field(init=False)
     reconciliations: dict[str, ReconciliationResult] = field(init=False)
 
-    def prepare(self) -> "RuleContext":
+    def prepare(self) -> RuleContext:
         self.ledger.build_indexes()
         self.tb = build_trial_balance(self.ledger, self.period_start, self.period_end)
         prior_end = self.period_start - timedelta(days=1)

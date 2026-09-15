@@ -14,14 +14,15 @@ so rather than producing confident findings on top of numbers that do not add up
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
-from typing import Any, Sequence
+from typing import Any
 
 from .agents.gateway import ModelGateway
 from .agents.roles import run_review_loop
-from .canonical.enums import AutonomyLevel, RiskTier, Severity, WorkItemState
+from .canonical.enums import AutonomyLevel, RiskTier
 from .canonical.models import Ledger
 from .engine.reconcile import BankStatement
 from .money import Money

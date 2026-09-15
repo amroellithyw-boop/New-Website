@@ -13,14 +13,12 @@ happened to mention the right number.
 
 from __future__ import annotations
 
-import json
 import time
-from dataclasses import dataclass, field
-from datetime import date
+from collections.abc import Sequence
+from dataclasses import dataclass
 from decimal import Decimal
-from typing import Any, Iterable, Sequence
+from typing import Any
 
-from ..canonical.enums import Severity
 from ..money import Money
 from ..rules import REGISTRY, RuleContext, RuleOutcome, run_rules
 from ..rules.base import Finding, RuleRegistry

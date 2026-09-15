@@ -22,9 +22,9 @@ Design notes
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from decimal import ROUND_HALF_EVEN, ROUND_HALF_UP, Decimal, localcontext
-from typing import Iterable, Sequence
 
 __all__ = ["Money", "CurrencyMismatch", "MINOR_UNITS", "ROUND_HALF_UP", "ROUND_HALF_EVEN"]
 
@@ -71,13 +71,13 @@ class Money:
     # ---- constructors -------------------------------------------------
 
     @classmethod
-    def zero(cls, currency: str = "CAD") -> "Money":
+    def zero(cls, currency: str = "CAD") -> Money:
         return cls(0, currency)
 
     @classmethod
     def from_decimal(
         cls, value: Decimal | str | int, currency: str = "CAD", rounding: str = ROUND_HALF_UP
-    ) -> "Money":
+    ) -> Money:
         """Build from a major-unit decimal, e.g. ``"1234.56"`` -> 123456 cents.
 
         Floats are rejected on purpose: ``0.1 + 0.2`` is not 0.3 and a finance
@@ -118,30 +118,30 @@ class Money:
 
     # ---- arithmetic ---------------------------------------------------
 
-    def _check(self, other: "Money") -> None:
+    def _check(self, other: Money) -> None:
         if self.currency != other.currency:
             raise CurrencyMismatch(f"{self.currency} vs {other.currency}")
 
-    def __add__(self, other: "Money") -> "Money":
+    def __add__(self, other: Money) -> Money:
         self._check(other)
         return Money(self.minor_units + other.minor_units, self.currency)
 
-    def __sub__(self, other: "Money") -> "Money":
+    def __sub__(self, other: Money) -> Money:
         self._check(other)
         return Money(self.minor_units - other.minor_units, self.currency)
 
-    def __neg__(self) -> "Money":
+    def __neg__(self) -> Money:
         return Money(-self.minor_units, self.currency)
 
-    def __abs__(self) -> "Money":
+    def __abs__(self) -> Money:
         return Money(abs(self.minor_units), self.currency)
 
-    def __mul__(self, factor: int | Decimal | str) -> "Money":
+    def __mul__(self, factor: int | Decimal | str) -> Money:
         return self.scale(factor)
 
     __rmul__ = __mul__
 
-    def scale(self, factor: int | Decimal | str, rounding: str = ROUND_HALF_UP) -> "Money":
+    def scale(self, factor: int | Decimal | str, rounding: str = ROUND_HALF_UP) -> Money:
         """Multiply by a rate with explicit rounding (tax, FX, allocation %)."""
         if isinstance(factor, float):
             raise TypeError("Refusing to scale Money by float; pass int, str or Decimal")
@@ -151,7 +151,7 @@ class Money:
             result = (Decimal(self.minor_units) * dec).quantize(Decimal(1), rounding=rounding)
         return Money(int(result), self.currency)
 
-    def ratio_to(self, other: "Money") -> Decimal | None:
+    def ratio_to(self, other: Money) -> Decimal | None:
         """Exact ratio as a Decimal, or ``None`` when the denominator is zero."""
         self._check(other)
         if other.minor_units == 0:
@@ -160,7 +160,7 @@ class Money:
             ctx.prec = 28
             return Decimal(self.minor_units) / Decimal(other.minor_units)
 
-    def allocate(self, weights: Sequence[int | Decimal | str]) -> list["Money"]:
+    def allocate(self, weights: Sequence[int | Decimal | str]) -> list[Money]:
         """Split across ``weights`` so the parts sum exactly back to ``self``.
 
         Uses the largest-remainder method; ties break toward the earlier index,
@@ -190,19 +190,19 @@ class Money:
 
     # ---- comparison ---------------------------------------------------
 
-    def __lt__(self, other: "Money") -> bool:
+    def __lt__(self, other: Money) -> bool:
         self._check(other)
         return self.minor_units < other.minor_units
 
-    def __le__(self, other: "Money") -> bool:
+    def __le__(self, other: Money) -> bool:
         self._check(other)
         return self.minor_units <= other.minor_units
 
-    def __gt__(self, other: "Money") -> bool:
+    def __gt__(self, other: Money) -> bool:
         self._check(other)
         return self.minor_units > other.minor_units
 
-    def __ge__(self, other: "Money") -> bool:
+    def __ge__(self, other: Money) -> bool:
         self._check(other)
         return self.minor_units >= other.minor_units
 

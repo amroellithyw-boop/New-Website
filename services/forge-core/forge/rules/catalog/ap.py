@@ -7,12 +7,12 @@ evidence attached, and never asserts intent.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, RiskTier, Severity, TxnType
-from ...engine.features import median_money, month_key, monthly_series, robust_zscore
+from ...engine.features import median_money, month_key, robust_zscore
 from ...money import Money, msum
 from ..base import Finding, Rule, RuleContext, register
 
@@ -195,17 +195,17 @@ class PersonalExpensePattern(Rule):
         ]
         for acct in watched:
             hits = [
-                (t, l)
-                for (t, l) in ctx.ledger.postings(acct.account_id)
-                if ctx.period_start <= t.txn_date <= ctx.period_end and l.amount.minor_units > 0
+                (t, line)
+                for (t, line) in ctx.ledger.postings(acct.account_id)
+                if ctx.period_start <= t.txn_date <= ctx.period_end and line.amount.minor_units > 0
             ]
             if not hits:
                 continue
-            total = msum((l.amount for _t, l in hits), ctx.currency)
+            total = msum((line.amount for _t, line in hits), ctx.currency)
             undocumented = [
-                (t, l) for (t, l) in hits if not t.document_refs
+                (t, line) for (t, line) in hits if not t.document_refs
             ]
-            undoc_total = msum((l.amount for _t, l in undocumented), ctx.currency)
+            undoc_total = msum((line.amount for _t, line in undocumented), ctx.currency)
             if ctx.materiality.is_trivial(undoc_total):
                 continue
             builder = ctx.packet(

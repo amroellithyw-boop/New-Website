@@ -6,14 +6,14 @@ are the ones that most directly convert into money on the client's side.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import RiskTier, Severity, TxnType
 from ...engine.aging import build_aging, days_sales_outstanding
 from ...evidence.packet import EvidenceRef
-from ...money import Money, msum
+from ...money import msum
 from ..base import Finding, Rule, RuleContext, register
 
 

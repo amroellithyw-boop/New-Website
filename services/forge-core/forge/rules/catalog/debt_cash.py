@@ -7,9 +7,9 @@ contractor with 80-day receivables still runs out of money.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, RiskTier, Severity
 from ...engine.rollforward import build_rollforward, debt_rollforward

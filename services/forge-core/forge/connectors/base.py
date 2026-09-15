@@ -9,9 +9,10 @@ it and the deterministic engine has tied it out.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from typing import Any, Iterator, Mapping
+from datetime import datetime
+from typing import Any
 
 __all__ = ["RawRecord", "SyncCursor", "SyncResult", "Connector"]
 

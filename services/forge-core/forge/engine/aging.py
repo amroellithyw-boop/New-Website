@@ -8,10 +8,11 @@ so a back-dated payment re-ages history correctly.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import date, timedelta
+from datetime import date
 from decimal import Decimal
-from typing import Literal, Sequence
+from typing import Literal
 
 from ..canonical.models import Ledger, OpenItem
 from ..money import Money, msum

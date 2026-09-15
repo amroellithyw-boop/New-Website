@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, RiskTier, Severity, TxnType
 from ...engine.rollforward import build_rollforward
 from ...evidence.packet import EvidenceRef
-from ...money import Money, msum
+from ...money import msum
 from ..base import Finding, Rule, RuleContext, register
 
 
@@ -34,10 +34,10 @@ class UnreviewedAssetAdditions(Rule):
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         for acct in ctx.ledger.accounts_of(subtype=AccountSubtype.FIXED_ASSET):
             additions = [
-                (t, l)
-                for (t, l) in ctx.ledger.postings(acct.account_id)
+                (t, line)
+                for (t, line) in ctx.ledger.postings(acct.account_id)
                 if ctx.period_start <= t.txn_date <= ctx.period_end
-                and l.amount.minor_units > 0
+                and line.amount.minor_units > 0
                 and t.type is not TxnType.OPENING_BALANCE
             ]
             for txn, line in additions:
@@ -274,9 +274,6 @@ class AccrualReversalHygiene(Rule):
         }
         if not accrual_accounts:
             return
-        reversed_ids = {
-            t.reverses_txn_id for t in ctx.ledger.transactions if t.reverses_txn_id
-        }
         reversal_counts: dict[str, int] = {}
         for t in ctx.ledger.transactions:
             if t.reverses_txn_id:
@@ -288,7 +285,7 @@ class AccrualReversalHygiene(Rule):
                 continue
             if not (lookback <= txn.txn_date < ctx.period_start):
                 continue
-            if not any(l.account_id in accrual_accounts for l in txn.lines):
+            if not any(line.account_id in accrual_accounts for line in txn.lines):
                 continue
             count = reversal_counts.get(txn.txn_id, 0)
             if count == 1:

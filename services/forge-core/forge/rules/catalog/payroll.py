@@ -7,9 +7,9 @@ for, so control 38 is CRITICAL by design rather than by amount.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, RiskTier, Severity, TxnType
 from ...money import Money, msum

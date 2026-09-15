@@ -13,10 +13,10 @@ Every injector is deterministic given a seed.
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass, field
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from decimal import Decimal
-from typing import Callable, Iterable, Sequence
 
 from ..canonical.enums import Severity, TxnType
 from ..canonical.models import (
@@ -25,7 +25,6 @@ from ..canonical.models import (
     Lineage,
     OpenItem,
     Transaction,
-    TransactionLine,
 )
 from ..connectors import chart as C
 from ..connectors.fixture_contractor import FixtureCompany, LedgerBuilder, build_contractor_company
@@ -162,9 +161,9 @@ def inject_duplicate_bill(ledger: Ledger, rng: random.Random, start: date, end: 
     original = rng.choice(bills)
     b = _builder(ledger)
     lines = [
-        b.line(l.account_id, l.amount, memo=l.memo, party_id=l.party_id, job_id=l.job_id,
-               tax_code=l.tax_code, tax_amount=l.tax_amount)
-        for l in original.lines
+        b.line(line.account_id, line.amount, memo=line.memo, party_id=line.party_id, job_id=line.job_id,
+               tax_code=line.tax_code, tax_amount=line.tax_amount)
+        for line in original.lines
     ]
     dup = b.post(
         type=TxnType.BILL,

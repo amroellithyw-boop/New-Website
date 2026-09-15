@@ -7,9 +7,9 @@ so these run first and their failures are CRITICAL by construction.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, AccountType, RiskTier, Severity, Side, TxnType
 from ...engine.features import is_round_amount
@@ -214,8 +214,8 @@ class RetainedEarningsContinuity(Rule):
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         for acct in ctx.ledger.accounts_of(subtype=AccountSubtype.RETAINED_EARNINGS):
             hits = [
-                (t, l)
-                for (t, l) in ctx.ledger.postings(acct.account_id)
+                (t, line)
+                for (t, line) in ctx.ledger.postings(acct.account_id)
                 if ctx.period_start <= t.txn_date <= ctx.period_end
                 and t.type is not TxnType.OPENING_BALANCE
             ]
@@ -631,17 +631,17 @@ class AbnormalSidePostings(Rule):
                 continue
             wrong_side = Side.CREDIT if acct.normal_balance is Side.DEBIT else Side.DEBIT
             hits = [
-                (t, l)
-                for (t, l) in ctx.ledger.postings(acct.account_id)
+                (t, line)
+                for (t, line) in ctx.ledger.postings(acct.account_id)
                 if ctx.period_start <= t.txn_date <= ctx.period_end
-                and l.side is wrong_side
+                and line.side is wrong_side
                 and t.reverses_txn_id is None
             ]
             if not hits:
                 continue
             total = Money.zero(ctx.currency)
-            for _t, l in hits:
-                total = total + abs(l.amount)
+            for _t, line in hits:
+                total = total + abs(line.amount)
             if ctx.materiality.is_trivial(total):
                 continue
             builder = ctx.packet(

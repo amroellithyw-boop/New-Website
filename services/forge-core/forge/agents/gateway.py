@@ -26,7 +26,7 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Any, Sequence, Type, TypeVar
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
@@ -307,11 +307,11 @@ class ModelGateway:
     max_attempts: int = 3
 
     @classmethod
-    def offline(cls) -> "ModelGateway":
+    def offline(cls) -> ModelGateway:
         return cls(providers={"offline": OfflineDeterministicProvider()})
 
     @classmethod
-    def anthropic(cls, api_key: str | None = None) -> "ModelGateway":
+    def anthropic(cls, api_key: str | None = None) -> ModelGateway:
         return cls(
             providers={
                 "anthropic": AnthropicProvider(api_key),
@@ -364,7 +364,7 @@ class ModelGateway:
         tier: RiskTier,
         system: str,
         user: str,
-        response_model: Type[T],
+        response_model: type[T],
         packet_checksum: str,
         prompt_version: str = "1",
         avoid_family: str | None = None,
@@ -386,7 +386,7 @@ class ModelGateway:
         started = time.perf_counter()
         total_in = total_out = 0
 
-        for attempt in range(1, self.max_attempts + 1):
+        for _attempt in range(1, self.max_attempts + 1):
             response = provider.complete(
                 spec=chosen,
                 system=system,

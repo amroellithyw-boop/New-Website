@@ -11,14 +11,14 @@ from __future__ import annotations
 import hashlib
 import re
 import statistics
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import date, timedelta
 from decimal import Decimal
-from typing import Iterable, Sequence
 
-from ..canonical.enums import AccountSubtype, Side
-from ..canonical.models import Ledger, Transaction, TransactionLine
-from ..money import Money, msum
+from ..canonical.enums import Side
+from ..canonical.models import Ledger, Transaction
+from ..money import Money
 
 __all__ = [
     "MonthKey",
@@ -187,8 +187,10 @@ class RecurringProfile:
         if not self.months_seen:
             return 0
         run = 1
-        for earlier, later in zip(self.months_seen[-2::-1], self.months_seen[::-1]):
-            expected = months_between(*month_bounds(earlier))
+        for earlier, later in zip(
+            self.months_seen[-2::-1], self.months_seen[::-1], strict=False
+        ):
+            # Two months span exactly two entries when they are adjacent.
             gap = len(months_between(month_bounds(earlier)[0], month_bounds(later)[1]))
             if gap == 2:
                 run += 1

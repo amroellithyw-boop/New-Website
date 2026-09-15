@@ -15,12 +15,10 @@ Two properties are deliberate:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from decimal import Decimal
-from typing import Iterable, Sequence
 
-from ..canonical.enums import AgentRole, RiskTier, Severity
-from ..money import Money
+from ..canonical.enums import AgentRole, RiskTier
 from ..rules.base import Finding
 from ..rules.materiality import Materiality
 
@@ -50,7 +48,7 @@ class RiskScore:
     def reasons(self) -> tuple[str, ...]:
         return tuple(f.reason for f in self.factors)
 
-    def escalate_to(self, tier: RiskTier, reason: str) -> "RiskScore":
+    def escalate_to(self, tier: RiskTier, reason: str) -> RiskScore:
         """Raise the tier. Lowering is not available on purpose."""
         if tier.level <= self.tier.level:
             return self

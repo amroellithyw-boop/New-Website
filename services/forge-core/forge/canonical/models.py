@@ -14,10 +14,11 @@ enforceable if every row can name the raw payload it came from.
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from ..money import Money
 from .enums import AccountSubtype, AccountType, PartyType, Side, TxnType
@@ -382,7 +383,7 @@ class Ledger:
     def currency(self) -> str:
         return self.entity.currency
 
-    def build_indexes(self) -> "Ledger":
+    def build_indexes(self) -> Ledger:
         by_account: dict[str, list[tuple[Transaction, TransactionLine]]] = {}
         for txn in self.transactions:
             for ln in txn.lines:

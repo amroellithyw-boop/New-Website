@@ -15,7 +15,7 @@ class AccountType(str, Enum):
     EXPENSE = "expense"
 
     @property
-    def normal_balance(self) -> "Side":
+    def normal_balance(self) -> Side:
         """The side on which this account type normally carries a balance."""
         return Side.DEBIT if self in (AccountType.ASSET, AccountType.EXPENSE) else Side.CREDIT
 

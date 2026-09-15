@@ -7,8 +7,8 @@ same logic serves any jurisdiction.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, AccountType, RiskTier, Severity, TxnType
 from ...money import Money, msum
@@ -37,21 +37,21 @@ class SalesTaxCodeInconsistency(Rule):
         expected_rate = ctx.policy.get("sales_tax_rate", Decimal("0.13"))
         for acct in ctx.ledger.accounts_of(type=AccountType.REVENUE):
             lines = [
-                (t, l)
-                for (t, l) in ctx.ledger.postings(acct.account_id)
+                (t, line)
+                for (t, line) in ctx.ledger.postings(acct.account_id)
                 if ctx.period_start <= t.txn_date <= ctx.period_end
                 and t.type in (TxnType.INVOICE, TxnType.SALES_RECEIPT)
             ]
             if len(lines) < 4:
                 continue
             untaxed = [
-                (t, l)
-                for (t, l) in lines
-                if l.tax_code is None or l.tax_amount is None or l.tax_amount.is_zero
+                (t, line)
+                for (t, line) in lines
+                if line.tax_code is None or line.tax_amount is None or line.tax_amount.is_zero
             ]
             if not untaxed or len(untaxed) == len(lines):
                 continue  # all-or-nothing is a deliberate policy, not an anomaly
-            exposure = msum((abs(l.amount) for _t, l in untaxed), ctx.currency)
+            exposure = msum((abs(line.amount) for _t, line in untaxed), ctx.currency)
             tax_at_risk = exposure.scale(expected_rate)
             if ctx.materiality.is_trivial(tax_at_risk):
                 continue

@@ -8,9 +8,9 @@ debit, a negative balance is a net credit.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from collections.abc import Iterable, Sequence
+from dataclasses import dataclass
 from datetime import date
-from typing import Iterable, Sequence
 
 from ..canonical.enums import AccountSubtype, AccountType, Side
 from ..canonical.models import Account, Ledger, Transaction

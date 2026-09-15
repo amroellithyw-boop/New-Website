@@ -15,10 +15,10 @@ produces a *clean, balanced, tie-ing* book. Errors are injected separately by
 from __future__ import annotations
 
 import random
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from decimal import Decimal
-from typing import Iterable, Sequence
 
 from ..canonical.enums import PartyType, TxnType
 from ..canonical.models import (
@@ -390,7 +390,7 @@ def _seed_opening_ar(b: LedgerBuilder, rng, entity_id, opening_date, total: Mone
     """
     picks = [c[0] for c in CUSTOMERS[:5]]
     weights = [35, 25, 18, 12, 10]
-    for idx, (pid, amount) in enumerate(zip(picks, total.allocate(weights))):
+    for idx, (pid, amount) in enumerate(zip(picks, total.allocate(weights), strict=False)):
         issued = opening_date - timedelta(days=rng.randint(10, 75))
         item = OpenItem(
             open_item_id=f"OI-AR-OPEN-{pid}", entity_id=entity_id,
@@ -421,7 +421,7 @@ def _seed_opening_ar(b: LedgerBuilder, rng, entity_id, opening_date, total: Mone
 def _seed_opening_ap(b: LedgerBuilder, rng, entity_id, opening_date, total: Money) -> None:
     """Opening payables, all settled inside the first month as they would be."""
     picks = [v[0] for v in VENDORS[:4]]
-    for pid, amount in zip(picks, total.allocate([40, 28, 20, 12])):
+    for pid, amount in zip(picks, total.allocate([40, 28, 20, 12]), strict=False):
         issued = opening_date - timedelta(days=rng.randint(5, 40))
         item = OpenItem(
             open_item_id=f"OI-AP-OPEN-{pid}", entity_id=entity_id,

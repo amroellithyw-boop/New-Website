@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ run.entity_name }} — Financial Control Review</title>
+<style>
+  :root{
+    --ink:#14181d; --muted:#5b6672; --line:#e2e6ea; --bg:#ffffff; --panel:#f7f9fa;
+    --critical:#b3261e; --high:#b5651d; --medium:#8a6d1f; --low:#4a6572; --ok:#1f6b47;
+    --accent:#1b3a5c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  header.doc{border-bottom:3px solid var(--accent);padding-bottom:20px;margin-bottom:28px}
+  .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+           font-weight:700;margin:0 0 6px}
+  h1{font-size:27px;line-height:1.2;margin:0 0 6px;font-weight:650}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+  h2{font-size:19px;margin:38px 0 12px;font-weight:650;
+     border-bottom:1px solid var(--line);padding-bottom:7px}
+  h3{font-size:15px;margin:22px 0 8px;font-weight:650}
+  p{margin:0 0 12px} ul{margin:0 0 12px;padding-left:20px} li{margin:0 0 5px}
+  .lede{font-size:16px;color:var(--ink)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 6px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:13px 14px}
+  .stat .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+           font-weight:700;margin-bottom:5px}
+  .stat .v{font-size:21px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.15}
+  .stat .n{font-size:12px;color:var(--muted);margin-top:3px}
+  .gate{border-radius:8px;padding:14px 16px;margin:18px 0;border:1px solid}
+  .gate.pass{background:#eef6f1;border-color:#bfdccd;color:#134a31}
+  .gate.fail{background:#fdefee;border-color:#eccac7;color:#7d1a15}
+  .gate b{display:block;margin-bottom:4px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0 16px}
+  th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+     border-bottom:1.5px solid var(--line);padding:7px 8px;font-weight:700}
+  td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tablewrap{overflow-x:auto}
+  .sev{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+       text-transform:uppercase;padding:2px 7px;border-radius:99px;white-space:nowrap}
+  .sev.critical{background:#fdecea;color:var(--critical)}
+  .sev.high{background:#fdf1e6;color:var(--high)}
+  .sev.medium{background:#fbf6e3;color:var(--medium)}
+  .sev.low,.sev.info{background:#eef1f3;color:var(--low)}
+  .tier{font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+  .finding{border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin:0 0 14px;
+           background:var(--bg)}
+  .finding.critical{border-left:4px solid var(--critical)}
+  .finding.high{border-left:4px solid var(--high)}
+  .finding.medium{border-left:4px solid var(--medium)}
+  .finding .top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;
+                flex-wrap:wrap;margin-bottom:8px}
+  .finding h3{margin:0;font-size:15.5px;flex:1 1 320px}
+  .amount{font-size:17px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .meta{font-size:12px;color:var(--muted);margin:8px 0 0;display:flex;gap:14px;flex-wrap:wrap}
+  .fix{background:var(--panel);border-radius:6px;padding:10px 12px;margin-top:11px;font-size:13.5px}
+  .fix b{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+         color:var(--muted);margin-bottom:4px}
+  details{margin-top:10px;font-size:13px}
+  summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:12.5px}
+  details table{margin-top:8px;font-size:12.5px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+       background:var(--panel);padding:1px 5px;border-radius:4px}
+  footer.doc{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);
+             font-size:12px;color:var(--muted)}
+  @media print{ .wrap{max-width:none;padding:0} details{display:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <p class="eyebrow">Financial control review</p>
+  <h1>{{ run.entity_name }}</h1>
+  <p class="sub">Period {{ run.period_start.strftime('%d %B %Y') }} to {{ run.period_end.strftime('%d %B %Y') }}
+     &middot; {{ run.currency }} &middot; prepared {{ generated_on.strftime('%d %B %Y') }}</p>
+</header>
+
+<p class="lede">
+  {{ summary_sentence }}
+</p>
+
+<div class="grid">
+  <div class="stat"><div class="k">Findings</div><div class="v">{{ findings|length }}</div>
+    <div class="n">from {{ run.outcome.rules_run }} controls</div></div>
+  <div class="stat"><div class="k">Critical</div>
+    <div class="v" style="color:var(--critical)">{{ by_severity.get('critical', 0) }}</div>
+    <div class="n">need action now</div></div>
+  <div class="stat"><div class="k">Cash recoverable</div><div class="v">{{ run.recoverable_cash.format() }}</div>
+    <div class="n">overpaid, unbilled or overdue</div></div>
+  <div class="stat"><div class="k">Value reviewed</div><div class="v">{{ run.total_exposure.format() }}</div>
+    <div class="n">total amount examined</div></div>
+</div>
+
+{% if run.passed_data_gate %}
+<div class="gate pass">
+  <b>The books tie out.</b>
+  Total debits equal total credits, the trial balance nets to zero, and assets equal
+  liabilities plus equity to the cent. Every figure in this report is reproduced from
+  your ledger rather than estimated.
+</div>
+{% else %}
+<div class="gate fail">
+  <b>The books do not tie out. Read this first.</b>
+  The checks below failed, which means the underlying ledger cannot currently support
+  reliable reporting. Findings elsewhere in this report remain valid as observations,
+  but the statements should not be relied on or filed until these are cleared.
+  <ul style="margin:8px 0 0">
+  {% for g in run.gate_failures %}
+    <li><b>{{ g.check }}</b> — {{ g.detail }}{% if g.amount %} Out by {{ g.amount.format() }}.{% endif %}</li>
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<h2>Financial position</h2>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Measure</th><th class="num">Period</th><th class="num">Trailing twelve months</th></tr></thead>
+  <tbody>
+    <tr><td>Revenue</td><td class="num">{{ pl.revenue.total.format() }}</td>
+        <td class="num">{{ ttm.revenue.total.format() }}</td></tr>
+    <tr><td>Cost of sales</td><td class="num">{{ pl.cost_of_sales.total.format() }}</td>
+        <td class="num">{{ ttm.cost_of_sales.total.format() }}</td></tr>
+    <tr><td>Gross profit</td><td class="num">{{ pl.gross_profit.format() }}
+        {% if pl.gross_margin %}<span class="n"> ({{ '%.1f'|format(pl.gross_margin * 100) }}%)</span>{% endif %}</td>
+        <td class="num">{{ ttm.gross_profit.format() }}
+        {% if ttm.gross_margin %}<span class="n"> ({{ '%.1f'|format(ttm.gross_margin * 100) }}%)</span>{% endif %}</td></tr>
+    <tr><td>Operating expenses</td><td class="num">{{ pl.operating_expenses.total.format() }}</td>
+        <td class="num">{{ ttm.operating_expenses.total.format() }}</td></tr>
+    <tr><td><b>Net income</b></td><td class="num"><b>{{ pl.net_income.format() }}</b></td>
+        <td class="num"><b>{{ ttm.net_income.format() }}</b></td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Position at {{ run.period_end.strftime('%d %b %Y') }}</th><th class="num">Amount</th>
+             <th>Working capital</th><th class="num">Amount</th></tr></thead>
+  <tbody>
+    <tr><td>Cash and bank</td><td class="num">{{ cash.format() }}</td>
+        <td>Receivables outstanding</td><td class="num">{{ run.ctx.ar.total.format() }}</td></tr>
+    <tr><td>Total assets</td><td class="num">{{ bs.total_assets.format() }}</td>
+        <td>Receivables past due</td><td class="num">{{ run.ctx.ar.past_due_total().format() }}</td></tr>
+    <tr><td>Total liabilities</td><td class="num">{{ bs.total_liabilities.format() }}</td>
+        <td>Payables outstanding</td><td class="num">{{ run.ctx.ap.total.format() }}</td></tr>
+    <tr><td>Equity</td><td class="num">{{ bs.total_equity.format() }}</td>
+        <td>Net working capital</td><td class="num">{{ bs.working_capital.format() }}</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>What needs attention</h2>
+<p>
+  Findings are ordered by severity and then by value. Each one states what was found,
+  the calculation that produced it, and the specific next step. Anything marked
+  <span class="sev critical">critical</span> affects whether the numbers can be relied
+  on, whether money has already been lost, or whether a filing deadline has passed.
+</p>
+
+{% for f in findings %}
+<article class="finding {{ f.severity.value }}">
+  <div class="top">
+    <h3>{{ f.title }}</h3>
+    <div class="amount">{{ f.exposure.format() }}</div>
+  </div>
+  <div><span class="sev {{ f.severity.value }}">{{ f.severity.value }}</span>
+       <span class="tier">&nbsp;{{ tiers[f.finding_id].tier.value }} review &middot; {{ f.category }}</span></div>
+  <p style="margin-top:9px">{{ f.narrative }}</p>
+  <div class="fix"><b>What to do</b>{{ f.remediation }}</div>
+  <div class="meta">
+    <span>Control {{ f.rule_id }} v{{ f.rule_version }}</span>
+    <span>{{ f.packet.refs|length }} source record{{ '' if f.packet.refs|length == 1 else 's' }}</span>
+    <span>{{ f.packet.calculations|length }} calculation{{ '' if f.packet.calculations|length == 1 else 's' }}</span>
+    {% if f.confidence < 1 %}<span>signal confidence {{ f.confidence }}</span>{% endif %}
+  </div>
+  <details>
+    <summary>Show the evidence and the calculations</summary>
+    <table>
+      <thead><tr><th>Calculation</th><th>How it is derived</th><th class="num">Result</th></tr></thead>
+      <tbody>
+      {% for c in f.packet.calculations %}
+        <tr><td>{{ c.name }}</td><td><code>{{ c.expression }}</code></td>
+            <td class="num">{{ c.to_dict()['result'] }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if f.packet.refs %}
+    <table>
+      <thead><tr><th>Source record</th><th>Reference</th><th class="num">Date</th><th class="num">Amount</th></tr></thead>
+      <tbody>
+      {% for r in f.packet.refs[:12] %}
+        <tr><td>{{ r.label }}</td><td><code>{{ r.ref_id }}</code></td>
+            <td class="num">{{ r.on.isoformat() if r.on else '' }}</td>
+            <td class="num">{{ r.amount.format() if r.amount else '' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if f.packet.refs|length > 12 %}
+    <p style="color:var(--muted);font-size:12px">
+      {{ f.packet.refs|length - 12 }} further record{{ '' if f.packet.refs|length - 12 == 1 else 's' }} not shown.</p>
+    {% endif %}
+    {% endif %}
+  </details>
+</article>
+{% else %}
+<p>No findings above the reporting threshold for this period.</p>
+{% endfor %}
+
+<h2>How this review was performed</h2>
+<p>
+  {{ run.outcome.rules_run }} deterministic controls were run against every transaction in the
+  period. Each control is a fixed calculation, not a judgement: the same ledger produces the
+  same findings every time, and any figure in this report can be reproduced from the source
+  records listed beneath it.
+</p>
+<p>
+  Materiality was set at {{ run.ctx.materiality.describe() }}. Items below the trivial
+  threshold are not reported at all, which is why this document is short.
+  {% if run.outcome.suppressed_trivial %}
+  {{ run.outcome.suppressed_trivial }} item{{ '' if run.outcome.suppressed_trivial == 1 else 's' }}
+  fell below that threshold and {{ 'was' if run.outcome.suppressed_trivial == 1 else 'were' }} suppressed.
+  {% endif %}
+</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Area reviewed</th><th class="num">Controls run</th><th class="num">Findings</th></tr></thead>
+  <tbody>
+  {% for cat, stats in categories %}
+    <tr><td>{{ cat }}</td><td class="num">{{ stats.controls }}</td><td class="num">{{ stats.findings }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% if run.reviewed %}
+<p>
+  {{ reviewed_count }} finding{{ '' if reviewed_count == 1 else 's' }} at the highest risk tiers
+  {{ 'was' if reviewed_count == 1 else 'were' }} additionally put through a specialist review
+  chain, and {{ run.items_needing_human|length }}
+  {{ 'is' if run.items_needing_human|length == 1 else 'are' }} held for explicit human
+  authorisation before any action is taken.
+</p>
+{% endif %}
+
+<footer class="doc">
+  <p>
+    Prepared by ForgeOS for {{ run.entity_name }}. This review identifies control weaknesses and
+    accounting exceptions from the accounting records provided. It is not an audit, a review
+    engagement, or a tax filing opinion, and it does not provide assurance on the financial
+    statements as a whole. Tax positions, payroll remittances and filings identified here should
+    be confirmed with the responsible professional before action.
+  </p>
+  <p>Controls version {{ control_version }} &middot; generated {{ generated_on.isoformat() }}</p>
+</footer>
+
+</div>
+</body>
+</html>

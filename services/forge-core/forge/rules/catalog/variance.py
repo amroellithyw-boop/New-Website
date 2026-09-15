@@ -9,14 +9,13 @@ finding).
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import date, timedelta
 from decimal import Decimal
-from typing import Iterable
 
 from ...canonical.enums import AccountType, RiskTier, Severity
 from ...engine.aging import concentration
 from ...engine.features import (
-    month_bounds,
     month_key,
     monthly_series,
     period_variance,
@@ -271,10 +270,10 @@ class MissingRecurringTransaction(Rule):
             # consecutive months immediately before the gap is the test.
             if profile.consecutive_tail < 3:
                 continue
-            last_seen = profile.months_seen[-1]
-            if len(months_between(*month_bounds(last_seen))) and last_seen < _previous_month(
-                current_key
-            ):
+            # The pattern must have been running right up to the month being
+            # closed. A gap that started three months ago is a business change
+            # someone already knows about, not news.
+            if profile.months_seen[-1] != _previous_month(current_key):
                 continue
             if ctx.materiality.is_trivial(profile.median_amount):
                 continue
@@ -344,10 +343,10 @@ class RecurringAmountDeviation(Rule):
             if not profile.is_fixed_amount:
                 continue
             current = [
-                (t, l)
-                for (t, l) in ctx.ledger.postings(profile.account_id)
+                (t, line)
+                for (t, line) in ctx.ledger.postings(profile.account_id)
                 if ctx.period_start <= t.txn_date <= ctx.period_end
-                and (l.party_id or t.party_id) == profile.party_id
+                and (line.party_id or t.party_id) == profile.party_id
             ]
             for txn, line in current:
                 dev = profile.deviation(line.amount)

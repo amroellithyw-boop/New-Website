@@ -16,12 +16,11 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from ..canonical.enums import AgentRole, ReviewDecisionKind, RiskTier
+from ..canonical.enums import AgentRole, ReviewDecisionKind
 
 __all__ = [
     "ProposedAction",
@@ -119,7 +118,7 @@ class ReviewNote(BaseModel):
     resolution: str | None = None
     resolved_at: datetime | None = None
 
-    def resolve(self, resolution: str) -> "ReviewNote":
+    def resolve(self, resolution: str) -> ReviewNote:
         return self.model_copy(
             update={
                 "resolved": True,
