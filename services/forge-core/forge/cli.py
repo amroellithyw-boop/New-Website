@@ -49,6 +49,16 @@ app = typer.Typer(
 )
 
 
+@app.callback()
+def _main(
+    env: Path | None = typer.Option(None, "--env", help="Read keys from this file instead of .env, e.g. .env.production"),
+) -> None:
+    if env is not None:
+        if not env.exists():
+            raise typer.BadParameter(f"{env} does not exist")
+        _load_dotenv(env)
+
+
 def _echo_money(label: str, value) -> None:
     typer.echo(f"  {label:<34s} {value.format():>16s}")
 
@@ -801,3 +811,63 @@ def qbo_tieout(
                 typer.echo(f"  {f}")
     if not result.ties:
         raise typer.Exit(code=1)
+
+
+@app.command()
+def setup(
+    production: bool = typer.Option(False, "--production", help="Write .env.production with QBO_SANDBOX=false"),
+) -> None:
+    """Ask for each key and name, and write .env and firm.json. Nothing to edit by hand.
+
+    Press Enter to keep whatever is already there. Secrets are typed hidden."""
+    import os
+
+    target = Path(".env.production" if production else ".env")
+    current: dict[str, str] = {}
+    if target.exists():
+        for line in target.read_text().splitlines():
+            if "=" in line and not line.strip().startswith("#"):
+                k, _, v = line.partition("=")
+                current[k.strip()] = v.strip()
+
+    def ask(key: str, label: str, *, secret: bool = False, default: str = "") -> str:
+        existing = current.get(key) or os.environ.get(key, "") or default
+        shown = ("set, press Enter to keep" if existing else "not set") if secret else (existing or "not set")
+        value = typer.prompt(f"{label} [{shown}]", default="", show_default=False, hide_input=secret)
+        return value.strip() or existing
+
+    typer.echo(f"\nWriting {target}. Press Enter to keep a value.\n")
+    typer.echo("QuickBooks (developer.intuit.com, Keys and credentials)")
+    values = {
+        "QBO_CLIENT_ID": ask("QBO_CLIENT_ID", "  Client ID"),
+        "QBO_CLIENT_SECRET": ask("QBO_CLIENT_SECRET", "  Client secret", secret=True),
+        "QBO_REDIRECT_URI": current.get("QBO_REDIRECT_URI") or "http://localhost:8765/callback",
+        "QBO_SANDBOX": "false" if production else "true",
+    }
+    typer.echo("\nModel vendors (leave blank for any you do not have)")
+    values["ANTHROPIC_API_KEY"] = ask("ANTHROPIC_API_KEY", "  Anthropic key (console.anthropic.com)", secret=True)
+    values["XAI_API_KEY"] = ask("XAI_API_KEY", "  xAI key (console.x.ai)", secret=True)
+    values["OPENAI_API_KEY"] = ask("OPENAI_API_KEY", "  OpenAI key, optional", secret=True)
+    values["OLLAMA_BASE_URL"] = current.get("OLLAMA_BASE_URL") or "http://localhost:11434/v1"
+    values["FORGE_FIRM"] = "firm.json"
+
+    lines = ["# Written by `forge setup`. Never commit this file."]
+    lines += [f"{k}={v}" for k, v in values.items() if v]
+    target.write_text("\n".join(lines) + "\n")
+    try:
+        target.chmod(0o600)
+    except OSError:
+        pass
+
+    firm_path = Path("firm.json")
+    if not firm_path.exists():
+        typer.echo("\nYour firm (goes on proposals and emails)")
+        raw = json.loads(Path(__file__).resolve().parents[1].joinpath("firm.example.json").read_text())
+        raw["name"] = typer.prompt("  Firm name", default=raw["name"])
+        raw["sender"] = typer.prompt("  Your name as it should be signed", default=raw["sender"])
+        raw["email"] = typer.prompt("  Email", default="")
+        firm_path.write_text(json.dumps(raw, indent=2))
+        typer.echo(f"  wrote {firm_path}; open it any time to change prices")
+
+    typer.echo(f"\nDone. {target} written with {sum(1 for v in values.values() if v)} values.")
+    typer.echo("Next: `forge providers` to see the models, `forge qbo connect --tenant sandbox` to link QuickBooks.")

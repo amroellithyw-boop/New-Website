@@ -1,17 +1,38 @@
 # Handover checklist: the six things only you can supply, step by step
 
 Each section says what I already did, what you do, and how we both know it
-worked. Do them in order; the first one matters most. Every command is run
-from `services/forge-core` with the virtual environment active:
+worked. Do them in order; the first one matters most.
 
-```bash
-cd services/forge-core
-python3 -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"
-cp .env.example .env
-cp firm.example.json firm.json
-```
+## 0. Getting the software onto your computer (once, no coding)
 
-`.env` and `firm.json` are ignored by git. They never leave your machine.
+**Windows**
+
+1. Install Python: https://www.python.org/downloads/windows/, click the big
+   Download button, run it, and on the first screen tick **Add python.exe to
+   PATH** before clicking Install Now.
+2. Install GitHub Desktop: https://desktop.github.com. Sign in with your
+   GitHub account. **File**, **Clone repository**, pick
+   `amroellithyw-boop/New-Website`, and in **Current branch** choose
+   `claude/serene-feynman-261gor`. Note the folder it cloned into, usually
+   `Documents\GitHub\New-Website`.
+3. In File Explorer open that folder, then `services`, then `forge-core`.
+   Double-click **setup.cmd**. A black window opens, installs everything,
+   runs the self-test (you want to see `Release gate: PASS`), then asks you
+   for each key one at a time. Paste and press Enter. Leave anything you do
+   not have blank.
+4. From then on, double-click **forge.cmd** in the same folder to get a
+   window where you type `forge` commands.
+
+**Mac**
+
+1. Install Python from https://www.python.org/downloads/macos/.
+2. Install GitHub Desktop and clone the repository as above.
+3. Open Terminal, type `cd ` (with a space), drag the `forge-core` folder into
+   the Terminal window, press Enter, then type `bash setup.sh` and Enter.
+4. From then on, in Terminal: `cd` to the folder and `source .venv/bin/activate`.
+
+`.env` and `firm.json` are written by the setup and ignored by git. They never
+leave your machine. To change a key later, run `forge setup` again.
 
 ---
 
@@ -30,9 +51,9 @@ no network and reports exactly which entities the mappers still miss.
 2. Top menu: **Dashboard**, then **Create an app**. Choose **QuickBooks
    Online and Payments**. Name it `ForgeOS`. Scope:
    `com.intuit.quickbooks.accounting`. Create it.
-3. Left menu: **Development Settings**, then **Keys & credentials**. Copy the
-   **Client ID** and **Client Secret** into `.env` as `QBO_CLIENT_ID` and
-   `QBO_CLIENT_SECRET`.
+3. Left menu: **Keys and credentials**. Turn on **Show credentials**. You
+   will paste the Client ID and Client secret when `setup.cmd` (or
+   `forge setup`) asks for them.
 4. On the same page, under **Redirect URIs**, click **Add URI** and enter
    exactly `http://localhost:8765/callback`. Save.
 5. Left menu: **Sandbox** (under API Docs & Tools). Intuit created a sample
@@ -58,16 +79,15 @@ no network and reports exactly which entities the mappers still miss.
 
 **The real client file (another 15 minutes, after the sandbox works):**
 
-8. Back on the developer portal, the same app page has a **Production**
-   section under Keys & credentials. Intuit asks a few compliance questions
-   before it shows production keys; answer them. Put the production keys in
-   a second file `.env.production` with `QBO_SANDBOX=false`.
+8. Back on the developer portal, **Keys and credentials** has a
+   **Production** tab. Intuit asks a few compliance questions before it
+   shows production keys; answer them. Then run `forge setup --production`
+   and paste the production keys; it writes `.env.production`.
 9. Pick one client whose books you know have problems. Run:
 
    ```bash
-   set -a; source .env.production; set +a
-   forge qbo connect --tenant clientA
-   forge qbo pull --tenant clientA --out fixtures/clientA.json --months 12 --anonymise
+   forge --env .env.production qbo connect --tenant clientA
+   forge --env .env.production qbo pull --tenant clientA --out fixtures/clientA.json --months 12 --anonymise
    ```
 
 10. Open `fixtures/clientA.json` once and scan it. Names read "Customer
@@ -99,10 +119,12 @@ automatically.
 
 1. Anthropic: https://console.anthropic.com, sign in, **Billing**, add a
    card. **API Keys**, **Create Key**, name it `forgeos`. Copy it once; it
-   is not shown again. Put it in `.env` as `ANTHROPIC_API_KEY`.
+   is not shown again.
 2. xAI: https://console.x.ai, sign in, add billing, **API Keys**, **Create
-   API Key**. Copy it into `.env` as `XAI_API_KEY`.
-3. Optional, free local model: install Ollama from https://ollama.com, then
+   API Key**. Copy it.
+3. Run `forge setup` and paste each key when asked. Press Enter to keep
+   anything already set.
+4. Optional, free local model: install Ollama from https://ollama.com, then
    in a terminal:
 
    ```bash
@@ -111,7 +133,7 @@ automatically.
 
    Leave `OLLAMA_BASE_URL` in `.env` as it is.
 
-4. Check:
+5. Check:
 
    ```bash
    forge providers
@@ -120,7 +142,7 @@ automatically.
    You want at least two families listed and a different family named for
    the adversary role than for the preparer.
 
-5. First real call, cheap and low risk:
+6. First real call, cheap and low risk:
 
    ```bash
    forge onboard intake.json --plan
@@ -181,8 +203,9 @@ shows what is in use. The proposal, outreach and diagnostic fee all read it.
 
 **You do (5 minutes):**
 
-1. Open `firm.json` (you copied it from `firm.example.json` above).
-2. Set `name`, `sender`, `email`, `phone`, `website`.
+1. `setup.cmd` already asked for your firm name, your name and email and
+   wrote `firm.json` in the `forge-core` folder. Open it in Notepad.
+2. Check `name`, `sender`, `email`; add `phone` and `website` if you like.
 3. Change any price you disagree with. Monthly base by client size, monthly
    add-on per service, per-employee payroll, per-100-transactions volume,
    per-month-behind cleanup, and the diagnostic fee by size. Delete any line
