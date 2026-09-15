@@ -8,6 +8,7 @@ from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, RiskTier, Severity, TxnType
 from ...engine.rollforward import build_rollforward
+from ...evidence.packet import EvidenceRef
 from ...money import Money, msum
 from ..base import Finding, Rule, RuleContext, register
 
@@ -153,8 +154,28 @@ class DepreciationReasonableness(Rule):
             return
         if ctx.materiality.is_trivial(variance):
             return
+        builder = ctx.packet(
+            f"{self.rule_id}-dep", "Recompute the expected depreciation charge"
+        )
+        for row in ctx.tb.rows_of(subtype=AccountSubtype.FIXED_ASSET):
+            if row.presentation_balance.is_zero:
+                continue
+            builder.ref(
+                EvidenceRef(
+                    kind="account",
+                    ref_id=row.account.account_id,
+                    label=f"{row.account.number} {row.account.name}",
+                    amount=row.presentation_balance,
+                    on=ctx.period_end,
+                )
+            )
+        for acct in ctx.ledger.accounts_of(subtype=AccountSubtype.DEPRECIATION_EXPENSE):
+            for txn, _line in ctx.drivers(
+                acct.account_id, start=ctx.period_start - timedelta(days=120)
+            )[:6]:
+                builder.transaction(txn, label="Depreciation entry in recent history")
         packet = (
-            ctx.packet(f"{self.rule_id}-dep", "Recompute the expected depreciation charge")
+            builder
             .calc("gross fixed assets", "sum(fixed asset closing balances)", gross)
             .calc("assumed annual rate", "policy depreciation rate", rate)
             .calc("days in period", "period end - period start + 1", days)

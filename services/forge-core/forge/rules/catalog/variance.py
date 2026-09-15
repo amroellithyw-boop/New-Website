@@ -56,11 +56,22 @@ class _VarianceBase(Rule):
                 continue
             if self._seasonally_expected(ctx, acct.account_id, cur_start, cur_end):
                 continue
+            builder = ctx.packet(
+                f"{self.rule_id}-{row.account_id}",
+                f"Explain the movement in {acct.name} against the {self.comparative_label}",
+            )
+            drivers = ctx.drivers(row.account_id, start=cur_start, end=cur_end)
+            if not drivers:
+                # The movement is a disappearance. The evidence is what used to be
+                # there, so cite the comparative window instead of citing nothing.
+                drivers = ctx.drivers(row.account_id, start=cmp_start, end=cmp_end)
+                label = f"Posting to {acct.name} in the {self.comparative_label}"
+            else:
+                label = f"Driver posting to {acct.name}"
+            for txn, _line in drivers:
+                builder.transaction(txn, label=label)
             packet = (
-                ctx.packet(
-                    f"{self.rule_id}-{row.account_id}",
-                    f"Explain the movement in {acct.name} against the {self.comparative_label}",
-                )
+                builder
                 .calc(
                     "current period",
                     f"movement {cur_start.isoformat()} to {cur_end.isoformat()}",
@@ -82,6 +93,7 @@ class _VarianceBase(Rule):
                     ctx.materiality.describe(),
                     ctx.materiality.performance,
                 )
+                .calc("driver postings shown", "largest postings in the period", len(drivers))
                 .build()
             )
             direction = "increased" if row.absolute_change.minor_units > 0 else "decreased"
@@ -200,11 +212,16 @@ class DormantRecurringAccount(Rule):
             )
             if ctx.materiality.is_trivial(typical):
                 continue
+            builder = ctx.packet(
+                f"{self.rule_id}-{acct.account_id}",
+                f"Show that {acct.name} posts every month and is empty this month",
+            )
+            for txn, _line in ctx.drivers(
+                acct.account_id, start=hist_start, end=ctx.period_start - timedelta(days=1)
+            ):
+                builder.transaction(txn, label=f"Prior posting to {acct.name}")
             packet = (
-                ctx.packet(
-                    f"{self.rule_id}-{acct.account_id}",
-                    f"Show that {acct.name} posts every month and is empty this month",
-                )
+                builder
                 .calc("months with activity in history", "count", len(active_months))
                 .calc("average monthly amount", "sum(history) / months", typical)
                 .calc("current month amount", "movement in period", current)
@@ -263,11 +280,16 @@ class MissingRecurringTransaction(Rule):
                 continue
             acct = ctx.ledger.account(profile.account_id)
             party = ctx.ledger.parties.get(profile.party_id)
+            builder = ctx.packet(
+                f"{self.rule_id}-{profile.key}",
+                "Show the recurring pattern and the gap in it",
+            )
+            for txn, _line in ctx.drivers(
+                profile.account_id, start=hist_start, end=ctx.period_start - timedelta(days=1)
+            ):
+                builder.transaction(txn, label="Prior occurrence of the pattern")
             packet = (
-                ctx.packet(
-                    f"{self.rule_id}-{profile.key}",
-                    "Show the recurring pattern and the gap in it",
-                )
+                builder
                 .calc("months observed", "count(distinct months)", len(profile.months_seen))
                 .calc("typical amount", "median of historical amounts", profile.median_amount)
                 .calc("current month", "month being closed", current_key)
@@ -409,8 +431,16 @@ class CounterpartyConcentration(Rule):
             return
         party = ctx.ledger.parties.get(top_id)
         total = msum(revenue_by_customer.values(), ctx.currency)
+        builder = ctx.packet(
+            f"{self.rule_id}-{top_id}", "Rank revenue by customer year to date"
+        )
+        for txn in [
+            t for t in ctx.ledger.transactions
+            if t.party_id == top_id and ctx.fiscal_year_start <= t.txn_date <= ctx.period_end
+        ][:8]:
+            builder.transaction(txn, label="Revenue from the largest customer")
         packet = (
-            ctx.packet(f"{self.rule_id}-{top_id}", "Rank revenue by customer year to date")
+            builder
             .calc("largest customer revenue", "sum(revenue lines year to date)", top_amount)
             .calc("total revenue", "sum(all revenue year to date)", total)
             .calc("share", "largest / total", top_share)
@@ -473,8 +503,13 @@ class BudgetVarianceOutlier(Rule):
                 continue
             acct = row.account
             pct = variance.ratio_to(budgeted)
+            builder = ctx.packet(
+                f"{self.rule_id}-{account_id}", f"Budget variance for {acct.name}"
+            )
+            for txn, _line in ctx.drivers(account_id):
+                builder.transaction(txn, label=f"Posting to {acct.name}")
             packet = (
-                ctx.packet(f"{self.rule_id}-{account_id}", f"Budget variance for {acct.name}")
+                builder
                 .calc("budget", "approved budget for the period", budgeted)
                 .calc("actual", "movement in period", actual)
                 .calc("variance", "actual - budget", variance)

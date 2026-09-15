@@ -135,6 +135,26 @@ class RuleContext:
         p = self.ledger.calendar.period_for(d)
         return bool(p and p.is_closed)
 
+    def drivers(
+        self, account_id: str, *, start: date | None = None, end: date | None = None, limit: int = 8
+    ) -> list:
+        """The largest postings to an account in a window, biggest first.
+
+        Analytical controls need these. "Repairs rose 2,945%" is a number; "repairs
+        rose because of this one 58,000 invoice from Cedarline Hardware" is a
+        finding someone can act on, and only the second one satisfies the
+        evidence rule.
+        """
+        lo = start or self.period_start
+        hi = end or self.period_end
+        rows = [
+            (txn, line)
+            for (txn, line) in self.ledger.postings(account_id)
+            if lo <= txn.txn_date <= hi
+        ]
+        rows.sort(key=lambda tl: -abs(tl[1].amount).minor_units)
+        return rows[:limit]
+
     def packet(self, packet_id: str, objective: str) -> PacketBuilder:
         return PacketBuilder(
             packet_id=packet_id,
@@ -166,6 +186,7 @@ class Finding:
     """Deterministic controls are certain that the *condition* holds. Confidence
     below 1.0 means the condition is a heuristic signal, not a proven defect."""
     tags: tuple[str, ...] = ()
+    involves_disbursed_cash: bool = False
     detected_at: date | None = None
     seeded_error_id: str | None = None
     """Set only by ForgeBench when matching a finding to a planted error."""
@@ -211,6 +232,14 @@ class Rule(ABC):
     remediation: str = ""
     evidence_required: tuple[str, ...] = ()
     references: tuple[str, ...] = ()
+    involves_disbursed_cash: bool = False
+    """True when the defect means money has already left the business or a
+    statutory obligation is already overdue.
+
+    This is the difference between a finding that costs an email and one that
+    costs a recovery action, and it is the single biggest input to how far up the
+    review hierarchy an item travels. Declaring it on the control keeps the risk
+    router from having to guess from a category name."""
 
     @abstractmethod
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
@@ -247,6 +276,7 @@ class Rule(ABC):
             risk_tier_floor=risk_tier_floor or self.risk_tier_floor,
             confidence=confidence,
             tags=tuple(tags),
+            involves_disbursed_cash=self.involves_disbursed_cash,
             detected_at=ctx.period_end,
         )
 
@@ -261,6 +291,7 @@ class Rule(ABC):
             "risk_tier_floor": self.risk_tier_floor.value,
             "evidence_required": list(self.evidence_required),
             "references": list(self.references),
+            "involves_disbursed_cash": self.involves_disbursed_cash,
         }
 
 

@@ -28,12 +28,16 @@ class PaymentWithoutBill(Rule):
     )
     category = "accounts payable"
     severity = Severity.CRITICAL
-    risk_tier_floor = RiskTier.R3
+    # R4 regardless of amount. A disbursement with no bill and no approval is the
+    # one finding that should always reach a human, because if it is fraud the
+    # cost of routing it internally for another cycle is the money itself.
+    risk_tier_floor = RiskTier.R4
     remediation = (
         "Obtain the invoice and the approval for the payment. If neither exists, "
         "treat this as a suspected unauthorised disbursement and escalate to the owner."
     )
     evidence_required = ("payment transaction", "bill", "approval record")
+    involves_disbursed_cash = True
 
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         applied_txns = {a.payment_txn_id for a in ctx.ledger.applications}

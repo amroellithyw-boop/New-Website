@@ -114,6 +114,7 @@ class BankReconciliationDifference(_ReconBase):
         "difference; an unexplained bank difference is a live control failure."
     )
     evidence_required = ("bank statement", "ledger postings", "outstanding item list")
+    involves_disbursed_cash = True
     credit_card = False
 
 
@@ -131,6 +132,7 @@ class CreditCardReconciliationDifference(_ReconBase):
         "accounts are where undocumented and personal spending accumulates."
     )
     evidence_required = ("card statement", "ledger postings", "receipts")
+    involves_disbursed_cash = True
     credit_card = True
 
 

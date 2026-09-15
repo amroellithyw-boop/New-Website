@@ -16,7 +16,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 from typing import Iterable, Sequence
 
-from ..canonical.enums import AccountSubtype
+from ..canonical.enums import AccountSubtype, Side
 from ..canonical.models import Ledger, Transaction, TransactionLine
 from ..money import Money, msum
 
@@ -77,6 +77,13 @@ def monthly_series(
 
 @dataclass(frozen=True)
 class VarianceRow:
+    """Movement in two windows, already in statement-reading direction.
+
+    ``current`` and ``comparative`` are credit-positive for revenue, equity and
+    liabilities. Comparing raw debit-positive sums would report a revenue
+    *increase* as a decrease, because more revenue means a larger credit.
+    """
+
     account_id: str
     account_name: str
     current: Money
@@ -130,6 +137,8 @@ def period_variance(
                 current = current + line.amount
             elif comparative_start <= txn.txn_date <= comparative_end:
                 comparative = comparative + line.amount
+        if acct.type.normal_balance is Side.CREDIT:
+            current, comparative = -current, -comparative
         if current.is_zero and comparative.is_zero:
             continue
         rows.append(

@@ -35,6 +35,7 @@ class LoanPaymentSplit(Rule):
         "payment in the period."
     )
     evidence_required = ("loan payments", "lender amortisation schedule")
+    involves_disbursed_cash = True
 
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         for debt_id, debt in ctx.ledger.debts.items():
@@ -42,10 +43,60 @@ class LoanPaymentSplit(Rule):
             if rf.payments_total.is_zero:
                 continue
             diff = rf.implied_split_difference
+            # Coding the whole payment to principal makes the arithmetic tie
+            # while eliminating interest expense entirely, so the split test has
+            # to check for a missing interest component as well as a difference.
+            no_interest = (
+                rf.interest_expensed.is_zero
+                and debt.annual_rate is not None
+                and rf.opening_principal.minor_units > 0
+            )
+            if no_interest:
+                expected_interest = rf.opening_principal.scale(
+                    debt.annual_rate
+                    * Decimal((ctx.period_end - ctx.period_start).days + 1)
+                    / Decimal(365)
+                )
+                nb = ctx.packet(
+                    f"{self.rule_id}-{debt_id}-nointerest",
+                    f"Show that no interest was recorded on {debt.name}",
+                )
+                for txn, _line in ctx.drivers(debt.liability_account_id):
+                    nb.transaction(txn, label=f"Payment posted to {debt.name}")
+                packet = (
+                    nb
+                    .calc("cash paid on the loan", "sum(bank credits on payment entries)",
+                          rf.payments_total)
+                    .calc("principal reduction recorded", "debits to the loan account",
+                          rf.principal_repaid)
+                    .calc("interest expensed", "movement in interest expense",
+                          rf.interest_expensed)
+                    .calc("stated annual rate", "from the loan agreement", debt.annual_rate)
+                    .calc("interest that should have been charged",
+                          "opening principal x rate x days / 365", expected_interest)
+                    .build()
+                )
+                yield self.finding(
+                    ctx,
+                    suffix=f"{debt_id}-no-interest",
+                    title=f"{debt.name} payments recorded with no interest at all",
+                    narrative=(
+                        f"{rf.payments_total.format()} of payments were made on {debt.name} and "
+                        f"the entire amount was applied to principal. At the stated rate of "
+                        f"{debt.annual_rate:.2%}, about {expected_interest.format()} of interest "
+                        "expense is missing and the loan balance is understated by the same amount."
+                    ),
+                    exposure=expected_interest,
+                    packet=packet,
+                )
+                continue
             if abs(diff) < ctx.materiality.performance:
                 continue
+            sb = ctx.packet(f"{self.rule_id}-{debt_id}", f"Split test for {debt.name}")
+            for txn, _line in ctx.drivers(debt.liability_account_id):
+                sb.transaction(txn, label=f"Payment posted to {debt.name}")
             packet = (
-                ctx.packet(f"{self.rule_id}-{debt_id}", f"Split test for {debt.name}")
+                sb
                 .calc("cash paid on the loan", "sum(bank credits on payment entries)", rf.payments_total)
                 .calc("principal reduction recorded", "debits to the loan account", rf.principal_repaid)
                 .calc("interest expensed", "movement in interest expense", rf.interest_expensed)
@@ -83,8 +134,11 @@ class DebtRollForwardTie(Rule):
             rf = debt_rollforward(ctx.ledger, debt_id, ctx.period_start, ctx.period_end)
             if rf.ties:
                 continue
+            rb = ctx.packet(f"{self.rule_id}-{debt_id}", f"Roll forward {debt.name}")
+            for txn, _line in ctx.drivers(debt.liability_account_id):
+                rb.transaction(txn, label=f"Movement in {debt.name}")
             packet = (
-                ctx.packet(f"{self.rule_id}-{debt_id}", f"Roll forward {debt.name}")
+                rb
                 .calc("opening principal", "balance at period start", rf.opening_principal)
                 .calc("new borrowings", "credits to the loan account", rf.new_borrowings)
                 .calc("principal repaid", "debits to the loan account", rf.principal_repaid)
@@ -137,8 +191,16 @@ class InterestExpenseReasonableness(Rule):
                 continue
             if ctx.materiality.is_trivial(variance):
                 continue
+            ib = ctx.packet(
+                f"{self.rule_id}-{debt_id}", f"Recompute interest on {debt.name}"
+            )
+            for txn, _line in ctx.drivers(debt.liability_account_id):
+                ib.transaction(txn, label=f"Payment posted to {debt.name}")
+            if debt.interest_account_id:
+                for txn, _line in ctx.drivers(debt.interest_account_id):
+                    ib.transaction(txn, label="Interest expense posting")
             packet = (
-                ctx.packet(f"{self.rule_id}-{debt_id}", f"Recompute interest on {debt.name}")
+                ib
                 .calc("opening principal", "balance at period start", rf.opening_principal)
                 .calc("closing principal", "balance at period end", rf.closing_principal)
                 .calc("average principal", "(opening + closing) / 2", average)
@@ -180,6 +242,7 @@ class CovenantHeadroom(Rule):
         "with the lender before the test, not after."
     )
     evidence_required = ("covenant definition", "ratio calculation", "forecast")
+    involves_disbursed_cash = True
 
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         covenants = ctx.policy.get("covenants") or {}
@@ -260,6 +323,7 @@ class CashRunway(Rule):
         "spend, and confirm available credit facility headroom this week."
     )
     evidence_required = ("bank balances", "operating cash movement", "receivables aging")
+    involves_disbursed_cash = True
 
     MIN_WEEKS = Decimal("8")
     LOOKBACK_DAYS = 90
@@ -283,8 +347,14 @@ class CashRunway(Rule):
         if weeks is None or weeks > self.MIN_WEEKS:
             return
         collectible = ctx.ar.past_due_total(1)
+        cb = ctx.packet(
+            f"{self.rule_id}-runway", "Compute weeks of cash at the current burn"
+        )
+        for acct in ctx.ledger.accounts_of(subtype=AccountSubtype.BANK):
+            for txn, _line in ctx.drivers(acct.account_id, start=start)[:6]:
+                cb.transaction(txn, label="Largest cash movement in the window")
         packet = (
-            ctx.packet(f"{self.rule_id}-runway", "Compute weeks of cash at the current burn")
+            cb
             .calc("cash on hand", "sum(bank account balances)", cash)
             .calc(
                 f"net cash movement over {self.LOOKBACK_DAYS} days",

@@ -116,6 +116,7 @@ class DuplicateVendorBills(_DuplicateBase):
         "went out, raise a vendor credit and request recovery."
     )
     evidence_required = ("both bills", "vendor statement")
+    involves_disbursed_cash = True
     txn_type = TxnType.BILL
     noun = "bill"
     party_word = "vendor"

@@ -108,6 +108,7 @@ class PayrollRemittanceAging(Rule):
         "authority. Escalate to the owner the same day; this does not wait for close."
     )
     evidence_required = ("payroll liability roll-forward", "remittance confirmations")
+    involves_disbursed_cash = True
 
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         for acct in ctx.ledger.accounts_of(subtype=AccountSubtype.PAYROLL_LIABILITY):

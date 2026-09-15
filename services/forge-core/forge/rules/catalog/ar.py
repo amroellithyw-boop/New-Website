@@ -297,6 +297,7 @@ class DebitBalancesInPayables(Rule):
         "apply it against the next invoice."
     )
     evidence_required = ("vendor balance", "open items", "vendor statement")
+    involves_disbursed_cash = True
 
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         for party_id, balance in ctx.ap.by_party().items():

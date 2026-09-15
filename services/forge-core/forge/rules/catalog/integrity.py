@@ -13,6 +13,7 @@ from typing import Iterable
 
 from ...canonical.enums import AccountSubtype, AccountType, RiskTier, Severity, Side, TxnType
 from ...engine.features import is_round_amount
+from ...evidence.packet import EvidenceRef
 from ...money import Money
 from ..base import Finding, Rule, RuleContext, register
 
@@ -38,8 +39,23 @@ class BalanceSheetEquation(Rule):
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         if not ctx.tb.closing_imbalance.is_zero:
             diff = ctx.tb.closing_imbalance
+            builder = ctx.packet(f"{self.rule_id}-tb", "Prove the trial balance nets to zero")
+            for txn in ctx.tb.unbalanced_transactions[:15]:
+                builder.transaction(txn, label="Entry whose debits do not equal its credits")
+            for row in sorted(
+                ctx.tb.nonzero_rows(), key=lambda r: -abs(r.closing).minor_units
+            )[:10]:
+                builder.ref(
+                    EvidenceRef(
+                        kind="account",
+                        ref_id=row.account.account_id,
+                        label=f"{row.account.number} {row.account.name}",
+                        amount=row.closing,
+                        on=ctx.period_end,
+                    )
+                )
             packet = (
-                ctx.packet(f"{self.rule_id}-tb", "Prove the trial balance nets to zero")
+                builder
                 .calc(
                     "trial balance net",
                     "sum(closing balance of every account, debit-positive)",
@@ -66,8 +82,23 @@ class BalanceSheetEquation(Rule):
 
         if not ctx.bs.equation_difference.is_zero:
             diff = ctx.bs.equation_difference
+            builder = ctx.packet(f"{self.rule_id}-bs", "Prove assets = liabilities + equity")
+            for section in (
+                ctx.bs.current_assets, ctx.bs.fixed_assets, ctx.bs.other_assets,
+                ctx.bs.current_liabilities, ctx.bs.long_term_liabilities, ctx.bs.equity,
+            ):
+                for row in section.nonzero()[:4]:
+                    builder.ref(
+                        EvidenceRef(
+                            kind="account",
+                            ref_id=row.account.account_id,
+                            label=f"{section.label}: {row.account.number} {row.account.name}",
+                            amount=section.value_of(row),
+                            on=ctx.period_end,
+                        )
+                    )
             packet = (
-                ctx.packet(f"{self.rule_id}-bs", "Prove assets = liabilities + equity")
+                builder
                 .calc("total assets", "current + fixed + other assets", ctx.bs.total_assets)
                 .calc(
                     "total liabilities",
@@ -124,8 +155,22 @@ class StatementRollupTie(Rule):
         diff = ctx.pl.net_income - movement
         if diff.is_zero:
             return
+        builder = ctx.packet(f"{self.rule_id}-tie", "Tie net income to profit and loss movement")
+        for row in sorted(
+            (r for r in ctx.tb.rows if r.account.type.is_income_statement),
+            key=lambda r: -abs(r.movement).minor_units,
+        )[:12]:
+            builder.ref(
+                EvidenceRef(
+                    kind="account",
+                    ref_id=row.account.account_id,
+                    label=f"{row.account.number} {row.account.name}",
+                    amount=row.presentation_movement,
+                    on=ctx.period_end,
+                )
+            )
         packet = (
-            ctx.packet(f"{self.rule_id}-tie", "Tie net income to profit and loss movement")
+            builder
             .calc("net income per statement", "revenue - cost of sales - expenses", ctx.pl.net_income)
             .calc(
                 "net movement of profit and loss accounts",

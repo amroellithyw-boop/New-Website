@@ -103,6 +103,7 @@ class SalesTaxPayableReasonableness(Rule):
         "means either a return was wrong or a remittance was misposted."
     )
     evidence_required = ("tax account roll-forward", "filed returns", "taxable sales")
+    involves_disbursed_cash = True
 
     def evaluate(self, ctx: RuleContext) -> Iterable[Finding]:
         tax_accounts = ctx.ledger.accounts_of(subtype=AccountSubtype.SALES_TAX_PAYABLE)
