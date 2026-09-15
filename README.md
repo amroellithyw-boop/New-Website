@@ -41,12 +41,15 @@ in about a tenth of a second.
 | Exact money arithmetic | Integer minor units; floats rejected at the constructor |
 | Canonical financial model | Accounts, transactions, parties, jobs, debt, open items, lineage on every record |
 | Deterministic engine | Trial balance, statements, aging, bank reconciliation, roll-forwards, anomaly features |
-| Control catalogue | 50 versioned controls, each with purpose, severity, evidence contract and remediation |
+| Control catalogue | 55 versioned controls, each with purpose, severity, evidence contract and remediation |
 | Evidence packets | Bounded, checksummed, with untrusted source text fenced as data |
 | Risk router | Deterministic tiering R0 to R4 that records its reasons |
 | Review hierarchy | Preparer, manager, controller, adversary, policy, VP, CFO, human |
 | Model gateway | Provider-agnostic, routes by risk, enforces reviewer independence, tracks cost |
 | Work items | 16-state machine; cannot approve over an open note or act beyond approved scope |
+| Industry packs | 22 Canadian industries, 33 cost structures, 5 revenue tiers |
+| Canadian payroll | 2026 CPP, CPP2, EI, federal and Ontario tax, exact to the cent |
+| QuickBooks connector | Read-only, normalising, with a tie-out against QBO's own trial balance |
 | ForgeBench | 17 injectors, 15 defects, 2 adversarial decoys, release gate in CI |
 | Client report | Standalone HTML review plus a machine-readable evidence bundle |
 
@@ -90,3 +93,4 @@ docs/                         constitution, architecture, strategy, decisions
 | `docs/03-build-stack.md` | Which tool and which model for which job |
 | `docs/04-getting-existing-code-in.md` | Moving the Replit project into this repository |
 | `docs/05-decision-log.md` | Every shortcut, assumption and deferred feature |
+| `docs/06-legacy-migration.md` | What moved over from ProfitForge, and the nine defects found in it |
