@@ -206,3 +206,24 @@ class TestReconciliation:
         rates = rates_for(2026, "ON")
         assert hasattr(rates, "is_verified")
         assert isinstance(rates.is_verified, bool)
+
+
+class TestPublishedMaximums2026:
+    """The annual maxima the CRA and the CEIC publish for 2026. If any constant is
+    wrong, one of these products is wrong, and the test names which."""
+
+    def test_cpp_maximum_employee_contribution(self):
+        assert rates_for(2026, "ON").cpp_maximum_contribution == Money.from_decimal("4230.45")
+
+    def test_cpp2_maximum_employee_contribution(self):
+        assert rates_for(2026, "ON").cpp2_maximum_contribution == Money.from_decimal("416.00")
+
+    def test_ei_maximum_employee_premium(self):
+        rates = rates_for(2026, "ON")
+        assert rates.ei_maximum_contribution == Money.from_decimal("1123.07")
+        assert rates.ei_maximum_contribution.scale(rates.ei_employer_multiplier) == Money.from_decimal("1572.30")
+
+    def test_verification_is_recorded_with_its_limits(self):
+        rates = rates_for(2026, "ON")
+        assert rates.is_verified
+        assert "T4127" in rates.verified_against

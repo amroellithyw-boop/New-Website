@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from datetime import date
 
 from ..clients.profile import ClientProfile
+from ..firm import FirmConfig
 from ..money import Money
 from ..pipeline import ControllerRun
 from .pricing import Engagement, recommend_engagement
@@ -45,13 +46,13 @@ class Proposal:
                 "engagement": self.engagement.to_dict(), "return_multiple": self.first_year_return_multiple}
 
 
-def build_proposal(profile: ClientProfile, run: ControllerRun, *, today: date | None = None) -> Proposal:
+def build_proposal(profile: ClientProfile, run: ControllerRun, *, today: date | None = None, firm: FirmConfig | None = None) -> Proposal:
     findings = run.findings
     return Proposal(
         business_name=profile.business_name, prepared_on=today or date.today(), findings=len(findings), controls_run=run.outcome.rules_run,
         critical=sum(1 for f in findings if f.severity.value == "critical"),
         recoverable_cash=run.recoverable_cash, total_exposure=run.total_exposure,
-        top_findings=tuple(f.title for f in findings[:5]), engagement=recommend_engagement(profile),
+        top_findings=tuple(f.title for f in findings[:5]), engagement=recommend_engagement(profile, firm),
         industry=run.ctx.policy.get("industry_label") or profile.industry_label, size_tier=profile.size_tier_label,
     )
 

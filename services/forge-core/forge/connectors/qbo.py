@@ -106,8 +106,8 @@ class QboConnector(Connector):
 
     # ---- canonical assembly ---------------------------------------------
 
+    @staticmethod
     def build_ledger(
-        self,
         records: Sequence[RawRecord],
         *,
         tenant_id: str,

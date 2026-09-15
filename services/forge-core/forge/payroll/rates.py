@@ -169,7 +169,15 @@ ONTARIO_2026 = PayrollRates(
         (_m("7446.00"), Decimal("0.36")),
     ),
     health_premium=ONTARIO_HEALTH_PREMIUM,
-    verified_against="",  # nobody has checked this against CRA T4127 yet
+    verified_against=(
+        "2026-09-15: every figure cross-checked against published 2026 tables "
+        "(CPP: CRA announcement via CPB Canada, YMPE 74,600, YAMPE 85,000, 5.95% and 4%; "
+        "EI: CEIC 2026 rate release, 1.63 per 100, MIE 68,900, employer 1.4x; "
+        "federal: 14/20.5/26/29/33 at 58,523/117,045/181,440/258,482, BPA 16,452; "
+        "Ontario: 5.05/9.15/11.16/12.16/13.16 at 53,891/107,785/150,000/220,000, BPA 12,989, "
+        "surtax 5,818 and 7,446; Ontario Health Premium bands unchanged). "
+        "The CRA T4127 edition itself has not been opened; confirm Table 8.1 before the first live payroll."
+    ),
 )
 
 

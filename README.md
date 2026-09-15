@@ -33,6 +33,7 @@ forge run --seeded        # the whole finance team for one client, one period
 forge close --seeded      # the month-end checklist, each task proven
 forge tax calendar        # every filing deadline the profile implies
 forge brief               # the five things the owner needs to hear
+forge qbo connect --tenant sandbox   # authorise a QuickBooks company, read-only
 ```
 
 No database, no API key and no network are required. A seeded synthetic
@@ -105,6 +106,8 @@ docs/                         constitution, architecture, strategy, decisions
 | Document | What it answers |
 | --- | --- |
 | `docs/10-operating-manual.md` | How to run it day to day, what it cannot do yet and why, what is not right |
+| `docs/11-handover-checklist.md` | The six things only the owner can supply, step by step, and what is already done for each |
+| `docs/12-scope-language-for-legal-review.md` | Every sentence a client reads, ready for a lawyer |
 | `docs/00-product-constitution.md` | The rules that cannot be traded away for a demo |
 | `docs/01-architecture.md` | The layers, the decisions taken, and what each one costs |
 | `docs/02-commercial-strategy.md` | How this earns money, in what order, at what price |

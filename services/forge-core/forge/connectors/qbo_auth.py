@@ -29,9 +29,11 @@ import urllib.request
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Any, Protocol
 
 __all__ = [
+    "FileTokenStore",
     "QboConfig",
     "QboTokens",
     "TokenStore",
@@ -87,6 +89,25 @@ class QboConfig:
     @property
     def api_base(self) -> str:
         return SANDBOX_BASE if self.sandbox else PRODUCTION_BASE
+
+    @classmethod
+    def from_environment(cls) -> QboConfig:
+        """Read QBO_CLIENT_ID, QBO_CLIENT_SECRET, QBO_REDIRECT_URI and QBO_SANDBOX.
+
+        Fails with the names of the missing variables rather than a KeyError,
+        because the person hitting this is setting up their first connection.
+        """
+        import os
+
+        missing = [k for k in ("QBO_CLIENT_ID", "QBO_CLIENT_SECRET") if not os.environ.get(k)]
+        if missing:
+            raise QboAuthError(f"set {' and '.join(missing)} (from Intuit developer portal, Keys & credentials)")
+        return cls(
+            client_id=os.environ["QBO_CLIENT_ID"],
+            client_secret=os.environ["QBO_CLIENT_SECRET"],
+            redirect_uri=os.environ.get("QBO_REDIRECT_URI", "http://localhost:8765/callback"),
+            sandbox=os.environ.get("QBO_SANDBOX", "true").strip().lower() not in ("0", "false", "no", "production"),
+        )
 
     @property
     def basic_auth(self) -> str:
@@ -150,6 +171,31 @@ class TokenStore(Protocol):
     def load(self, tenant_id: str) -> QboTokens | None: ...
 
     def save(self, tenant_id: str, tokens: QboTokens) -> None: ...
+
+
+class FileTokenStore:
+    """One JSON file per tenant in a directory that must never be committed."""
+
+    def __init__(self, directory: Path) -> None:
+        self.directory = Path(directory)
+
+    def _path(self, tenant_id: str) -> Path:
+        return self.directory / f"{tenant_id}.qbo-tokens.json"
+
+    def load(self, tenant_id: str) -> QboTokens | None:
+        path = self._path(tenant_id)
+        if not path.exists():
+            return None
+        return QboTokens.from_dict(json.loads(path.read_text()))
+
+    def save(self, tenant_id: str, tokens: QboTokens) -> None:
+        self.directory.mkdir(parents=True, exist_ok=True)
+        path = self._path(tenant_id)
+        path.write_text(json.dumps(tokens.to_dict(), indent=2))
+        try:
+            path.chmod(0o600)
+        except OSError:
+            pass
 
 
 class MemoryTokenStore:

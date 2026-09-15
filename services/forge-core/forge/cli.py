@@ -23,6 +23,25 @@ from .pipeline import run_continuous_controller
 from .report import render_diagnostic, write_evidence_bundle
 from .rules import REGISTRY
 
+
+def _load_dotenv(path: Path = Path(".env")) -> None:
+    """Read KEY=VALUE lines from .env in the working directory without overriding the shell."""
+    import os
+
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key, value = key.strip(), value.strip().strip('"').strip("'")
+        if key and value and key not in os.environ:
+            os.environ[key] = value
+
+
+_load_dotenv()
+
 app = typer.Typer(
     add_completion=False,
     help="ForgeOS: evidence-first finance operating system.",
@@ -522,16 +541,19 @@ def brief(
     period_end: str = typer.Option("2026-06-30"),
     data_dir: Path = typer.Option(Path("data")),
     proposal: bool = typer.Option(False, "--proposal", help="Render the prospect proposal instead of the owner brief"),
-    firm: str = typer.Option("Profit Forge"),
-    sender: str = typer.Option("Amro"),
+    firm: str | None = typer.Option(None, help="Defaults to firm.json"),
+    sender: str | None = typer.Option(None, help="Defaults to firm.json"),
 ) -> None:
     """The five things that matter this month for the owner, or a proposal for a prospect."""
     from .cfo import owner_brief
+    from .firm import load_firm
     from .growth import build_proposal, render_proposal
 
+    fc = load_firm()
     cr = _client_run(profile, period_end, 1, data_dir)
     if proposal:
-        typer.echo(render_proposal(build_proposal(cr.profile, cr.run, today=date.fromisoformat(period_end)), firm=firm, sender=sender))
+        typer.echo(render_proposal(build_proposal(cr.profile, cr.run, today=date.fromisoformat(period_end), firm=fc),
+                                   firm=firm or fc.name, sender=sender or fc.sender))
     else:
         typer.echo(owner_brief(cr))
 
@@ -545,12 +567,15 @@ def sales(
     naics: str | None = typer.Option(None),
     stage: str | None = typer.Option(None),
     note: str = typer.Option(""),
-    firm: str = typer.Option("Profit Forge"),
-    sender: str = typer.Option("Amro"),
+    firm: str | None = typer.Option(None, help="Defaults to firm.json"),
+    sender: str | None = typer.Option(None, help="Defaults to firm.json"),
 ) -> None:
     """The selling machine: pipeline stages, follow-ups due, and drafted outreach."""
+    from .firm import load_firm
     from .growth import STAGES, Prospect, SalesPipeline, diagnostic_fee, draft_outreach
 
+    fc = load_firm()
+    firm, sender = firm or fc.name, sender or fc.sender
     sp = SalesPipeline.load(pipeline)
     if action == "list":
         typer.echo(f"Funnel: {sp.funnel()}   conversion: {sp.conversion()}\n")
@@ -577,7 +602,7 @@ def sales(
         p = sp.prospects[prospect_id]
         prof = ClientProfile(client_id=p.prospect_id, business_name=p.business_name, naics_code=p.naics_code, province=p.province)
         gw = ModelGateway.from_environment()
-        email = draft_outreach(prof, gateway=gw, sender=sender, firm=firm, diagnostic_fee=diagnostic_fee(prof).format())
+        email = draft_outreach(prof, gateway=gw, sender=sender, firm=firm, diagnostic_fee=diagnostic_fee(prof, fc).format())
         typer.echo(f"Subject: {email.subject}\n\n{email.body}\n\nCost: {gw.cost_summary()['cost']}")
     else:
         raise typer.BadParameter("action must be list, add, move, due or outreach")
@@ -611,3 +636,168 @@ def outcome(
     typer.echo(f"Recorded {decision} for {finding_id} (pattern {o.pattern}); "
                f"dismissals so far {pol.dismissal_counts.get(o.pattern, 0)}; "
                f"{'now suppressed' if pol.is_suppressed(finding) else 'now a known pattern' if pol.is_known(finding) else 'still raised'}.")
+
+
+@app.command()
+def firm() -> None:
+    """Show the firm identity and pricing in use, and where it came from."""
+    from .firm import load_firm
+
+    fc = load_firm()
+    typer.echo(f"\n{fc.name}   sender {fc.sender}   {fc.email or 'no email set'}")
+    typer.echo(f"  source: {fc.source or 'code defaults (copy firm.example.json to firm.json to change)'}")
+    if fc.base_by_tier or fc.service_fees or fc.diagnostic_by_tier:
+        typer.echo("  pricing overrides:")
+        for k, v in fc.to_dict().items():
+            if k in ("base_by_tier", "service_fees", "diagnostic_by_tier") and v:
+                typer.echo(f"    {k}: {v}")
+    else:
+        typer.echo("  pricing: defaults from forge/growth/pricing.py")
+
+
+# ---------------------------------------------------------------------------
+# QuickBooks: connect a company, pull it to a file, tie it out.
+# ---------------------------------------------------------------------------
+
+qbo_app = typer.Typer(help="QuickBooks Online: connect, pull a company to a file, tie out.", no_args_is_help=True)
+app.add_typer(qbo_app, name="qbo")
+
+
+def _qbo_auth(data_dir: Path):
+    from .connectors.qbo_auth import FileTokenStore, QboAuth, QboConfig
+
+    return QboAuth(QboConfig.from_environment(), FileTokenStore(data_dir / "qbo"))
+
+
+@qbo_app.command("connect")
+def qbo_connect(
+    tenant: str = typer.Option(..., help="Your name for this company, e.g. acme"),
+    data_dir: Path = typer.Option(Path("data")),
+    no_browser: bool = typer.Option(False, "--no-browser", help="Print the URL instead of opening it"),
+) -> None:
+    """Authorise read access to one QuickBooks company and keep its tokens locally."""
+    import secrets
+    import threading
+    import urllib.parse
+    import webbrowser
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    auth = _qbo_auth(data_dir)
+    state = secrets.token_urlsafe(24)
+    url = auth.authorize_url(state)
+    redirect = urllib.parse.urlparse(auth.config.redirect_uri)
+    captured: dict[str, str] = {}
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            params = dict(urllib.parse.parse_qsl(urllib.parse.urlparse(self.path).query))
+            captured.update(params)
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain")
+            self.end_headers()
+            self.wfile.write(b"ForgeOS has the code. You can close this tab.")
+
+        def log_message(self, *_):
+            return
+
+    server = None
+    if redirect.hostname in ("localhost", "127.0.0.1") and redirect.port:
+        try:
+            server = HTTPServer((redirect.hostname, redirect.port), Handler)
+            threading.Thread(target=server.handle_request, daemon=True).start()
+        except OSError:
+            server = None
+
+    typer.echo(f"\n1. Sign in to QuickBooks and pick the company ({'sandbox' if auth.config.sandbox else 'PRODUCTION'}):\n   {url}\n")
+    if not no_browser:
+        webbrowser.open(url)
+    if server:
+        typer.echo("2. Waiting for QuickBooks to send the code back to this terminal...")
+        deadline = threading.Event()
+        while not captured and not deadline.wait(0.5):
+            pass
+    if not captured:
+        pasted = typer.prompt("2. Paste the full URL of the page QuickBooks sent you to")
+        captured.update(dict(urllib.parse.parse_qsl(urllib.parse.urlparse(pasted).query)))
+    if captured.get("state") != state:
+        raise typer.BadParameter("state mismatch; start again")
+    tokens = auth.exchange_code(tenant, captured["code"], captured["realmId"])
+    typer.echo(f"\nConnected. Company {tokens.realm_id} saved as tenant '{tenant}' in {data_dir / 'qbo'}. "
+               f"Refresh token valid until {tokens.refresh_expires_at}.")
+
+
+@qbo_app.command("pull")
+def qbo_pull(
+    tenant: str = typer.Option(...),
+    out: Path = typer.Option(..., help="Where to write the export, e.g. fixtures/acme.json"),
+    period_end: str = typer.Option("2026-06-30"),
+    months: int = typer.Option(12),
+    anonymise: bool = typer.Option(False, "--anonymise", help="Replace every party name and strip contact details"),
+    data_dir: Path = typer.Option(Path("data")),
+) -> None:
+    """Pull every entity and QuickBooks' own trial balance into one file."""
+    from .connectors.qbo import QboConnector
+    from .connectors.qbo_auth import QboReadClient
+    from .connectors.qbo_export import anonymise as _anon
+    from .connectors.qbo_export import pull_company
+
+    start, end = _period(period_end, months)
+    connector = QboConnector(QboReadClient(_qbo_auth(data_dir), tenant))
+    export = pull_company(connector, period_start=start, period_end=end)
+    counts = {k: len(v) for k, v in export["records"].items()}
+    if anonymise:
+        export = _anon(export)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(export, indent=1))
+    typer.echo(f"\nWrote {out}  ({sum(counts.values())} records; "
+               f"{'anonymised ' + str(export['anonymised_parties']) + ' parties' if anonymise else 'NOT anonymised'})")
+    for k, v in counts.items():
+        typer.echo(f"  {k:<14s} {v:>6d}")
+
+
+@qbo_app.command("tieout")
+def qbo_tieout(
+    from_file: Path | None = typer.Option(None, help="Replay a pulled export instead of calling QuickBooks"),
+    tenant: str | None = typer.Option(None),
+    period_end: str = typer.Option("2026-06-30"),
+    months: int = typer.Option(12),
+    data_dir: Path = typer.Option(Path("data")),
+) -> None:
+    """Rebuild the ledger from the synced records and compare it to QuickBooks' trial balance."""
+    from .connectors.qbo import QboConnector, compare_trial_balance
+    from .connectors.qbo_auth import QboReadClient
+    from .connectors.qbo_export import (
+        load_export,
+        pull_company,
+        records_from_export,
+        trial_balance_from_export,
+    )
+
+    if from_file:
+        export = load_export(from_file)
+        client = None
+    elif tenant:
+        start, end = _period(period_end, months)
+        client = QboReadClient(_qbo_auth(data_dir), tenant)
+        export = pull_company(QboConnector(client), period_start=start, period_end=end)
+    else:
+        raise typer.BadParameter("give --from-file or --tenant")
+    records = records_from_export(export)
+    info = (export["records"].get("CompanyInfo") or [{}])[0]
+    name = info.get("CompanyName") or "QuickBooks company"
+    ledger, failures = QboConnector.build_ledger(records, tenant_id=tenant or "file", entity_id="E1", entity_name=name)
+    tb = trial_balance_from_export(export)
+    result = compare_trial_balance(tb, ledger, date.fromisoformat(export["period_end"]),
+                                   start=date.fromisoformat(export["period_start"]))
+    typer.echo(f"\n{name}: {len(ledger.transactions)} transactions mapped, {len(ledger.accounts)} accounts")
+    typer.echo(result.report())
+    if failures:
+        typer.echo(f"\n{len(failures)} mapping gap(s):")
+        seen = set()
+        for f in failures:
+            head = f.split(";")[0]
+            if head not in seen:
+                seen.add(head)
+                typer.echo(f"  {f}")
+    if not result.ties:
+        raise typer.Exit(code=1)

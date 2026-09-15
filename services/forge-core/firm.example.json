@@ -1,0 +1,40 @@
+{
+  "name": "Profit Forge",
+  "sender": "Amro Ellithy",
+  "email": "you@profitforge.ca",
+  "phone": "",
+  "website": "",
+  "province": "ON",
+
+  "base_by_tier": {
+    "start-up": "350.00",
+    "micro": "650.00",
+    "small": "1250.00",
+    "mid-size": "2400.00",
+    "upper mid-market": "4500.00",
+    "unknown": "950.00"
+  },
+  "service_fees": {
+    "hst": "150.00",
+    "payroll": "45.00",
+    "corporate_tax": "175.00",
+    "management_rep": "300.00",
+    "cfo_advisory": "900.00",
+    "job_costing": "350.00",
+    "accounts_rec": "200.00",
+    "accounts_pay": "200.00",
+    "wsib": "75.00",
+    "year_end": "225.00",
+    "cash_forecast": "250.00"
+  },
+  "diagnostic_by_tier": {
+    "start-up": "950.00",
+    "micro": "1500.00",
+    "small": "2500.00",
+    "mid-size": "4000.00",
+    "upper mid-market": "6500.00"
+  },
+  "payroll_per_employee": "18.00",
+  "volume_per_100_txns": "120.00",
+  "cleanup_per_month_behind": "450.00"
+}

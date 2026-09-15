@@ -18,3 +18,10 @@ out/
 *.db
 node_modules/
 .next/
+
+# Client data and credentials: never committed. Anonymised exports go in
+# services/forge-core/fixtures/ on purpose.
+services/forge-core/data/
+services/forge-core/clients/
+*.qbo-tokens.json
+firm.json

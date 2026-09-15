@@ -277,10 +277,8 @@ class TestTrialBalanceReport:
 
 class TestTieOut:
     def _ledger_from(self, connector_records):
-        connector = QboConnector.__new__(QboConnector)
         return QboConnector.build_ledger(
-            connector, connector_records, tenant_id="TEN-1", entity_id="ENT-1",
-            entity_name="Test Co",
+            connector_records, tenant_id="TEN-1", entity_id="ENT-1", entity_name="Test Co",
         )
 
     def test_a_faithful_rebuild_ties_exactly(self):
