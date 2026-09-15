@@ -29,6 +29,10 @@ forge bench       # run the quality gate
 forge providers   # which model vendors are configured, and the routing
 forge forecast    # working capital, health score, 13-week cash
 forge review --seeded --out review.html
+forge run --seeded        # the whole finance team for one client, one period
+forge close --seeded      # the month-end checklist, each task proven
+forge tax calendar        # every filing deadline the profile implies
+forge brief               # the five things the owner needs to hear
 ```
 
 No database, no API key and no network are required. A seeded synthetic
@@ -42,14 +46,19 @@ in about a tenth of a second.
 | Exact money arithmetic | Integer minor units; floats rejected at the constructor |
 | Canonical financial model | Accounts, transactions, parties, jobs, debt, open items, lineage on every record |
 | Deterministic engine | Trial balance, statements, aging, bank reconciliation, roll-forwards, anomaly features |
-| Control catalogue | 55 versioned controls, each with purpose, severity, evidence contract and remediation |
+| Control catalogue | 56 versioned controls, each with purpose, severity, evidence contract and remediation |
 | Evidence packets | Bounded, checksummed, with untrusted source text fenced as data |
 | Risk router | Deterministic tiering R0 to R4 that records its reasons |
 | Review hierarchy | Preparer, manager, controller, adversary, policy, VP, CFO, human |
 | Model gateway | 12 providers through 2 adapters, cost-aware routing, cascade, cross-vendor independence, fallback, budgets |
 | Client profiles | One profile drives policy for every control, benchmark, tax rate and workflow |
 | Document pipeline | Vision extraction, deterministic vendor table, model research only for unknowns, code-computed tax, balance-validated entries |
-| CFO layer | CCA, deferred revenue and loan schedules, working capital, health score, 13-week cash forecast |
+| CFO layer | CCA, deferred revenue and loan schedules, working capital, health score, 13-week cash forecast, job profitability, owner brief |
+| Tax | HST return working paper reconciled to the ledger, filing calendar, corporate provision, T5018 and T4A obligations |
+| Close | Sixteen-task month-end checklist, every task proven done, open or blocked from the engine |
+| Learning | Per-client outcome log; dismissals suppress, acceptances become known patterns; critical never suppressed |
+| Operations | One-command client run, job plan per client, firm queue and daily brief across every client |
+| Growth | Pricing from the profile, proposals from the diagnostic, outreach drafts, pipeline |
 | Work items | 16-state machine; cannot approve over an open note or act beyond approved scope |
 | Industry packs | 22 Canadian industries, 33 cost structures, 5 revenue tiers |
 | Canadian payroll | 2026 CPP, CPP2, EI, federal and Ontario tax, exact to the cent |
@@ -64,7 +73,7 @@ Current numbers on the seeded case:
 | Planted defects detected | 15 of 15 |
 | Critical defects detected | 6 of 6 |
 | Decoys wrongly reported | 0 of 2 |
-| Findings on a clean book | 8 |
+| Findings on a clean book | 9 |
 | Full control pass | ~110 ms |
 
 ## What is deliberately not here
@@ -79,7 +88,11 @@ decisions, not omissions; see `docs/01-architecture.md` for why each one waits.
 services/forge-core/          the engine, controls, agents and bench
   forge/canonical/            the financial model every layer agrees on
   forge/engine/               deterministic accounting math
-  forge/rules/catalog/        the 50 controls, grouped by finance area
+  forge/rules/catalog/        the 56 controls, grouped by finance area
+  forge/tax/ forge/close/     sales tax, provision, calendar, slips; the close checklist
+  forge/learning/             outcomes that become suppressions and known patterns
+  forge/operations/           client runs, job plans, the firm queue, the daily brief
+  forge/growth/               pricing, proposals, outreach, pipeline
   forge/agents/               contracts, model gateway, review loop
   forge/workitems/            risk scoring, routing, state machine
   forge/bench/                seeded defects and the release gate
@@ -91,6 +104,7 @@ docs/                         constitution, architecture, strategy, decisions
 
 | Document | What it answers |
 | --- | --- |
+| `docs/10-operating-manual.md` | How to run it day to day, what it cannot do yet and why, what is not right |
 | `docs/00-product-constitution.md` | The rules that cannot be traded away for a demo |
 | `docs/01-architecture.md` | The layers, the decisions taken, and what each one costs |
 | `docs/02-commercial-strategy.md` | How this earns money, in what order, at what price |

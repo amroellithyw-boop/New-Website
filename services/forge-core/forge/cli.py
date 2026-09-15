@@ -355,3 +355,259 @@ def route(
 
 if __name__ == "__main__":  # pragma: no cover
     app()
+
+
+# ---------------------------------------------------------------------------
+# Operations: one client, the whole firm, close, tax, brief, sales, outcomes.
+# ---------------------------------------------------------------------------
+
+
+def _period(period_end: str, months: int = 1) -> tuple[date, date]:
+    end = date.fromisoformat(period_end)
+    m, y = end.month - months + 1, end.year
+    while m <= 0:
+        m, y = m + 12, y - 1
+    return date(y, m, 1), end
+
+
+def _demo_profile(name: str) -> ClientProfile:
+    from .money import Money
+
+    return ClientProfile(client_id="DEMO", business_name=name, naics_code="238210", owner_name="Demo Owner",
+                         annual_revenue_estimate=Money.from_decimal("2400000.00"), employees_full_time=8,
+                         uses_subcontractors=True, services=("bookkeeping", "payroll", "tax", "cfo_advisory"))
+
+
+def _load_profile(profile: Path | None, company) -> ClientProfile:
+    return ClientProfile.from_json(profile.read_text()) if profile else _demo_profile(company.ledger.entity.name)
+
+
+def _client_run(profile: Path | None, period_end: str, months: int, data_dir: Path | None, *, seeded: bool = False,
+                with_review: bool = False):
+    """The ledger is the demonstration company until a live connector mapping is finished."""
+    from .operations import run_client
+
+    start, end = _period(period_end, months)
+    if seeded:
+        case = build_seeded_case(period_start=start, period_end=end)
+        company, ledger = case.company, case.ledger
+    else:
+        company = build_contractor_company()
+        ledger = company.ledger
+    prof = _load_profile(profile, company)
+    gateway = ModelGateway.from_environment() if with_review else None
+    return run_client(prof, ledger, period_start=start, period_end=end, statements=company.statements,
+                      gateway=gateway, review=with_review, data_dir=data_dir)
+
+
+@app.command()
+def run(
+    profile: Path | None = typer.Option(None, help="Client profile JSON; the demo company is used without one"),
+    period_end: str = typer.Option("2026-06-30"),
+    months: int = typer.Option(1),
+    data_dir: Path = typer.Option(Path("data"), help="Where outcomes and knowledge for each client are kept"),
+    seeded: bool = typer.Option(False, "--seeded", help="Plant the ForgeBench error set first"),
+    with_review: bool = typer.Option(False, "--with-review", help="Run the model review hierarchy on material items"),
+    as_json: bool = typer.Option(False, "--json"),
+) -> None:
+    """Everything the finance team does for one client in one period: controls,
+    health, cash, close, sales tax, provision, deadlines and drafted actions."""
+    cr = _client_run(profile, period_end, months, data_dir, seeded=seeded, with_review=with_review)
+    if as_json:
+        typer.echo(json.dumps(cr.summary(), indent=2, default=str))
+        return
+    s = cr.summary()
+    typer.echo(f"\n{s['client']}  {s['period']}   data gate {'PASSED' if s['passed_data_gate'] else 'FAILED'}")
+    typer.echo(f"  health {s['health']['score']}/100 ({s['health']['grade']})   findings {s['findings']} {s['by_severity']}"
+               f"   suppressed by learning {s['suppressed_by_learning']}")
+    typer.echo(f"  recoverable cash {s['recoverable_cash']}   cash low point week {s['cash']['lowest_week']}"
+               f"{'  GOES NEGATIVE' if s['cash']['goes_negative'] else ''}")
+    typer.echo(f"  close {s['close']['percent_complete']}% ({s['close']['open']} open)   can lock: {s['close']['can_lock']}")
+    typer.echo(f"  sales tax balance {s['sales_tax_balance']}   tax provision YTD {s['tax_provision']}")
+    typer.echo(f"  drafts {s['drafts']['total']} ({s['drafts']['authorised_now']} authorised now)   model cost {s['cost_micros']} micro-dollars")
+    if s["deadlines_30_days"]:
+        typer.echo("  deadlines in thirty days: " + "; ".join(f"{k} {d}" for k, d in s["deadlines_30_days"]))
+    typer.echo("")
+    for item in cr.run.work_items:
+        f = item.finding
+        typer.echo(f"  [{f.severity.value:<8s}] {item.risk.tier.value} {f.rule_id} {abs(f.exposure).format():>14s}  {f.title}")
+    typer.echo("\nRecord decisions with `forge outcome <finding-id> accepted|dismissed|corrected` so the system learns.")
+
+
+@app.command("run-all")
+def run_all(
+    clients: Path = typer.Argument(..., help="Directory of client profile JSON files"),
+    period_end: str = typer.Option("2026-06-30"),
+    data_dir: Path = typer.Option(Path("data")),
+    pipeline: Path | None = typer.Option(None, help="Sales pipeline JSON to fold into the queue"),
+) -> None:
+    """Run every client, then print the firm's prioritised queue and the daily brief."""
+    from .growth import SalesPipeline
+    from .operations import build_firm_queue, daily_brief
+
+    runs = [_client_run(p, period_end, 1, data_dir) for p in sorted(clients.glob("*.json"))]
+    if not runs:
+        typer.echo("No profiles found; `forge onboard <intake.json> --out clients/<id>.json` creates one.")
+        raise typer.Exit(1)
+    sp = SalesPipeline.load(pipeline) if pipeline else None
+    queue = build_firm_queue(runs, as_of=date.fromisoformat(period_end), pipeline=sp)
+    typer.echo(daily_brief(queue, runs))
+    typer.echo("\nQueue")
+    for i in queue.top(30):
+        typer.echo(f"  P{i.priority} {i.client:<22s} {i.kind:<10s} {i.title}" + (f"  due {i.due_on}" if i.due_on else ""))
+
+
+@app.command()
+def close(
+    profile: Path | None = typer.Option(None),
+    period_end: str = typer.Option("2026-06-30"),
+    data_dir: Path = typer.Option(Path("data")),
+    seeded: bool = typer.Option(False, "--seeded"),
+) -> None:
+    """The month-end close checklist, each task proven done, open or blocked."""
+    cr = _client_run(profile, period_end, 1, data_dir, seeded=seeded)
+    cl = cr.close
+    typer.echo(f"\nClose {cl.period_start} to {cl.period_end}: {cl.percent_complete}% complete, "
+               f"{'can lock' if cl.can_lock else 'cannot lock yet'}\n")
+    for t in cl.tasks:
+        mark = {"done": "x", "open": " ", "blocked": "!", "not_applicable": "-"}[t.status]
+        typer.echo(f"  [{mark}] {t.title:<44s} {t.owner.value:<22s} {t.evidence}")
+    typer.echo("\nDrafted adjustments")
+    for wid, d in cr.drafts:
+        if d.kind == "draft_journal_entry":
+            typer.echo(f"  {wid}  {d.title}" + ("  (estimate)" if d.is_estimate else ""))
+            for ln in d.lines:
+                typer.echo(f"      {ln['side']:<6s} {ln['account_number']:<8s} {ln['account_name']:<32s} {ln['amount']:>12s}")
+
+
+@app.command()
+def tax(
+    what: str = typer.Argument("return", help="return | calendar | provision | slips"),
+    profile: Path | None = typer.Option(None),
+    period_end: str = typer.Option("2026-06-30"),
+    months: int = typer.Option(3, help="Return period length; three for a quarterly filer"),
+    data_dir: Path = typer.Option(Path("data")),
+) -> None:
+    """Sales tax return working paper, filing calendar, corporate provision, or slip obligations."""
+    from .tax import slip_obligations
+
+    cr = _client_run(profile, period_end, months, data_dir)
+    end = date.fromisoformat(period_end)
+    if what == "return":
+        r = cr.sales_tax
+        typer.echo(f"\n{cr.profile.business_name}: sales tax return {r.period_start} to {r.period_end}\n")
+        for k, v in r.to_dict().items():
+            typer.echo(f"  {k:<32s} {v}")
+    elif what == "calendar":
+        typer.echo(f"\nFiling calendar for {cr.profile.business_name}, from {end}\n")
+        for d in cr.deadlines:
+            flag = "  (confirm frequency on the CRA account)" if d.confirm else ""
+            typer.echo(f"  {d.due_on}  {d.kind:<20s} {d.description}{flag}")
+    elif what == "provision":
+        typer.echo(f"\nCorporate tax provision, fiscal year to {end}\n")
+        for k, v in cr.provision.to_dict().items():
+            typer.echo(f"  {k:<28s} {v}")
+    elif what == "slips":
+        slips = slip_obligations(cr.run.ctx, year=end.year, construction=cr.profile.files_t5018)
+        typer.echo(f"\n{len(slips)} slip(s) to issue for {end.year}\n")
+        for s in slips:
+            typer.echo(f"  {s.slip}  {s.party_name:<32s} {s.amount_paid.format():>14s}")
+    else:
+        raise typer.BadParameter("what must be return, calendar, provision or slips")
+
+
+@app.command()
+def brief(
+    profile: Path | None = typer.Option(None),
+    period_end: str = typer.Option("2026-06-30"),
+    data_dir: Path = typer.Option(Path("data")),
+    proposal: bool = typer.Option(False, "--proposal", help="Render the prospect proposal instead of the owner brief"),
+    firm: str = typer.Option("Profit Forge"),
+    sender: str = typer.Option("Amro"),
+) -> None:
+    """The five things that matter this month for the owner, or a proposal for a prospect."""
+    from .cfo import owner_brief
+    from .growth import build_proposal, render_proposal
+
+    cr = _client_run(profile, period_end, 1, data_dir)
+    if proposal:
+        typer.echo(render_proposal(build_proposal(cr.profile, cr.run, today=date.fromisoformat(period_end)), firm=firm, sender=sender))
+    else:
+        typer.echo(owner_brief(cr))
+
+
+@app.command()
+def sales(
+    action: str = typer.Argument("list", help="list | add | move | due | outreach"),
+    pipeline: Path = typer.Option(Path("data/pipeline.json")),
+    prospect_id: str | None = typer.Option(None),
+    name: str | None = typer.Option(None),
+    naics: str | None = typer.Option(None),
+    stage: str | None = typer.Option(None),
+    note: str = typer.Option(""),
+    firm: str = typer.Option("Profit Forge"),
+    sender: str = typer.Option("Amro"),
+) -> None:
+    """The selling machine: pipeline stages, follow-ups due, and drafted outreach."""
+    from .growth import STAGES, Prospect, SalesPipeline, diagnostic_fee, draft_outreach
+
+    sp = SalesPipeline.load(pipeline)
+    if action == "list":
+        typer.echo(f"Funnel: {sp.funnel()}   conversion: {sp.conversion()}\n")
+        for p in sp.prospects.values():
+            typer.echo(f"  {p.prospect_id:<10s} {p.business_name:<28s} {p.stage:<20s} next: {p.next_action or ''} {p.next_action_on or ''}")
+    elif action == "add":
+        if not (prospect_id and name):
+            raise typer.BadParameter("--prospect-id and --name are required")
+        sp.add(Prospect(prospect_id=prospect_id, business_name=name, naics_code=naics))
+        sp.save()
+        typer.echo(f"Added {name} at stage lead")
+    elif action == "move":
+        if not (prospect_id and stage):
+            raise typer.BadParameter(f"--prospect-id and --stage ({', '.join(STAGES)}) are required")
+        sp.prospects[prospect_id].move(stage, note=note)
+        sp.save()
+        typer.echo(f"{prospect_id} -> {stage}; next: {sp.prospects[prospect_id].next_action}")
+    elif action == "due":
+        for p in sp.due_today():
+            typer.echo(f"  {p.prospect_id:<10s} {p.business_name:<28s} {p.stage:<20s} {p.next_action}")
+    elif action == "outreach":
+        if not prospect_id:
+            raise typer.BadParameter("--prospect-id is required")
+        p = sp.prospects[prospect_id]
+        prof = ClientProfile(client_id=p.prospect_id, business_name=p.business_name, naics_code=p.naics_code, province=p.province)
+        gw = ModelGateway.from_environment()
+        email = draft_outreach(prof, gateway=gw, sender=sender, firm=firm, diagnostic_fee=diagnostic_fee(prof).format())
+        typer.echo(f"Subject: {email.subject}\n\n{email.body}\n\nCost: {gw.cost_summary()['cost']}")
+    else:
+        raise typer.BadParameter("action must be list, add, move, due or outreach")
+
+
+@app.command()
+def outcome(
+    finding_id: str = typer.Argument(..., help="The finding id shown by `forge run`"),
+    decision: str = typer.Argument(..., help="accepted | dismissed | corrected | deferred"),
+    profile: Path | None = typer.Option(None),
+    period_end: str = typer.Option("2026-06-30"),
+    data_dir: Path = typer.Option(Path("data")),
+    reason: str = typer.Option(""),
+    by: str = typer.Option("operator"),
+    seeded: bool = typer.Option(False, "--seeded"),
+) -> None:
+    """Record what happened to a finding. Three dismissals of one pattern suppress it;
+    an acceptance makes it a known pattern and lowers its novelty next time."""
+    from .learning import OutcomeLog
+
+    if decision not in ("accepted", "dismissed", "corrected", "deferred"):
+        raise typer.BadParameter("decision must be accepted, dismissed, corrected or deferred")
+    cr = _client_run(profile, period_end, 1, None, seeded=seeded)
+    finding = next((f for f in list(cr.run.findings) + list(cr.run.suppressed) if f.finding_id == finding_id), None)
+    if finding is None:
+        raise typer.BadParameter(f"{finding_id} is not a finding in this run")
+    log = OutcomeLog.load(cr.profile.client_id, data_dir)
+    o = log.record(finding, decision, by=by, reason=reason)  # type: ignore[arg-type]
+    log.save()
+    pol = log.policy()
+    typer.echo(f"Recorded {decision} for {finding_id} (pattern {o.pattern}); "
+               f"dismissals so far {pol.dismissal_counts.get(o.pattern, 0)}; "
+               f"{'now suppressed' if pol.is_suppressed(finding) else 'now a known pattern' if pol.is_known(finding) else 'still raised'}.")

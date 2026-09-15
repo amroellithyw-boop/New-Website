@@ -67,6 +67,7 @@ class ControllerRun:
     gate_failures: tuple[DataGateFailure, ...] = ()
     gateway: ModelGateway | None = None
     reviewed: bool = False
+    suppressed: list[Finding] = field(default_factory=list)
 
     @property
     def passed_data_gate(self) -> bool:
@@ -133,6 +134,7 @@ class ControllerRun:
             "size_tier": self.ctx.policy.get("size_tier"),
             "reviewed": self.reviewed,
             "items_needing_human": len(self.items_needing_human),
+            "suppressed_by_learning": len(self.suppressed),
             "cost_micros": self.cost_micros,
         }
 
@@ -188,6 +190,7 @@ def run_continuous_controller(
     profile: ClientProfile | None = None,
     knowledge: ClientKnowledge | None = None,
     scope_to_profile: bool = False,
+    learning: Any = None,
 ) -> ControllerRun:
     """Run a full Continuous Controller pass.
 
@@ -228,6 +231,15 @@ def run_continuous_controller(
         only = profile.to_policy().controls_in_scope(registry or REGISTRY)
     outcome = run_rules(ctx, registry=registry or REGISTRY, only=only)
 
+    # Learned suppressions: a pattern the operator dismissed three times on this
+    # client stops being raised, unless it is critical. Recorded, never silent.
+    suppressed_findings: list = []
+    if learning is not None:
+        from .learning import apply_learning
+
+        kept, suppressed_findings = apply_learning(outcome.findings, learning)
+        outcome.findings = kept
+
     run = ControllerRun(
         entity_name=ledger.entity.name,
         period_start=period_start,
@@ -237,6 +249,7 @@ def run_continuous_controller(
         outcome=outcome,
         gate_failures=gate_failures,
         gateway=gateway,
+        suppressed=suppressed_findings,
     )
 
     # Findings are still produced when the gate fails, because the integrity
@@ -252,7 +265,7 @@ def run_continuous_controller(
                 f"rule:{finding.rule_id}",
                 f"rule:{finding.rule_id}:{finding.finding_id.partition(':')[2]}",
             )
-        )
+        ) or bool(learning is not None and learning.is_known(finding))
         score = score_finding(finding, ctx.materiality, known_pattern=known)
         plan = required_reviewers(finding, score)
         run.work_items.append(

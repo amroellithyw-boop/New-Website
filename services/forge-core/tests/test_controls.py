@@ -7,7 +7,7 @@ from forge.money import Money
 from forge.rules import REGISTRY, run_rules
 from forge.rules.materiality import compute_materiality
 
-EXPECTED_CONTROL_COUNT = 55
+EXPECTED_CONTROL_COUNT = 56
 # The five benchmark controls are opt-in: they stay silent unless a client's
 # industry is configured, so the clean-book fixtures below do not set one.
 BENCHMARK_CONTROL_COUNT = 5

@@ -37,12 +37,34 @@ is shown to anyone: entries must balance, tax is computed from the client's
 province rather than by the model, and every finding carries the calculation
 and source records behind it.
 
+**Every role, every workflow, tax included (this round).** The audit against
+your two blueprints found four roles without a mandate and four workflows with
+no code: month-end close, tax readiness, FP&A and the owner brief. All are
+built now. Tax has its own package: the HST return working paper reconciled to
+the ledger, the filing calendar for every obligation the profile implies,
+the corporate provision with the add-backs, and T5018 and T4A slip obligations.
+The close is a sixteen-task checklist where every task proves its own status
+from the engine. Job profitability and a margin-outlier control cover FP&A.
+
+**Knowledge that compounds per client.** Every decision you record on a finding
+goes into that client's outcome log. Three dismissals of one pattern on one
+counterparty suppress it; an acceptance makes it a known pattern, which lowers
+its novelty score next time so it routes to a lighter review. Critical findings
+are never suppressed. The log, the knowledge store and the precedents all live
+in one directory per client and are read at the start of every run.
+
+**The selling machine and the operations machine.** `forge run-all` runs every
+client, builds the firm's prioritised queue and writes the daily brief. `forge
+sales` keeps the pipeline, drafts outreach and follow-ups, and `forge brief
+--proposal` turns a diagnostic into a priced proposal. Pricing is a function of
+the profile, so a proposal is never made up.
+
 ## The numbers
 
 | | Before this round | Now |
 | --- | --- | --- |
-| Controls | 55 | 55 |
-| Tests | 170 | 241 |
+| Controls | 55 | 56 |
+| Tests | 170 | 277 |
 | Model providers reachable | 1 | 12 |
 | Independent model families | 1 | up to 12 |
 | ForgeBench detection | 15 of 15 | 15 of 15 |
@@ -98,6 +120,57 @@ forge document statement.pdf --profile clients/eternal.json --out result.json
 
 Extracts, identifies vendors, proposes balanced tax-split entries, and shows what
 was rejected and why. Nothing is posted anywhere.
+
+**Run everything for one client.**
+
+```bash
+forge run --profile clients/eternal.json --data-dir data
+forge run --seeded            # the same, on a book with fifteen planted defects
+forge run --json              # every number, machine-readable
+```
+
+One command: controls, health score, working capital, cash forecast, close
+checklist, sales tax return, corporate provision, filing deadlines, and a
+drafted action for every finding. The data directory is where this client's
+knowledge and decisions accumulate.
+
+**Tell it what happened, so it learns.**
+
+```bash
+forge outcome FOS-R027:CUST-0007 accepted  --data-dir data --by amro
+forge outcome FOS-R015:bookkeeper dismissed --data-dir data --reason "she is our bookkeeper"
+```
+
+**Close the month, prepare tax, brief the owner.**
+
+```bash
+forge close --profile clients/eternal.json
+forge tax return    --profile clients/eternal.json --period-end 2026-06-30 --months 3
+forge tax calendar  --profile clients/eternal.json
+forge tax provision --profile clients/eternal.json
+forge tax slips     --profile clients/eternal.json
+forge brief         --profile clients/eternal.json
+```
+
+**Run the whole firm.**
+
+```bash
+forge run-all clients/ --pipeline data/pipeline.json
+```
+
+Every profile in the directory is run; you get the daily brief and the queue
+ordered by what matters: approvals and broken books first, then cash and
+deadlines inside a week, then material findings, then sales follow-ups.
+
+**Sell.**
+
+```bash
+forge sales add  --prospect-id P1 --name "Acme Paving" --naics 238210
+forge sales outreach --prospect-id P1          # drafts the first email with your models
+forge sales move --prospect-id P1 --stage diagnostic_booked
+forge brief --proposal --profile clients/acme.json
+forge sales due                                # who to follow up today
+```
 
 **Prove the books and the quality gate.**
 
@@ -176,8 +249,10 @@ demonstration; all of it blocks running on a real client.
 
 - Ten QuickBooks entity mappers beyond journal entries, which block a real
   file tying out.
-- The month-end close and year-end workflows on the state machine.
-- HST and WSIB filing preparation as workflows; the controls exist.
+- The year-end working-paper binder and slip rendering; the obligations,
+  dates and provision are computed.
+- WSIB premium calculation; the dates and the rate-group control exist.
+- Driver-based budgets; the cash forecast and variance control exist.
 - A persistence layer and an API over the pipeline; the CLI covers everything
   today.
 - Any write-back, sending or filing. Those are autonomy level A2 and wait on

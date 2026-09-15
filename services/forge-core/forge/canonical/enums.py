@@ -182,6 +182,7 @@ class AgentRole(str, Enum):
     FPA_ANALYST = "fpa_analyst"
     FPA_MANAGER = "fpa_manager"
     COMMERCIAL_ANALYST = "commercial_analyst"
+    FINANCE_BUSINESS_PARTNER = "finance_business_partner"
     VP_FINANCE = "vp_finance"
     CFO = "cfo"
     ADVERSARY = "adversary"

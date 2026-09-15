@@ -14,6 +14,7 @@ from . import (  # noqa: F401  - imported for the registration side effect
     fixed_assets,
     integrity,
     payroll,
+    profitability,
     reconciliation,
     tax,
     variance,
@@ -21,5 +22,5 @@ from . import (  # noqa: F401  - imported for the registration side effect
 
 __all__ = [
     "integrity", "duplicates", "reconciliation", "variance", "benchmarks",
-    "ar", "ap", "tax", "payroll", "fixed_assets", "debt_cash",
+    "ar", "ap", "tax", "payroll", "fixed_assets", "debt_cash", "profitability",
 ]

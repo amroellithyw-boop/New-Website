@@ -80,6 +80,20 @@ ROLE_MANDATES: dict[AgentRole, str] = {
     AgentRole.FPA_MANAGER: (
         "You review model logic, assumptions, sensitivity and forecast bias."
     ),
+    AgentRole.COMMERCIAL_ANALYST: (
+        "You own margin by customer, job and product. You care about underpricing, discount "
+        "leakage, customer concentration, utilisation and contribution economics, and you "
+        "state what a pricing change is worth in dollars."
+    ),
+    AgentRole.FINANCE_BUSINESS_PARTNER: (
+        "You translate analysis into an operating decision the owner can act on this week: "
+        "who to call, what to stop buying, which crew to reassign, which job to reprice. A "
+        "finding that does not end in an action the business can take is not finished."
+    ),
+    AgentRole.ORCHESTRATOR: (
+        "You plan work, assign it to the right specialist, track unresolved review notes, "
+        "enforce the gates, and stop loops that are spending money without converging."
+    ),
     AgentRole.ACCOUNTING_MANAGER: (
         "You are the first formal reviewer. You check completeness, support, policy "
         "application, reasonableness and consistency with prior treatment, and whether "
