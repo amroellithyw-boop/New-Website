@@ -31,6 +31,10 @@ from .rules.base import Finding, RuleRegistry
 from .workitems.risk import required_reviewers, score_finding
 from .workitems.state import WorkItem
 
+if False:  # typing only; avoids an import cycle at runtime
+    from .clients.knowledge import ClientKnowledge
+    from .clients.profile import ClientProfile
+
 __all__ = ["DataGateFailure", "ControllerRun", "run_continuous_controller"]
 
 DEFAULT_POLICY: dict[str, Any] = {
@@ -125,6 +129,8 @@ class ControllerRun:
             "total_exposure": str(self.total_exposure.to_decimal()),
             "recoverable_cash": str(self.recoverable_cash.to_decimal()),
             "materiality": self.ctx.materiality.describe(),
+            "industry": self.ctx.policy.get("industry_label"),
+            "size_tier": self.ctx.policy.get("size_tier"),
             "reviewed": self.reviewed,
             "items_needing_human": len(self.items_needing_human),
             "cost_micros": self.cost_micros,
@@ -179,6 +185,9 @@ def run_continuous_controller(
     review_limit: int = 10,
     autonomy: AutonomyLevel = AutonomyLevel.A0_OBSERVE,
     enforce_data_gate: bool = True,
+    profile: ClientProfile | None = None,
+    knowledge: ClientKnowledge | None = None,
+    scope_to_profile: bool = False,
 ) -> ControllerRun:
     """Run a full Continuous Controller pass.
 
@@ -188,6 +197,21 @@ def run_continuous_controller(
     ``review_limit`` of them: spending model tokens on routine items is exactly
     the waste the constitution's token-control rule warns about.
     """
+    # The profile is the single source of personalisation. When one is given it
+    # supplies the policy, the fiscal year and, if asked, the control scope;
+    # an explicit policy argument still wins for individual keys so an operator
+    # can override one setting for one run without editing the profile.
+    resolved_policy: dict[str, Any] = dict(DEFAULT_POLICY)
+    if profile is not None:
+        resolved_policy.update(profile.to_policy().as_rule_policy())
+        if fiscal_year_start is None:
+            fiscal_year_start = profile.fiscal_year_start(period_end)
+        if knowledge is not None:
+            resolved_policy["context_notes"] = "\n".join(
+                [resolved_policy.get("context_notes", "")] + knowledge.context_lines()
+            ).strip()
+    if policy:
+        resolved_policy.update(policy)
     fy_start = fiscal_year_start or date(period_end.year, 1, 1)
     ctx = RuleContext(
         ledger=ledger,
@@ -195,11 +219,14 @@ def run_continuous_controller(
         period_end=period_end,
         fiscal_year_start=fy_start,
         statements=tuple(statements),
-        policy=dict(policy or DEFAULT_POLICY),
+        policy=resolved_policy,
     ).prepare()
 
     gate_failures = _check_data_gate(ctx)
-    outcome = run_rules(ctx, registry=registry or REGISTRY)
+    only = None
+    if scope_to_profile and profile is not None:
+        only = profile.to_policy().controls_in_scope(registry or REGISTRY)
+    outcome = run_rules(ctx, registry=registry or REGISTRY, only=only)
 
     run = ControllerRun(
         entity_name=ledger.entity.name,
@@ -216,7 +243,17 @@ def run_continuous_controller(
     # controls are precisely what explains the failure. What does not happen is
     # spending model reasoning on top of numbers that do not add up.
     for index, finding in enumerate(run.findings):
-        score = score_finding(finding, ctx.materiality)
+        # A precedent the operator approved for this pattern lowers novelty in
+        # the risk score. This is how the system gets cheaper on a client the
+        # longer it works with them, without getting less careful on new things.
+        known = bool(
+            knowledge is not None
+            and knowledge.is_known(
+                f"rule:{finding.rule_id}",
+                f"rule:{finding.rule_id}:{finding.finding_id.partition(':')[2]}",
+            )
+        )
+        score = score_finding(finding, ctx.materiality, known_pattern=known)
         plan = required_reviewers(finding, score)
         run.work_items.append(
             WorkItem(

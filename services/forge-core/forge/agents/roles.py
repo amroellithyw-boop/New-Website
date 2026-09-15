@@ -276,6 +276,7 @@ def run_review_loop(
 
     independent = True
     rounds = 0
+    families_used: list[str] = [preparer_spec.family]
     for reviewer in item.plan.reviewers:
         if reviewer is AgentRole.HUMAN:
             item.transition(
@@ -287,17 +288,20 @@ def run_review_loop(
                 item.state, rounds, "awaiting human approval", independent
             )
 
-        # Reviewer independence for material work: prefer a different model family.
-        avoid = preparer_spec.family if item.risk.tier.level >= 3 else None
-        reviewer_spec = gateway.select(tier=item.risk.tier, role=reviewer, avoid_family=avoid)
-        if avoid and reviewer_spec.family == avoid:
+        # Reviewer independence for material work: every reviewer in the chain
+        # should come from a family not yet used, so a preparer on Claude, a
+        # controller on GPT and an adversary on Grok never share a failure mode.
+        avoid = list(families_used) if item.risk.tier.level >= 3 else []
+        reviewer_spec = gateway.select(tier=item.risk.tier, role=reviewer, avoid_families=avoid)
+        if avoid and reviewer_spec.family in avoid:
             independent = False
             item.record(
                 "orchestrator",
                 "independence_unavailable",
-                f"no model family other than '{avoid}' is configured; this "
-                f"{item.risk.tier.value} review is not independent",
+                f"no model family outside {sorted(set(avoid))} is configured; this "
+                f"{item.risk.tier.value} review by {reviewer.value} is not independent",
             )
+        families_used.append(reviewer_spec.family)
 
         while True:
             rounds += 1

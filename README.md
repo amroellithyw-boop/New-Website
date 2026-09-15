@@ -26,7 +26,8 @@ pip install -e ".[dev]"
 
 forge tieout      # prove the books reconcile
 forge bench       # run the quality gate
-forge controls    # list all 50 controls
+forge providers   # which model vendors are configured, and the routing
+forge forecast    # working capital, health score, 13-week cash
 forge review --seeded --out review.html
 ```
 
@@ -45,7 +46,10 @@ in about a tenth of a second.
 | Evidence packets | Bounded, checksummed, with untrusted source text fenced as data |
 | Risk router | Deterministic tiering R0 to R4 that records its reasons |
 | Review hierarchy | Preparer, manager, controller, adversary, policy, VP, CFO, human |
-| Model gateway | Provider-agnostic, routes by risk, enforces reviewer independence, tracks cost |
+| Model gateway | 12 providers through 2 adapters, cost-aware routing, cascade, cross-vendor independence, fallback, budgets |
+| Client profiles | One profile drives policy for every control, benchmark, tax rate and workflow |
+| Document pipeline | Vision extraction, deterministic vendor table, model research only for unknowns, code-computed tax, balance-validated entries |
+| CFO layer | CCA, deferred revenue and loan schedules, working capital, health score, 13-week cash forecast |
 | Work items | 16-state machine; cannot approve over an open note or act beyond approved scope |
 | Industry packs | 22 Canadian industries, 33 cost structures, 5 revenue tiers |
 | Canadian payroll | 2026 CPP, CPP2, EI, federal and Ontario tax, exact to the cent |
@@ -94,3 +98,6 @@ docs/                         constitution, architecture, strategy, decisions
 | `docs/04-getting-existing-code-in.md` | Moving the Replit project into this repository |
 | `docs/05-decision-log.md` | Every shortcut, assumption and deferred feature |
 | `docs/06-legacy-migration.md` | What moved over from ProfitForge, and the nine defects found in it |
+| `docs/07-ai-providers.md` | Every model vendor, how routing picks one, and why cheap is also rigorous |
+| `docs/08-feature-inventory.md` | All 53 legacy features and where each one stands |
+| `docs/09-walkthrough.md` | How to run it, set up providers, and what only you can supply |

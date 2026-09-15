@@ -14,7 +14,10 @@ from pathlib import Path
 import typer
 
 from .agents import ModelGateway
+from .agents.catalogue import CATALOGUE, PROVIDER_ENV, available_models
 from .bench import BenchThresholds, build_seeded_case, run_bench
+from .cfo import cash_forecast, health_score, working_capital
+from .clients import ClientProfile
 from .connectors.fixture_contractor import build_contractor_company
 from .pipeline import run_continuous_controller
 from .report import render_diagnostic, write_evidence_bundle
@@ -52,6 +55,138 @@ def controls(
             f"  {rule.rule_id} v{rule.version}  {rule.severity.value:<8s} "
             f"{rule.risk_tier_floor.value}  {rule.title}{flag}"
         )
+
+
+@app.command()
+def providers() -> None:
+    """Show which model providers are configured and what routing will use."""
+
+    live = {m.provider for m in available_models()}
+    typer.echo("\nProviders (set the environment variable to enable):\n")
+    for provider, (var, base) in PROVIDER_ENV.items():
+        if provider == "offline":
+            continue
+        state = "ENABLED " if provider in live else "disabled"
+        typer.echo(f"  {state}  {provider:<11s} {var:<22s} {base or '(SDK)'}")
+    gw = ModelGateway.from_environment()
+    fams = sorted(gw.families_available())
+    typer.echo(f"\nIndependent model families available: {len(fams)}  {fams}")
+    if len(fams) < 2:
+        typer.echo("  Material reviews will be marked not independent until a second family is configured.")
+    typer.echo("\nRouting preview (cheapest capable model per tier and role):")
+    from .canonical.enums import AgentRole, RiskTier
+    for tier in (RiskTier.R1, RiskTier.R2, RiskTier.R3, RiskTier.R4):
+        for role in (AgentRole.BOOKKEEPER, AgentRole.CONTROLLER, AgentRole.ADVERSARY):
+            try:
+                spec = gw.select(tier=tier, role=role)
+                typer.echo(f"  {tier.value} {role.value:<18s} -> {spec.key:<40s} q{spec.quality} "
+                           f"${spec.input_cost_per_mtok}/{spec.output_cost_per_mtok} per MTok")
+            except Exception as exc:  # noqa: BLE001
+                typer.echo(f"  {tier.value} {role.value:<18s} -> {exc}")
+    typer.echo(f"\nCatalogue: {len(CATALOGUE)} models. Edit forge/agents/catalogue.py to add one.")
+
+
+@app.command()
+def onboard(
+    intake: Path = typer.Argument(..., help="JSON file in the legacy intake shape or the profile shape"),
+    out: Path | None = typer.Option(None, help="Write the normalised profile JSON here"),
+    plan: bool = typer.Option(False, "--plan", help="Draft the onboarding plan with the configured models"),
+) -> None:
+    """Turn an intake questionnaire into a client profile, and optionally a plan."""
+    raw = json.loads(intake.read_text())
+    profile = ClientProfile.from_dict(raw) if "client_id" in raw else ClientProfile.from_legacy_intake(raw)
+    pol = profile.to_policy()
+    typer.echo(f"\n{profile.business_name}  ({profile.client_id})")
+    typer.echo(f"  industry     {pol.industry_label or 'not set'}   tier {pol.size_tier}")
+    typer.echo(f"  province     {profile.province}  {pol.sales_tax_label} {profile.sales_tax.percent_label}")
+    typer.echo(f"  fiscal year  ends {profile.fiscal_year_end_month}/{profile.fiscal_year_end_day}")
+    typer.echo(f"  services     {', '.join(profile.services)}")
+    typer.echo(f"  workflows    {', '.join(pol.workflows)}")
+    typer.echo(f"  controls     {', '.join(pol.control_categories)}")
+    typer.echo(f"  deferred rev {'expected' if pol.deferred_revenue_expected else 'not expected'}   T5018 {'yes' if pol.files_t5018 else 'no'}")
+    if out:
+        out.write_text(profile.to_json())
+        typer.echo(f"\nProfile written to {out}")
+    if plan:
+        from .agents.communications import draft_onboarding_plan
+
+        gw = ModelGateway.from_environment()
+        result = draft_onboarding_plan(profile, gateway=gw)
+        typer.echo("\n" + result.model_dump_json(indent=2))
+        typer.echo(f"\nCost: {gw.cost_summary()['cost']}")
+
+
+@app.command()
+def forecast(
+    period_end: str = typer.Option("2026-06-30"),
+    profile: Path | None = typer.Option(None, help="Client profile JSON; the demo company is used without one"),
+) -> None:
+    """Working capital, health score and a thirteen-week cash forecast."""
+    end = date.fromisoformat(period_end)
+    company = build_contractor_company()
+    prof = ClientProfile.from_json(profile.read_text()) if profile else ClientProfile(
+        client_id="DEMO", business_name=company.ledger.entity.name, naics_code="561730",
+        annual_revenue_estimate=None, services=("bookkeeping", "cfo_advisory"))
+    run = run_continuous_controller(company.ledger, period_start=date(end.year, end.month, 1), period_end=end,
+                                    statements=company.statements, profile=prof)
+    wc = working_capital(run.ctx)
+    hs = health_score(run.ctx, findings=run.findings)
+    fc = cash_forecast(run.ctx)
+    typer.echo(f"\n{run.entity_name}  as at {end.isoformat()}\n")
+    typer.echo(f"Health score {hs.score}/100  grade {hs.grade}")
+    for f in hs.factors:
+        typer.echo(f"  {f.points:>3}/{f.maximum:<3} {f.label:<20s} {f.detail}")
+    typer.echo("\nWorking capital")
+    for k, v in wc.to_dict().items():
+        if k != "as_of":
+            typer.echo(f"  {k:<28s} {v}")
+    typer.echo("\nThirteen-week cash")
+    typer.echo(f"  {'wk':>2} {'start':<11} {'receipts':>12} {'payroll':>12} {'payables':>12} {'recurring':>11} {'debt':>10} {'closing':>13}")
+    for w in fc.weeks:
+        typer.echo(f"  {w.week:>2} {w.start.isoformat():<11} {w.receipts.format():>12} {w.payroll.format():>12} "
+                   f"{w.payables.format():>12} {w.recurring.format():>11} {w.debt_service.format():>10} {w.closing.format():>13}")
+    low = fc.lowest_point
+    if low:
+        typer.echo(f"\nLowest point: week {low[0]} at {low[1].format()}" + ("  NEGATIVE" if fc.goes_negative else ""))
+
+
+@app.command()
+def document(
+    path: Path = typer.Argument(..., help="PDF or image to process"),
+    profile: Path | None = typer.Option(None, help="Client profile JSON"),
+    out: Path | None = typer.Option(None, help="Write the full result JSON here"),
+) -> None:
+    """Run the three-pass document pipeline and show the proposed entries."""
+    import mimetypes
+
+    from .documents import VendorCache, process_document
+
+    media = mimetypes.guess_type(str(path))[0] or "application/octet-stream"
+    prof = ClientProfile.from_json(profile.read_text()) if profile else ClientProfile(
+        client_id="DEMO", business_name="Demo Client", naics_code="561730")
+    gw = ModelGateway.from_environment()
+    if not gw.families_available():
+        typer.echo("No model provider configured; running with the offline stub, which extracts nothing.")
+    cache = VendorCache.load(prof.client_id, Path(".forge") / "vendors")
+    result = process_document(path.read_bytes(), media, profile=prof, gateway=gw, vendor_cache=cache)
+    cache.save()
+    ex = result.extracted
+    if ex:
+        typer.echo(f"\n{ex.document_type} from {ex.vendor_or_issuer or 'unknown'}  "
+                   f"{len(ex.transactions)} transactions  confidence {ex.confidence}")
+    typer.echo(f"proposed {len(result.prepared_entries)} entries, rejected {len(result.rejected_entries)}, "
+               f"warnings {len(result.warnings)}, cost {gw.cost_summary()['cost']}")
+    for e in result.prepared_entries:
+        typer.echo(f"\n  {e['date']}  {e['description']}  ({e['tax_treatment']}, confidence {e['confidence']})")
+        for ln in e["lines"]:
+            typer.echo(f"     {ln['side']:<6} {ln['account_number']:<6} {ln['account_name']:<30s} {ln['amount']:>12}")
+    for entry, reason in result.rejected_entries:
+        typer.echo(f"\n  REJECTED {entry.description}: {reason}")
+    for w in result.warnings:
+        typer.echo(f"  warning: {w}")
+    if out:
+        out.write_text(json.dumps(result.to_dict(), indent=2, default=str))
+        typer.echo(f"\nResult written to {out}")
 
 
 @app.command()

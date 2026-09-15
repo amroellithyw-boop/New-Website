@@ -1,29 +1,36 @@
-"""Provider-agnostic model gateway.
+"""The model gateway: routing, independence, cascade, fallback and budget.
 
-Constitution rule #11: ForgeOS owns the orchestration, evidence, tests and
-business logic. Model providers are replaceable components. Nothing above this
-module imports a vendor SDK or knows a model name.
+Constitution rule #11: ForgeOS owns the orchestration; model providers are
+replaceable components. Nothing above this module names a vendor.
 
-The gateway also carries three things that are easy to forget and expensive to
-retrofit:
+What the gateway does with a call, in order:
 
-* **Routing by risk.** Cheap models do extraction and routine first-pass work;
-  stronger models are spent where materiality, ambiguity or disagreement makes
-  the extra reasoning change the outcome.
-* **Reviewer independence.** For material work the reviewer should not run on
-  the same model family as the preparer, because two instances of one model fail
-  the same way and a correlated failure looks exactly like agreement.
-* **Cost telemetry.** Every call records tokens, latency and cost against a work
-  item, so "what did this close cost" is a query and not a guess.
+1. **Route by tier.** Each risk tier has a minimum quality. The gateway picks
+   the cheapest available model at or above it that has the capabilities the
+   call needs (vision, JSON schema, web search). A free local model wins a
+   routine tier when one is running; a frontier model is reserved for R4 and
+   adversarial work.
+2. **Enforce independence.** For material work the reviewer must come from a
+   different model family than the preparer. With three families configured
+   (say Claude, GPT and Grok) a preparer, a controller and an adversary can each
+   run on a different one. With one family, the gateway records that the review
+   was not independent rather than pretending.
+3. **Cascade when asked.** A cheap first pass; if the structured result reports
+   low confidence or missing evidence, the same call is escalated one quality
+   level. Most routine items never reach the expensive model.
+4. **Fall back on failure.** Retryable provider errors move to the next model in
+   the chain across providers; a refusal moves to another family.
+5. **Stay inside budget.** A per-gateway ceiling on cost and calls that fails
+   loudly. Constitution rule #6 applies to money too: no silent overspend.
+
+Every call records provider, model, tokens, cache hits, latency and cost.
 """
 
 from __future__ import annotations
 
-import json
 import os
-import re
 import time
-from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Any, TypeVar
@@ -31,18 +38,32 @@ from typing import Any, TypeVar
 from pydantic import BaseModel, ValidationError
 
 from ..canonical.enums import AgentRole, RiskTier
+from .catalogue import CATALOGUE, PROVIDER_ENV, ModelSpec
 from .contracts import AgentCall
+from .providers import (
+    ImageInput,
+    ModelResponse,
+    OfflineDeterministicProvider,
+    Provider,
+    ProviderError,
+    ProviderRefused,
+    build_provider,
+)
 
 __all__ = [
     "ModelSpec",
     "ModelResponse",
     "Provider",
     "OfflineDeterministicProvider",
-    "AnthropicProvider",
     "ModelGateway",
     "GatewayError",
+    "BudgetExceeded",
+    "RoutingPolicy",
+    "Budget",
+    "ImageInput",
     "UNTRUSTED_OPEN",
     "UNTRUSTED_CLOSE",
+    "DEFAULT_MODELS",
 ]
 
 T = TypeVar("T", bound=BaseModel)
@@ -50,277 +71,175 @@ T = TypeVar("T", bound=BaseModel)
 UNTRUSTED_OPEN = "<untrusted_source_data>"
 UNTRUSTED_CLOSE = "</untrusted_source_data>"
 
+# Backwards-compatible alias used by earlier tests.
+DEFAULT_MODELS: tuple[ModelSpec, ...] = tuple(
+    m for m in CATALOGUE if m.provider in ("offline", "anthropic")
+)
+
 
 class GatewayError(RuntimeError):
-    """Raised when a call cannot produce a valid, schema-conforming response."""
+    """No provider produced a valid, schema-conforming response."""
 
 
-@dataclass(frozen=True)
-class ModelSpec:
-    """One selectable model, with the facts routing needs."""
-
-    provider: str
-    model: str
-    family: str
-    """Independence is enforced at family level: two models from one family are
-    treated as correlated even when their names differ."""
-    input_cost_per_mtok: Decimal
-    output_cost_per_mtok: Decimal
-    supports_structured_output: bool = True
-    max_output_tokens: int = 4096
-
-    @property
-    def key(self) -> str:
-        return f"{self.provider}:{self.model}"
-
-    def cost_micros(self, input_tokens: int, output_tokens: int) -> int:
-        cost = (
-            Decimal(input_tokens) * self.input_cost_per_mtok
-            + Decimal(output_tokens) * self.output_cost_per_mtok
-        ) / Decimal(1_000_000)
-        return int((cost * Decimal(1_000_000)).quantize(Decimal(1)))
+class BudgetExceeded(GatewayError):
+    """The configured cost or call ceiling would be breached."""
 
 
 @dataclass
-class ModelResponse:
-    text: str
-    input_tokens: int = 0
-    output_tokens: int = 0
-    raw: Any = None
+class Budget:
+    """Ceilings for one gateway instance, typically one run or one work item."""
+
+    max_cost_micros: int | None = None
+    max_calls: int | None = None
+    spent_micros: int = 0
+    calls: int = 0
+
+    def check(self) -> None:
+        if self.max_calls is not None and self.calls >= self.max_calls:
+            raise BudgetExceeded(f"call ceiling of {self.max_calls} reached")
+        if self.max_cost_micros is not None and self.spent_micros >= self.max_cost_micros:
+            raise BudgetExceeded(
+                f"cost ceiling of {Decimal(self.max_cost_micros) / 1_000_000:.4f} reached"
+            )
+
+    def record(self, cost_micros: int) -> None:
+        self.calls += 1
+        self.spent_micros += cost_micros
 
 
-class Provider(ABC):
-    """A model backend. Implementations must not interpret finance semantics."""
+@dataclass(frozen=True)
+class RoutingPolicy:
+    """The dials an operator turns. Defaults favour cost without losing capability."""
 
-    name: str = "provider"
+    min_quality_by_tier: dict[int, int] = field(default_factory=lambda: {0: 1, 1: 2, 2: 3, 3: 4, 4: 4})
+    """Minimum model quality (1 to 5) for each risk tier level."""
+    adversary_min_quality: int = 4
+    executive_min_quality: int = 4
+    prefer_local: bool = True
+    """Use a free local model whenever it clears the tier's quality bar."""
+    prefer_families: tuple[str, ...] = ("claude", "gpt", "grok", "gemini", "deepseek", "hermes", "llama")
+    """Tie-break order among equally-priced candidates; also the order in which
+    independent families are tried for reviewers."""
+    allow_frontier: bool = False
+    """Quality-5 models cost the most and are only used when explicitly enabled."""
+    cascade_confidence_floor: Decimal = Decimal("0.7")
 
-    @abstractmethod
-    def complete(
-        self,
-        *,
-        spec: ModelSpec,
-        system: str,
-        user: str,
-        schema: dict[str, Any] | None = None,
-        max_tokens: int = 4096,
-        temperature: float = 0.0,
-    ) -> ModelResponse:
-        """Return the model's raw text response."""
-
-
-class OfflineDeterministicProvider(Provider):
-    """A provider that runs with no network and no API key.
-
-    This is not a mock bolted on for convenience. ForgeBench has to run in CI on
-    every commit, and a quality gate that depends on a paid external service is a
-    quality gate that gets disabled the first time it is flaky. This provider
-    produces schema-valid, deterministic output derived from the evidence packet,
-    so the *orchestration* - routing, correction loops, gate enforcement - is
-    tested continuously even when model calls are not.
-    """
-
-    name = "offline"
-
-    def __init__(self, seed: int = 11) -> None:
-        self.seed = seed
-        self.calls: list[tuple[str, str]] = []
-
-    def complete(
-        self,
-        *,
-        spec: ModelSpec,
-        system: str,
-        user: str,
-        schema: dict[str, Any] | None = None,
-        max_tokens: int = 4096,
-        temperature: float = 0.0,
-    ) -> ModelResponse:
-        self.calls.append((spec.key, system[:40]))
-        payload = _synthesise(system=system, user=user, schema=schema)
-        text = json.dumps(payload)
-        return ModelResponse(
-            text=text,
-            input_tokens=max(len(system) + len(user), 1) // 4,
-            output_tokens=max(len(text), 1) // 4,
-        )
-
-
-def _extract_evidence_ids(user: str, limit: int = 4) -> list[str]:
-    ids: list[str] = []
-    try:
-        start = user.index("{")
-        data = json.loads(user[start : user.rindex("}") + 1])
-        for ref in data.get("evidence", [])[:limit]:
-            if "id" in ref:
-                ids.append(str(ref["id"]))
-    except Exception:  # noqa: BLE001 - offline provider must never break a run
-        pass
-    if not ids:
-        ids = re.findall(r"\b(?:TXN|SEED|OI|LN|ST)-[A-Za-z0-9\-]+", user)[:limit]
-    return ids or ["evidence-unavailable"]
-
-
-def _synthesise(*, system: str, user: str, schema: dict[str, Any] | None) -> dict[str, Any]:
-    """Build a schema-valid response from the packet, deterministically."""
-    role = "bookkeeper"
-    m = re.search(r"You are the ([a-z_]+)", system)
-    if m:
-        role = m.group(1)
-    evidence = _extract_evidence_ids(user)
-
-    if "ReviewDecision" in (schema or {}).get("title", ""):
-        return {
-            "role": role,
-            "decision": "approve",
-            "evidence_test_passed": True,
-            "control_test_passed": True,
-            "strongest_alternative": (
-                "The condition could reflect a legitimate but unusual transaction; "
-                "rejected because the deterministic calculations in the packet "
-                "reproduce the exception exactly."
-            ),
-            "notes": [],
-            "residual_risk": (
-                "Offline review: the deterministic evidence was checked, but no model "
-                "judgement was applied to this item."
-            ),
-            "approved_scope": "analysis_only",
-            "escalate_to": None,
-            "escalation_reason": None,
-        }
-
-    return {
-        "role": role,
-        "conclusion": (
-            "The control condition is reproduced by the deterministic calculations in "
-            "the evidence packet. Prepared offline without model reasoning."
-        ),
-        "supporting_evidence_ids": evidence,
-        "calculations_relied_on": [],
-        "assumptions": ["Evidence packet is complete for the stated objective"],
-        "alternative_explanations": [],
-        "missing_evidence": [],
-        "confidence": "0.5",
-        "confidence_reason": (
-            "Offline deterministic preparer: confidence reflects the control's own "
-            "certainty, not model judgement."
-        ),
-        "proposed_action": {
-            "kind": "investigate",
-            "summary": "Review the evidence packet and confirm the control conclusion.",
-            "reversible": True,
-            "requires_human_approval": True,
-            "estimated_value": None,
-        },
-    }
-
-
-class AnthropicProvider(Provider):
-    """Claude backend. Imported lazily so the core never depends on the SDK."""
-
-    name = "anthropic"
-
-    def __init__(self, api_key: str | None = None) -> None:
-        self._api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
-        self._client = None
-
-    def _ensure(self):
-        if self._client is None:
-            if not self._api_key:
-                raise GatewayError(
-                    "ANTHROPIC_API_KEY is not set; use the offline provider or supply a key"
-                )
-            try:
-                import anthropic  # noqa: PLC0415 - deliberate lazy import
-            except ImportError as exc:  # pragma: no cover
-                raise GatewayError(
-                    "the anthropic package is not installed; pip install 'forge-core[anthropic]'"
-                ) from exc
-            self._client = anthropic.Anthropic(api_key=self._api_key)
-        return self._client
-
-    def complete(
-        self,
-        *,
-        spec: ModelSpec,
-        system: str,
-        user: str,
-        schema: dict[str, Any] | None = None,
-        max_tokens: int = 4096,
-        temperature: float = 0.0,
-    ) -> ModelResponse:
-        client = self._ensure()
-        kwargs: dict[str, Any] = {
-            "model": spec.model,
-            "max_tokens": min(max_tokens, spec.max_output_tokens),
-            "temperature": temperature,
-            "system": system,
-            "messages": [{"role": "user", "content": user}],
-        }
-        if schema is not None:
-            # A single forced tool is the most portable way to get strict JSON out
-            # of a chat model without depending on a provider-specific mode.
-            kwargs["tools"] = [
-                {
-                    "name": "submit",
-                    "description": "Submit the structured result.",
-                    "input_schema": schema,
-                }
-            ]
-            kwargs["tool_choice"] = {"type": "tool", "name": "submit"}
-        response = client.messages.create(**kwargs)
-        text = ""
-        for block in response.content:
-            if getattr(block, "type", None) == "tool_use":
-                text = json.dumps(block.input)
-                break
-            if getattr(block, "type", None) == "text":
-                text += block.text
-        return ModelResponse(
-            text=text,
-            input_tokens=getattr(response.usage, "input_tokens", 0),
-            output_tokens=getattr(response.usage, "output_tokens", 0),
-            raw=response,
-        )
-
-
-# Default catalogue. Prices are illustrative defaults and are meant to be
-# supplied from configuration in a deployment; they exist here so that cost
-# telemetry is exercised rather than left as a TODO.
-DEFAULT_MODELS: tuple[ModelSpec, ...] = (
-    ModelSpec("offline", "deterministic", "offline", Decimal(0), Decimal(0)),
-    ModelSpec("anthropic", "claude-haiku-4-5-20251001", "claude",
-              Decimal("1.00"), Decimal("5.00")),
-    ModelSpec("anthropic", "claude-sonnet-5", "claude", Decimal("3.00"), Decimal("15.00")),
-    ModelSpec("anthropic", "claude-opus-5", "claude", Decimal("15.00"), Decimal("75.00")),
-)
+    def min_quality(self, tier: RiskTier, role: AgentRole) -> int:
+        base = self.min_quality_by_tier.get(tier.level, 3)
+        if role is AgentRole.ADVERSARY:
+            base = max(base, self.adversary_min_quality)
+        if role in (AgentRole.CFO, AgentRole.VP_FINANCE, AgentRole.POLICY_REVIEWER):
+            base = max(base, self.executive_min_quality)
+        return base
 
 
 @dataclass
 class ModelGateway:
-    """Selects a model for a role and risk tier, calls it, and validates the result."""
+    """Selects, calls, validates, retries, falls back, and accounts for every call."""
 
     providers: dict[str, Provider] = field(default_factory=dict)
-    models: tuple[ModelSpec, ...] = DEFAULT_MODELS
-    default_provider: str = "offline"
+    models: tuple[ModelSpec, ...] = CATALOGUE
+    policy: RoutingPolicy = field(default_factory=RoutingPolicy)
+    budget: Budget = field(default_factory=Budget)
     calls: list[AgentCall] = field(default_factory=list)
     max_attempts: int = 3
+    """Validation retries per model before moving to the next one."""
+    default_provider: str = ""
+    """Kept for backwards compatibility; routing no longer depends on it."""
+
+    # ---- construction --------------------------------------------------
 
     @classmethod
-    def offline(cls) -> ModelGateway:
-        return cls(providers={"offline": OfflineDeterministicProvider()})
+    def offline(cls, **overrides: Any) -> ModelGateway:
+        return cls(providers={"offline": OfflineDeterministicProvider()}, **overrides)
 
     @classmethod
-    def anthropic(cls, api_key: str | None = None) -> ModelGateway:
+    def from_environment(cls, *, env: dict[str, str] | None = None, **overrides: Any) -> ModelGateway:
+        """Build a gateway with every provider whose key is present.
+
+        This is the production constructor. Set ``ANTHROPIC_API_KEY`` and you
+        have Claude; add ``XAI_API_KEY`` and reviewer independence becomes real;
+        run Ollama and extraction becomes free. Nothing else changes.
+        """
+        environ = env if env is not None else dict(os.environ)
+        providers: dict[str, Provider] = {"offline": OfflineDeterministicProvider()}
+        for provider, (var, _base) in PROVIDER_ENV.items():
+            if provider in ("offline",) or not var:
+                continue
+            if environ.get(var):
+                try:
+                    providers[provider] = build_provider(provider)
+                except ProviderError:
+                    continue
+        return cls(providers=providers, **overrides)
+
+    @classmethod
+    def anthropic(cls, api_key: str | None = None, **overrides: Any) -> ModelGateway:
+        from .providers import AnthropicProvider
+
         return cls(
-            providers={
-                "anthropic": AnthropicProvider(api_key),
-                "offline": OfflineDeterministicProvider(),
-            },
-            default_provider="anthropic",
+            providers={"anthropic": AnthropicProvider(api_key), "offline": OfflineDeterministicProvider()},
+            **overrides,
         )
 
     # ---- routing -------------------------------------------------------
+
+    def _available(self) -> list[ModelSpec]:
+        out = [m for m in self.models if m.provider in self.providers]
+        if not self.policy.allow_frontier:
+            out = [m for m in out if m.quality < 5]
+        return out
+
+    def families_available(self) -> set[str]:
+        return {m.family for m in self._available() if m.provider != "offline"}
+
+    def candidates(
+        self,
+        *,
+        tier: RiskTier,
+        role: AgentRole,
+        avoid_families: Sequence[str] = (),
+        need_vision: bool = False,
+        need_web_search: bool = False,
+        need_pdf: bool = False,
+        min_quality: int | None = None,
+    ) -> list[ModelSpec]:
+        """Every model that could take this call, cheapest first."""
+        floor = min_quality if min_quality is not None else self.policy.min_quality(tier, role)
+        avoid = set(avoid_families)
+        pool = []
+        for spec in self._available():
+            if spec.provider == "offline":
+                # The stub accepts anything so the orchestration can always be
+                # exercised; it is ranked last below regardless.
+                pool.append(spec)
+                continue
+            if spec.quality < floor:
+                continue
+            if spec.family in avoid:
+                continue
+            if need_vision and not spec.supports_vision:
+                continue
+            if need_web_search and not spec.supports_web_search:
+                continue
+            if need_pdf and spec.kind != "anthropic":
+                continue
+            pool.append(spec)
+        # Offline is a last resort, never a preference, unless it is all there is.
+        real = [m for m in pool if m.provider != "offline"]
+        if not real:
+            return pool
+
+        def rank(m: ModelSpec) -> tuple:
+            fam_rank = (
+                self.policy.prefer_families.index(m.family)
+                if m.family in self.policy.prefer_families
+                else len(self.policy.prefer_families)
+            )
+            local_rank = 0 if (m.local and self.policy.prefer_local) else 1
+            return (local_rank, m.input_cost_per_mtok + m.output_cost_per_mtok, -m.quality, fam_rank)
+
+        return sorted(real, key=rank)
 
     def select(
         self,
@@ -328,32 +247,38 @@ class ModelGateway:
         tier: RiskTier,
         role: AgentRole,
         avoid_family: str | None = None,
+        avoid_families: Sequence[str] = (),
+        need_vision: bool = False,
+        need_web_search: bool = False,
+        need_pdf: bool = False,
     ) -> ModelSpec:
-        """Pick a model for this tier and role, optionally avoiding a family.
+        avoid = list(avoid_families) + ([avoid_family] if avoid_family else [])
+        pool = self.candidates(
+            tier=tier, role=role, avoid_families=avoid,
+            need_vision=need_vision, need_web_search=need_web_search, need_pdf=need_pdf,
+        )
+        if not pool or all(m.provider == "offline" for m in pool):
+            # Independence could not be honoured; fall back without the exclusion
+            # and let the caller record that fact. The offline stub is never a
+            # substitute for a real model that merely shares a family.
+            pool = self.candidates(
+                tier=tier, role=role, need_vision=need_vision,
+                need_web_search=need_web_search, need_pdf=need_pdf,
+            )
+        if not pool:
+            raise GatewayError("no model available for this call; configure a provider key")
+        return pool[0]
 
-        ``avoid_family`` is how reviewer independence is enforced. When no
-        independent family is configured the gateway does not silently pretend
-        independence: it returns the best available model, and the caller records
-        that the review was not independent.
-        """
-        available = [m for m in self.models if m.provider in self.providers]
-        if not available:
-            raise GatewayError("no models available for any configured provider")
-
-        preferred = [m for m in available if m.provider == self.default_provider] or available
-        if avoid_family:
-            independent = [m for m in preferred if m.family != avoid_family]
-            if independent:
-                preferred = independent
-
-        ranked = sorted(preferred, key=lambda m: m.input_cost_per_mtok)
-        if tier.level >= 4 or role in (AgentRole.CFO, AgentRole.ADVERSARY, AgentRole.VP_FINANCE):
-            return ranked[-1]
-        if tier.level == 3 or role in (AgentRole.CONTROLLER, AgentRole.POLICY_REVIEWER):
-            return ranked[min(len(ranked) - 1, max(len(ranked) - 2, 0))]
-        if tier.level == 2:
-            return ranked[min(1, len(ranked) - 1)]
-        return ranked[0]
+    def independent_family_for(self, used: Sequence[str]) -> str | None:
+        """A family not yet used in this review chain, in preference order."""
+        available = self.families_available()
+        for fam in self.policy.prefer_families:
+            if fam in available and fam not in used:
+                return fam
+        for fam in sorted(available):
+            if fam not in used:
+                return fam
+        return None
 
     # ---- invocation ----------------------------------------------------
 
@@ -368,76 +293,140 @@ class ModelGateway:
         packet_checksum: str,
         prompt_version: str = "1",
         avoid_family: str | None = None,
+        avoid_families: Sequence[str] = (),
         spec: ModelSpec | None = None,
+        images: Sequence[ImageInput] = (),
+        web_search: bool = False,
+        max_tokens: int | None = None,
+        cascade: bool = False,
     ) -> tuple[T, AgentCall]:
-        """Call a model and return a validated response, or raise.
+        """Call, validate, retry, fall back; return a parsed model and its record.
 
-        A response that fails validation is retried with the validation error fed
-        back. After ``max_attempts`` the call fails loudly. Constitution rule #6:
-        no silent uncertainty, and that includes the plumbing.
+        With ``cascade`` on, the cheapest capable model runs first and the call
+        escalates one quality level when the result reports low confidence or
+        missing evidence. The escalation is recorded on the call, so the cost of
+        a cascade that did not save anything is visible.
         """
-        chosen = spec or self.select(tier=tier, role=role, avoid_family=avoid_family)
-        provider = self.providers[chosen.provider]
+        need_pdf = any(i.is_pdf for i in images)
+        need_vision = bool(images)
+        chain: list[ModelSpec]
+        if spec is not None:
+            chain = [spec] + [
+                m for m in self.candidates(
+                    tier=tier, role=role, avoid_families=list(avoid_families) + ([avoid_family] if avoid_family else []),
+                    need_vision=need_vision, need_web_search=web_search, need_pdf=need_pdf,
+                )
+                if m.key != spec.key
+            ]
+        else:
+            chain = self.candidates(
+                tier=tier, role=role,
+                avoid_families=list(avoid_families) + ([avoid_family] if avoid_family else []),
+                need_vision=need_vision, need_web_search=web_search, need_pdf=need_pdf,
+            )
+            if cascade:
+                floor = max(1, self.policy.min_quality(tier, role) - 1)
+                cheaper = self.candidates(
+                    tier=tier, role=role, min_quality=floor,
+                    avoid_families=list(avoid_families) + ([avoid_family] if avoid_family else []),
+                    need_vision=need_vision, need_web_search=web_search, need_pdf=need_pdf,
+                )
+                chain = cheaper + [m for m in chain if m not in cheaper]
+        if not chain:
+            raise GatewayError("no model available for this call; configure a provider key")
+
         schema = response_model.model_json_schema()
         schema.setdefault("title", response_model.__name__)
+        errors: list[str] = []
+        escalations = 0
 
-        attempt_user = user
-        last_error: str | None = None
-        started = time.perf_counter()
-        total_in = total_out = 0
+        for idx, candidate in enumerate(chain):
+            self.budget.check()
+            provider = self.providers[candidate.provider]
+            started = time.perf_counter()
+            total_in = total_out = cache_read = 0
+            attempt_user = user
+            last_validation: str | None = None
 
-        for _attempt in range(1, self.max_attempts + 1):
-            response = provider.complete(
-                spec=chosen,
-                system=system,
-                user=attempt_user,
-                schema=schema,
-                max_tokens=chosen.max_output_tokens,
-            )
-            total_in += response.input_tokens
-            total_out += response.output_tokens
-            try:
-                parsed = response_model.model_validate_json(response.text)
-            except (ValidationError, ValueError) as exc:
-                last_error = str(exc)[:1500]
-                attempt_user = (
-                    f"{user}\n\nYour previous response did not validate against the required "
-                    f"schema. Fix exactly these problems and resubmit:\n{last_error}"
+            for _attempt in range(1, self.max_attempts + 1):
+                try:
+                    response = provider.complete(
+                        spec=candidate, system=system, user=attempt_user, schema=schema,
+                        images=images, max_tokens=max_tokens or candidate.max_output_tokens,
+                        web_search=web_search,
+                    )
+                except ProviderRefused as exc:
+                    errors.append(f"{candidate.key}: refused ({exc})")
+                    self._record_failure(role, candidate, prompt_version, packet_checksum, str(exc), started)
+                    break
+                except ProviderError as exc:
+                    errors.append(f"{candidate.key}: {exc}")
+                    self._record_failure(role, candidate, prompt_version, packet_checksum, str(exc), started)
+                    break
+
+                total_in += response.input_tokens
+                total_out += response.output_tokens
+                cache_read += response.cache_read_tokens
+                try:
+                    parsed = response_model.model_validate_json(response.text)
+                except (ValidationError, ValueError) as exc:
+                    last_validation = str(exc)[:1500]
+                    attempt_user = (
+                        f"{user}\n\nYour previous response did not validate against the required "
+                        f"schema. Fix exactly these problems and resubmit:\n{last_validation}"
+                    )
+                    continue
+
+                cost = candidate.cost_micros(total_in - cache_read, total_out) + int(
+                    Decimal(cache_read) * candidate.input_cost_per_mtok / Decimal(10)  # cache reads ~10%
                 )
-                continue
+                record = AgentCall(
+                    role=role, provider=candidate.provider, model=response.model_used or candidate.model,
+                    prompt_version=prompt_version, packet_checksum=packet_checksum,
+                    input_tokens=total_in, output_tokens=total_out,
+                    latency_ms=(time.perf_counter() - started) * 1000,
+                    cost_micros=cost, succeeded=True,
+                )
+                self.calls.append(record)
+                self.budget.record(cost)
 
-            call = AgentCall(
-                role=role,
-                provider=chosen.provider,
-                model=chosen.model,
-                prompt_version=prompt_version,
-                packet_checksum=packet_checksum,
-                input_tokens=total_in,
-                output_tokens=total_out,
-                latency_ms=(time.perf_counter() - started) * 1000,
-                cost_micros=chosen.cost_micros(total_in, total_out),
-                succeeded=True,
-            )
-            self.calls.append(call)
-            return parsed, call
+                if cascade and idx + 1 < len(chain) and self._should_escalate(parsed, candidate):
+                    escalations += 1
+                    errors.append(f"{candidate.key}: low confidence, escalating")
+                    break  # try the next, stronger model
 
-        call = AgentCall(
-            role=role,
-            provider=chosen.provider,
-            model=chosen.model,
-            prompt_version=prompt_version,
-            packet_checksum=packet_checksum,
-            input_tokens=total_in,
-            output_tokens=total_out,
-            latency_ms=(time.perf_counter() - started) * 1000,
-            cost_micros=chosen.cost_micros(total_in, total_out),
-            succeeded=False,
-            error=last_error,
-        )
-        self.calls.append(call)
+                return parsed, record
+
+            else:
+                errors.append(f"{candidate.key}: invalid after {self.max_attempts} attempts: {last_validation}")
+                self._record_failure(role, candidate, prompt_version, packet_checksum, last_validation or "", started,
+                                     input_tokens=total_in, output_tokens=total_out)
+
         raise GatewayError(
-            f"{role.value} response failed validation after {self.max_attempts} attempts: "
-            f"{last_error}"
+            f"{role.value} produced no valid response across {len(chain)} model(s): " + " | ".join(errors[-4:])
+        )
+
+    def _should_escalate(self, parsed: BaseModel, spec: ModelSpec) -> bool:
+        if spec.quality >= 4:
+            return False
+        confidence = getattr(parsed, "confidence", None)
+        if confidence is not None:
+            try:
+                if Decimal(str(confidence)) < self.policy.cascade_confidence_floor:
+                    return True
+            except Exception:  # noqa: BLE001
+                pass
+        missing = getattr(parsed, "missing_evidence", None)
+        return bool(missing)
+
+    def _record_failure(self, role, spec, prompt_version, checksum, error, started, *, input_tokens=0, output_tokens=0):
+        self.calls.append(
+            AgentCall(
+                role=role, provider=spec.provider, model=spec.model, prompt_version=prompt_version,
+                packet_checksum=checksum, input_tokens=input_tokens, output_tokens=output_tokens,
+                latency_ms=(time.perf_counter() - started) * 1000,
+                cost_micros=spec.cost_micros(input_tokens, output_tokens), succeeded=False, error=error[:500],
+            )
         )
 
     # ---- telemetry -----------------------------------------------------
@@ -452,8 +441,10 @@ class ModelGateway:
 
     def cost_summary(self) -> dict[str, Any]:
         by_role: dict[str, int] = {}
+        by_model: dict[str, int] = {}
         for c in self.calls:
             by_role[c.role.value] = by_role.get(c.role.value, 0) + c.cost_micros
+            by_model[f"{c.provider}:{c.model}"] = by_model.get(f"{c.provider}:{c.model}", 0) + c.cost_micros
         return {
             "calls": len(self.calls),
             "failed_calls": sum(1 for c in self.calls if not c.succeeded),
@@ -461,4 +452,12 @@ class ModelGateway:
             "cost_micros": self.total_cost_micros,
             "cost": f"{Decimal(self.total_cost_micros) / Decimal(1_000_000):.4f}",
             "by_role": by_role,
+            "by_model": by_model,
+            "families_available": sorted(self.families_available()),
+            "budget": {
+                "spent_micros": self.budget.spent_micros,
+                "max_cost_micros": self.budget.max_cost_micros,
+                "calls": self.budget.calls,
+                "max_calls": self.budget.max_calls,
+            },
         }
