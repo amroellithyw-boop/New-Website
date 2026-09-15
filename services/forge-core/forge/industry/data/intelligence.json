@@ -1,0 +1,1488 @@
+{
+  "236110": {
+    "label": "Residential Building Construction",
+    "wsib_rate": 0.06,
+    "wsib_group": "Construction — Premium Rate",
+    "gp_benchmark": "20–30%",
+    "net_benchmark": "6–12%",
+    "labour_pct": "35–50%",
+    "revenue_streams": [
+      "New Home Construction",
+      "Renovation & Additions",
+      "Basement Finishing",
+      "Kitchen & Bath",
+      "Garage & Exterior",
+      "Custom Builds"
+    ],
+    "cogs_drivers": [
+      "Direct Labour – Trades",
+      "Subcontractor Costs",
+      "Materials & Lumber",
+      "Equipment Rental",
+      "Construction Holdback (10%)"
+    ],
+    "key_expenses": [
+      "Site Insurance & Bonding",
+      "Vehicle & Equipment",
+      "Tools & Supplies",
+      "Building Permits",
+      "Professional Fees (architect/engineer)"
+    ],
+    "seasonal": "Moderate seasonality: reduced exterior work Nov–Mar in Ontario. Interior renovations year-round.",
+    "seasonal_note": "Construction holdback 10% — must be tracked separately and not recognized as revenue until released (45 days after substantial performance)",
+    "deferred_revenue": true,
+    "deferred_note": "Holdback receivable (acct 1150) — do NOT include in main AR. Revenue recognized on percentage-of-completion basis for long-term contracts",
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, vans, trailers, powered equipment"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Construction equipment, tools, scaffolding"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools under $500, safety gear"
+      ],
+      [
+        "Class 53 — 50% DB",
+        "Manufacturing & processing equipment acquired 2016+"
+      ]
+    ],
+    "job_types": [
+      "new_home_build",
+      "renovation",
+      "basement_finish",
+      "kitchen_bath",
+      "addition",
+      "exterior",
+      "commercial_reno",
+      "custom_build"
+    ],
+    "hst_note": "New residential construction and substantial renovations are taxable. New Residential Rebate (NRR) may apply for buyers. HST on all subcontractor invoices is claimable as ITC.",
+    "common_errors": [
+      "Holdback revenue recognized too early",
+      "Material deposits not tracked as prepaid",
+      "Progress billings confused with revenue recognition"
+    ],
+    "fiscal_year_note": "December 31 most common for construction companies",
+    "revenue_per_employee": "$120K–$200K",
+    "fuel_pct": "3–6%",
+    "owner_comp_range": "$80K–$160K"
+  },
+  "236210": {
+    "label": "Industrial & Commercial Construction",
+    "wsib_rate": 0.06,
+    "wsib_group": "Construction — Premium Rate",
+    "gp_benchmark": "15–25%",
+    "net_benchmark": "4–10%",
+    "labour_pct": "30–45%",
+    "revenue_streams": [
+      "Commercial Construction",
+      "Industrial Facilities",
+      "Office Buildouts",
+      "Retail Fit-Up",
+      "Warehouse Construction",
+      "Tenant Improvements"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Subcontractor Costs",
+      "Materials",
+      "Equipment Rental",
+      "Bonding & Insurance"
+    ],
+    "key_expenses": [
+      "Project Insurance",
+      "Bond Premiums",
+      "Equipment Depreciation",
+      "Professional Fees",
+      "Safety Compliance"
+    ],
+    "seasonal": "Less seasonal than residential. Driven by permit cycles and client budgets.",
+    "seasonal_note": "Large contracts often use percentage-of-completion method. WIP schedule required for T2 filing.",
+    "deferred_revenue": true,
+    "deferred_note": "Construction contracts over 1 year: percentage-of-completion (ASPE 3400). WIP = costs incurred + recognized profit - billings to date",
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Heavy equipment, trucks, cranes"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Tools, equipment, scaffolding"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools, safety gear"
+      ],
+      [
+        "Class 53 — 50% DB",
+        "Specialized production equipment"
+      ]
+    ],
+    "job_types": [
+      "commercial_build",
+      "industrial_facility",
+      "office_buildout",
+      "retail_fitup",
+      "warehouse",
+      "tenant_improvement",
+      "renovation"
+    ],
+    "hst_note": "Commercial construction is fully taxable. Holdback HST — only collect/remit HST on holdback when released. Not when holdback is withheld.",
+    "common_errors": [
+      "WIP not calculated for year-end",
+      "Holdback HST collected before release",
+      "Progress billing ≠ revenue recognition"
+    ],
+    "fiscal_year_note": "December 31 or fiscal year aligned with major project cycles",
+    "revenue_per_employee": "$150K–$300K",
+    "fuel_pct": "2–5%",
+    "owner_comp_range": "$100K–$200K"
+  },
+  "238110": {
+    "label": "Foundation & Concrete Work",
+    "wsib_rate": 0.0575,
+    "wsib_group": "Concrete & Masonry Trades",
+    "gp_benchmark": "25–35%",
+    "net_benchmark": "8–15%",
+    "labour_pct": "35–50%",
+    "revenue_streams": [
+      "Foundation Work",
+      "Concrete Flatwork",
+      "Masonry",
+      "Underpinning",
+      "Waterproofing",
+      "Concrete Repair"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Concrete & Materials",
+      "Equipment Rental",
+      "Subcontractors",
+      "Forms & Hardware"
+    ],
+    "key_expenses": [
+      "Equipment Maintenance",
+      "Insurance",
+      "Fuel",
+      "Safety Compliance",
+      "Disposal/Waste"
+    ],
+    "seasonal": "Strong seasonality — concrete cannot be poured in freezing temps. Ontario outdoor season Apr–Nov.",
+    "seasonal_note": "Seasonal revenue dip Dec–Mar. Pre-sell and deposit spring projects in Jan–Feb.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, mixers, pumps, heavy equipment"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Forms, tools, compactors"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools under $500"
+      ]
+    ],
+    "job_types": [
+      "foundation",
+      "flatwork",
+      "masonry",
+      "underpinning",
+      "waterproofing",
+      "concrete_repair",
+      "retaining_wall"
+    ],
+    "hst_note": "All services taxable at 13% Ontario HST. Concrete materials + labour both taxable.",
+    "common_errors": [
+      "Deposits not deferred",
+      "Subcontractor T4A/T5018 missed"
+    ],
+    "fiscal_year_note": "December 31 common",
+    "revenue_per_employee": "$90K–$150K",
+    "fuel_pct": "4–8%",
+    "owner_comp_range": "$80K–$150K"
+  },
+  "238160": {
+    "label": "Roofing & Exterior Work",
+    "wsib_rate": 0.0785,
+    "wsib_group": "Roofing — High Risk",
+    "gp_benchmark": "30–40%",
+    "net_benchmark": "8–15%",
+    "labour_pct": "35–45%",
+    "revenue_streams": [
+      "Roof Replacement",
+      "Roof Repair",
+      "Siding",
+      "Windows & Doors",
+      "Gutters",
+      "Exterior Finishing"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Roofing Materials",
+      "Subcontractors",
+      "Equipment Rental",
+      "Disposal"
+    ],
+    "key_expenses": [
+      "Insurance – High Risk",
+      "Vehicle & Equipment",
+      "Safety Equipment",
+      "Disposal Fees"
+    ],
+    "seasonal": "Strong Ontario seasonality — roofing Apr–Nov. Emergency repairs year-round.",
+    "seasonal_note": "Emergency repair revenue in winter (ice dams, storm damage) supplements seasonal decline.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, lifts, equipment"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Tools, ladders, compressors"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools, safety gear"
+      ]
+    ],
+    "job_types": [
+      "roof_replacement",
+      "roof_repair",
+      "siding",
+      "windows_doors",
+      "gutters",
+      "exterior_finishing"
+    ],
+    "hst_note": "All services taxable 13% HST. Materials + labour both taxable.",
+    "common_errors": [
+      "High WSIB rate overlooked — 7.85% vs generic 2.85%",
+      "Subcontractor liability without WSIB clearance"
+    ],
+    "fiscal_year_note": "December 31 common",
+    "revenue_per_employee": "$100K–$160K",
+    "fuel_pct": "4–7%",
+    "owner_comp_range": "$80K–$150K"
+  },
+  "238210": {
+    "label": "Electrical Contracting",
+    "wsib_rate": 0.0325,
+    "wsib_group": "Electrical Trades",
+    "gp_benchmark": "30–42%",
+    "net_benchmark": "10–18%",
+    "labour_pct": "40–55%",
+    "revenue_streams": [
+      "Residential Wiring",
+      "Commercial Electrical",
+      "Service Panel Upgrades",
+      "EV Charger Install",
+      "Industrial Electrical",
+      "Maintenance Contracts",
+      "Emergency Service"
+    ],
+    "cogs_drivers": [
+      "Licensed Electrician Labour",
+      "Materials & Wire",
+      "Subcontractors",
+      "Permits & Inspections",
+      "Equipment"
+    ],
+    "key_expenses": [
+      "Licensing & Certification",
+      "Insurance – Electrical",
+      "Vehicle Costs",
+      "Tools & Equipment",
+      "Software (Jobber/ServiceTitan)"
+    ],
+    "seasonal": "Low seasonality. New construction follows building market. Service/maintenance is year-round.",
+    "seasonal_note": "EV charger installations growing rapidly. Government incentives may apply for clients.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Service vans, trucks"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Test equipment, tools over $500"
+      ],
+      [
+        "Class 12 — 100%",
+        "Hand tools, wire, consumables under $500"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Diagnostic computers, tablets"
+      ]
+    ],
+    "job_types": [
+      "residential_wiring",
+      "panel_upgrade",
+      "commercial_install",
+      "ev_charger",
+      "industrial",
+      "maintenance_contract",
+      "emergency_service",
+      "inspection"
+    ],
+    "hst_note": "All electrical services taxable 13% Ontario HST. Permits are zero-rated (no HST). Always get client's HST number for commercial jobs.",
+    "common_errors": [
+      "Permit fees not tracked separately",
+      "Personal vehicle mixed with service van",
+      "Time-and-material invoices not recorded in period of completion"
+    ],
+    "fiscal_year_note": "December 31 most common",
+    "revenue_per_employee": "$100K–$160K",
+    "fuel_pct": "3–6%",
+    "owner_comp_range": "$80K–$160K"
+  },
+  "238220": {
+    "label": "Plumbing & HVAC",
+    "wsib_rate": 0.035,
+    "wsib_group": "Plumbing & HVAC Trades",
+    "gp_benchmark": "30–42%",
+    "net_benchmark": "10–18%",
+    "labour_pct": "40–55%",
+    "revenue_streams": [
+      "Plumbing Service & Repair",
+      "HVAC Installation",
+      "Furnace & AC Service",
+      "Emergency Plumbing",
+      "New Construction Plumbing",
+      "Maintenance Contracts",
+      "Water Heater Install"
+    ],
+    "cogs_drivers": [
+      "Licensed Trade Labour",
+      "Parts & Materials",
+      "Equipment & Tools",
+      "Subcontractors",
+      "Permits"
+    ],
+    "key_expenses": [
+      "Insurance",
+      "Service Vans",
+      "Licensing",
+      "Dispatch Software",
+      "Parts Inventory"
+    ],
+    "seasonal": "Moderate seasonality — HVAC peaks in summer (AC) and fall (furnace). Emergency plumbing year-round.",
+    "seasonal_note": "Maintenance contracts provide stable recurring revenue to offset seasonal swings.",
+    "deferred_revenue": true,
+    "deferred_note": "Annual maintenance agreements: recognize monthly as service is available (ASPE 3400)",
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Service vans, trucks"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "HVAC equipment, tools over $500"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools, consumables"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Diagnostic equipment, tablets"
+      ]
+    ],
+    "job_types": [
+      "plumbing_service",
+      "hvac_install",
+      "furnace_service",
+      "ac_service",
+      "emergency_plumbing",
+      "maintenance_contract",
+      "water_heater",
+      "new_construction"
+    ],
+    "hst_note": "All services taxable 13% HST. Rebates available on qualifying energy-efficient HVAC equipment — advise clients on Canada Greener Homes.",
+    "common_errors": [
+      "Maintenance contracts not deferred",
+      "Parts inventory not tracked — expensed as purchased but used later"
+    ],
+    "fiscal_year_note": "December 31 most common",
+    "revenue_per_employee": "$100K–$180K",
+    "fuel_pct": "4–7%",
+    "owner_comp_range": "$80K–$160K"
+  },
+  "238310": {
+    "label": "Drywall & Insulation",
+    "wsib_rate": 0.0525,
+    "wsib_group": "Drywall & Finishing Trades",
+    "gp_benchmark": "25–38%",
+    "net_benchmark": "8–15%",
+    "labour_pct": "45–60%",
+    "revenue_streams": [
+      "Drywall Installation",
+      "Insulation",
+      "Taping & Mudding",
+      "Soundproofing",
+      "Commercial Drywall",
+      "Fire Stopping"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Drywall & Materials",
+      "Insulation Products",
+      "Subcontractors",
+      "Equipment Rental"
+    ],
+    "key_expenses": [
+      "Vehicle Costs",
+      "Insurance",
+      "Tools",
+      "Waste Disposal"
+    ],
+    "seasonal": "Follows construction market. Interior work year-round, but slows with construction market.",
+    "seasonal_note": "T4A/T5018 for drywall finishers critical — often subcontracted.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, vans"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Lifts, compressors, tools"
+      ],
+      [
+        "Class 12 — 100%",
+        "Hand tools, consumables"
+      ]
+    ],
+    "job_types": [
+      "drywall_install",
+      "insulation",
+      "taping_mudding",
+      "commercial_drywall",
+      "soundproofing",
+      "fire_stopping"
+    ],
+    "hst_note": "All services taxable 13% HST.",
+    "common_errors": [
+      "T4A/T5018 for drywall finishers (often subcontracted)",
+      "Subcontractor WSIB clearance not verified"
+    ],
+    "fiscal_year_note": "December 31 common",
+    "revenue_per_employee": "$80K–$130K",
+    "fuel_pct": "3–6%",
+    "owner_comp_range": "$70K–$130K"
+  },
+  "238320": {
+    "label": "Painting & Wall Covering",
+    "wsib_rate": 0.0475,
+    "wsib_group": "Painting Trades",
+    "gp_benchmark": "35–50%",
+    "net_benchmark": "12–20%",
+    "labour_pct": "45–60%",
+    "revenue_streams": [
+      "Interior Painting",
+      "Exterior Painting",
+      "Commercial Painting",
+      "Wallpaper",
+      "Epoxy Flooring",
+      "Pressure Washing",
+      "Staining & Finishing"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Paint & Materials",
+      "Equipment Rental",
+      "Subcontractors"
+    ],
+    "key_expenses": [
+      "Insurance",
+      "Vehicle",
+      "Tools & Equipment",
+      "Disposal"
+    ],
+    "seasonal": "Exterior work seasonal Apr–Oct in Ontario. Interior year-round.",
+    "seasonal_note": "Strong interior demand in winter months from condo and renovation market.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Vans, trucks"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Sprayers, lifts, equipment"
+      ],
+      [
+        "Class 12 — 100%",
+        "Brushes, rollers, small tools"
+      ]
+    ],
+    "job_types": [
+      "interior_painting",
+      "exterior_painting",
+      "commercial_painting",
+      "epoxy_floor",
+      "pressure_washing",
+      "staining",
+      "wallpaper"
+    ],
+    "hst_note": "All services taxable 13% HST. Paint + labour both taxable.",
+    "common_errors": [
+      "Personal vehicle mixed with work vehicle",
+      "Material purchases not matched to jobs"
+    ],
+    "fiscal_year_note": "December 31 common",
+    "revenue_per_employee": "$70K–$120K",
+    "fuel_pct": "3–5%",
+    "owner_comp_range": "$70K–$130K"
+  },
+  "238330": {
+    "label": "Flooring Installation",
+    "wsib_rate": 0.048,
+    "wsib_group": "Flooring Trades",
+    "gp_benchmark": "35–45%",
+    "net_benchmark": "10–18%",
+    "labour_pct": "35–50%",
+    "revenue_streams": [
+      "Hardwood Flooring",
+      "Tile & Stone",
+      "Vinyl & Laminate",
+      "Carpet",
+      "Epoxy & Polished Concrete",
+      "Stair Nosing",
+      "Commercial Flooring"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Flooring Materials",
+      "Subcontractors",
+      "Equipment Rental",
+      "Disposal"
+    ],
+    "key_expenses": [
+      "Vehicle",
+      "Tools & Equipment",
+      "Insurance"
+    ],
+    "seasonal": "Low seasonality — interior work year-round.",
+    "seasonal_note": "Material purchases often precede installation — track as prepaid inventory.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, vans"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Sanders, saws, nailers"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools, blades, consumables"
+      ]
+    ],
+    "job_types": [
+      "hardwood",
+      "tile_stone",
+      "vinyl_laminate",
+      "carpet",
+      "epoxy_concrete",
+      "commercial_flooring",
+      "stair"
+    ],
+    "hst_note": "All services + materials taxable 13% HST.",
+    "common_errors": [
+      "Material inventory not tracked (bought per job but leftovers not tracked)"
+    ],
+    "fiscal_year_note": "December 31 common",
+    "revenue_per_employee": "$80K–$140K",
+    "fuel_pct": "3–5%",
+    "owner_comp_range": "$70K–$130K"
+  },
+  "238990": {
+    "label": "Specialty Trades — Other",
+    "wsib_rate": 0.05,
+    "wsib_group": "Specialty Trades",
+    "gp_benchmark": "30–45%",
+    "net_benchmark": "10–18%",
+    "labour_pct": "40–55%",
+    "revenue_streams": [
+      "Specialty Trade Services",
+      "Welding & Fabrication",
+      "Demolition",
+      "Restoration",
+      "Other Specialty Work"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Materials",
+      "Subcontractors",
+      "Equipment"
+    ],
+    "key_expenses": [
+      "Equipment",
+      "Insurance",
+      "Safety",
+      "Vehicle"
+    ],
+    "seasonal": "Varies by specialty.",
+    "seasonal_note": "T4A/T5018 obligations critical for specialty subcontractors.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, equipment"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Specialty tools, equipment"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools, consumables"
+      ]
+    ],
+    "job_types": [
+      "specialty_service",
+      "welding",
+      "fabrication",
+      "demolition",
+      "restoration",
+      "other"
+    ],
+    "hst_note": "All services taxable 13% HST.",
+    "common_errors": [
+      "T4A/T5018 for specialty subcontractors"
+    ],
+    "fiscal_year_note": "December 31 common",
+    "revenue_per_employee": "$90K–$150K",
+    "fuel_pct": "4–8%",
+    "owner_comp_range": "$75K–$150K"
+  },
+  "311000": {
+    "label": "Manufacturing & Production",
+    "wsib_rate": 0.052,
+    "wsib_group": "Manufacturing",
+    "gp_benchmark": "25–45%",
+    "net_benchmark": "8–18%",
+    "labour_pct": "25–40%",
+    "revenue_streams": [
+      "Product Sales – Direct",
+      "Wholesale",
+      "Contract Manufacturing",
+      "Private Label",
+      "Export Sales"
+    ],
+    "cogs_drivers": [
+      "Raw Materials",
+      "Direct Labour – Production",
+      "Manufacturing Overhead",
+      "Quality Control",
+      "Packaging"
+    ],
+    "key_expenses": [
+      "Equipment Maintenance",
+      "Utilities – Production",
+      "Safety Compliance",
+      "Quality Systems",
+      "Logistics"
+    ],
+    "seasonal": "Varies by product. Food production follows harvest cycles. Consumer goods peak before holidays.",
+    "seasonal_note": "Inventory costing method (FIFO/average cost) must be consistent and disclosed under ASPE.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 53 — 50% DB",
+        "Manufacturing equipment acquired 2016+"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "General machinery and equipment"
+      ],
+      [
+        "Class 10 — 30% DB",
+        "Forklifts, vehicles"
+      ],
+      [
+        "Class 1 — 4% DB",
+        "Manufacturing facility (owned building)"
+      ]
+    ],
+    "job_types": [
+      "production_run",
+      "custom_order",
+      "contract_manufacturing",
+      "wholesale_order",
+      "export"
+    ],
+    "hst_note": "Sales to Canadian businesses: 13% HST. Exports are zero-rated. Keep detailed export documentation. Import duties on raw materials may apply.",
+    "common_errors": [
+      "Inventory costing method inconsistent",
+      "Overhead not allocated to cost of goods",
+      "WIP not valued at year-end"
+    ],
+    "fiscal_year_note": "December 31 most common; some use March 31",
+    "revenue_per_employee": "$100K–$300K",
+    "fuel_pct": "2–5%",
+    "owner_comp_range": "$80K–$200K"
+  },
+  "311900": {
+    "label": "Food Manufacturing & Processing",
+    "naics": "311900",
+    "gp_benchmark": "25–45%",
+    "net_benchmark": "5–12%",
+    "labour_pct": "25–40% of revenue",
+    "revenue_streams": [
+      "Wholesale Product Sales",
+      "Retail Direct Sales",
+      "Private Label Manufacturing",
+      "Co-packing Services"
+    ],
+    "cogs_drivers": [
+      "Raw ingredients",
+      "Packaging materials",
+      "Direct labour",
+      "Utilities (heating/cooling)",
+      "Equipment maintenance"
+    ],
+    "key_expenses": [
+      "Food safety certifications",
+      "Insurance (product liability)",
+      "Cold storage/utilities",
+      "Equipment depreciation",
+      "Regulatory compliance"
+    ],
+    "seasonal": "Varies by product. Bakery/confectionery peaks Dec. Specialty foods may follow agricultural seasons.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 8 — 20% DB",
+        "Food processing equipment, mixers, packaging machines"
+      ],
+      [
+        "Class 1 — 4% DB",
+        "Food processing facility"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools, food containers"
+      ],
+      [
+        "Class 10 — 30% DB",
+        "Delivery vans, refrigerated trucks"
+      ]
+    ],
+    "job_types": [
+      "Wholesale production",
+      "Retail direct",
+      "Private label",
+      "Co-packing",
+      "Food service supply"
+    ],
+    "hst_note": "Most grocery food items are ZERO-RATED (0% HST) — no HST collected on sales BUT you still claim full ITCs on inputs. Prepared/restaurant-ready food IS taxable at 13%. This creates a positive ITC refund position for most food manufacturers.",
+    "common_errors": [
+      "Zero-rated vs taxable food distinction",
+      "ITC on zero-rated sales (still claimable!)",
+      "Inventory cost vs NRV writedowns",
+      "CFIA compliance costs (capital vs expense)",
+      "WCB/WSIB for food workers"
+    ],
+    "wsib_rate": 0.0318,
+    "wsib_group": "Food Manufacturing",
+    "fiscal_year_note": "Calendar year most common. Inventory counts critical at Dec 31.",
+    "revenue_per_employee": "$120,000–$280,000",
+    "fuel_pct": "3–8% of revenue",
+    "owner_comp_range": "$70,000–$180,000"
+  },
+  "441110": {
+    "label": "Auto Dealers & Service",
+    "wsib_rate": 0.0319,
+    "wsib_group": "Auto Service",
+    "gp_benchmark": "45–60% (service dept)",
+    "net_benchmark": "8–15%",
+    "labour_pct": "35–50%",
+    "revenue_streams": [
+      "Labour Revenue – Service Bays",
+      "Parts Sales",
+      "Vehicle Sales",
+      "Body Shop",
+      "Detailing",
+      "Fleet Service Contracts"
+    ],
+    "cogs_drivers": [
+      "Technician Labour",
+      "Parts Cost",
+      "Sublet Repairs",
+      "Body Shop Materials"
+    ],
+    "key_expenses": [
+      "Insurance – Garage Liability",
+      "Tool Allowances",
+      "Licensing & Certification",
+      "Software (Shop Management)",
+      "Parts Inventory Carrying Cost"
+    ],
+    "seasonal": "Moderate — winter tire season Oct–Nov and Mar–Apr creates peaks. Summer for A/C service.",
+    "seasonal_note": "Parts inventory management is critical — track as asset (1300), expense only when used (COGS).",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 8 — 20% DB",
+        "Shop equipment, hoists, diagnostic tools"
+      ],
+      [
+        "Class 10 — 30% DB",
+        "Service loaners, tow trucks, shuttle vehicles"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Diagnostic computers, alignment equipment"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements"
+      ]
+    ],
+    "job_types": [
+      "oil_change",
+      "brake_service",
+      "tire_service",
+      "major_repair",
+      "diagnostics",
+      "body_shop",
+      "detailing",
+      "fleet_service",
+      "inspection"
+    ],
+    "hst_note": "All labour and parts taxable 13% HST. Used vehicle sales by a GST/HST registrant are taxable — use Dealer margin method where applicable.",
+    "common_errors": [
+      "Parts inventory expensed as purchased instead of when used",
+      "Shop supplies not tracked per job",
+      "Warranty labour not recognized correctly"
+    ],
+    "fiscal_year_note": "December 31 most common",
+    "revenue_per_employee": "$80K–$160K",
+    "fuel_pct": "2–4%",
+    "owner_comp_range": "$80K–$200K"
+  },
+  "454110": {
+    "label": "E-Commerce & Online Retail",
+    "naics": "454110",
+    "gp_benchmark": "30–55%",
+    "net_benchmark": "5–15%",
+    "labour_pct": "10–20% of revenue",
+    "revenue_streams": [
+      "Product Sales",
+      "Shipping Revenue",
+      "Subscription Revenue",
+      "Advertising/Affiliate Income"
+    ],
+    "cogs_drivers": [
+      "Product cost/inventory",
+      "Payment processing fees (HST-exempt)",
+      "Shipping costs",
+      "Returns/refunds"
+    ],
+    "key_expenses": [
+      "Platform fees (Shopify etc.)",
+      "Digital marketing/ads",
+      "Warehouse/fulfillment",
+      "Returns handling",
+      "Software subscriptions"
+    ],
+    "seasonal": "Peak: Nov–Dec (holiday season). Q1 typically slowest. Plan inventory 3 months ahead.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 8 — 20% DB",
+        "Warehouse equipment, shelving"
+      ],
+      [
+        "Class 10 — 30% DB",
+        "Delivery vehicles"
+      ],
+      [
+        "Class 12 — 100%",
+        "Software, domain names"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Computer equipment, servers"
+      ]
+    ],
+    "job_types": [
+      "B2C product sales",
+      "B2B wholesale",
+      "Dropshipping",
+      "Subscription box"
+    ],
+    "hst_note": "HST on Canadian sales. ZERO-RATED for export sales to non-Canadians. Payment processor fees (Stripe/PayPal) are HST-exempt financial services — no ITC. Careful with marketplace facilitated sales (Amazon, Etsy).",
+    "common_errors": [
+      "HST on exported goods (should be zero-rated)",
+      "Inventory write-downs",
+      "Platform fees vs cost of goods",
+      "Return/refund accounting",
+      "Nexus obligations in US states"
+    ],
+    "wsib_rate": 0.0161,
+    "wsib_group": "Retail — Online",
+    "fiscal_year_note": "Calendar year typical. Busy season inventory purchase in Sep–Oct.",
+    "revenue_per_employee": "$200,000–$800,000",
+    "fuel_pct": "2–8% (shipping costs)",
+    "owner_comp_range": "$60,000–$200,000"
+  },
+  "541110": {
+    "label": "Legal Services",
+    "wsib_rate": 0.0022,
+    "wsib_group": "Professional Services — Low Risk",
+    "gp_benchmark": "70–80%",
+    "net_benchmark": "25–40%",
+    "labour_pct": "40–60%",
+    "revenue_streams": [
+      "Billable Hours – Litigation",
+      "Billable Hours – Corporate",
+      "Billable Hours – Real Estate",
+      "Billable Hours – Family Law",
+      "Retainer Fees",
+      "Disbursements Recovery",
+      "Document Preparation"
+    ],
+    "cogs_drivers": [
+      "Lawyer & Paralegal Wages",
+      "Disbursements",
+      "Court Fees",
+      "Legal Research"
+    ],
+    "key_expenses": [
+      "Professional Liability Insurance",
+      "Law Society Fees",
+      "Software (Clio, PCLaw)",
+      "Office Rent",
+      "Legal Research Subscriptions"
+    ],
+    "seasonal": "Low seasonality — court schedules affect real estate closings (spring/fall peaks).",
+    "seasonal_note": "Trust accounting is critical — client trust funds MUST be kept separate. Never commingle trust with operating funds.",
+    "deferred_revenue": true,
+    "deferred_note": "Retainer fees held in trust are not revenue until earned. Draw from trust as work is completed.",
+    "cca_classes": [
+      [
+        "Class 50 — 55% DB",
+        "Computers, servers, tablets"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Office equipment"
+      ],
+      [
+        "Class 12 — 100%",
+        "Software licences under $500"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements"
+      ]
+    ],
+    "job_types": [
+      "litigation",
+      "corporate",
+      "real_estate",
+      "family_law",
+      "wills_estates",
+      "immigration",
+      "employment",
+      "criminal"
+    ],
+    "hst_note": "Most legal services are taxable 13% HST. Some services may be exempt — verify per matter type. Disbursements may or may not carry HST depending on the underlying supply.",
+    "common_errors": [
+      "Trust funds commingled with operating account",
+      "Disbursements not tracked per client matter",
+      "WIP not accrued at year-end"
+    ],
+    "fiscal_year_note": "December 31 most common for law firms",
+    "revenue_per_employee": "$150K–$400K",
+    "fuel_pct": "1–2%",
+    "owner_comp_range": "$150K–$500K+"
+  },
+  "541310": {
+    "label": "Architecture & Engineering",
+    "wsib_rate": 0.0022,
+    "wsib_group": "Professional Services — Low Risk",
+    "gp_benchmark": "55–70%",
+    "net_benchmark": "15–25%",
+    "labour_pct": "50–65%",
+    "revenue_streams": [
+      "Design Fees",
+      "Project Management",
+      "Consulting",
+      "Drawings & Documentation",
+      "Inspection Services",
+      "Peer Review"
+    ],
+    "cogs_drivers": [
+      "Professional Staff Wages",
+      "Subcontracted Engineers/Architects",
+      "Software Licences",
+      "Printing & Reprographics"
+    ],
+    "key_expenses": [
+      "Professional Liability (E&O) Insurance",
+      "Professional Fees (P.Eng, OAA)",
+      "Software (AutoCAD, Revit, etc.)",
+      "Office Rent"
+    ],
+    "seasonal": "Tied to construction seasons — permit applications peak in spring.",
+    "seasonal_note": "WIP must be valued at year-end for ASPE compliance.",
+    "deferred_revenue": true,
+    "deferred_note": "Project fee agreements: recognize revenue on percentage-of-completion based on milestones or hours incurred",
+    "cca_classes": [
+      [
+        "Class 50 — 55% DB",
+        "Design workstations, CAD computers"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Plotters, office equipment"
+      ],
+      [
+        "Class 12 — 100%",
+        "Software licences"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements"
+      ]
+    ],
+    "job_types": [
+      "architectural_design",
+      "structural_engineering",
+      "mechanical_engineering",
+      "project_management",
+      "inspection",
+      "peer_review",
+      "consulting"
+    ],
+    "hst_note": "All services taxable 13% HST. Software licences from US vendors may require self-assessment HST.",
+    "common_errors": [
+      "WIP not valued at year-end",
+      "Expense recovery from clients not recognized as income"
+    ],
+    "fiscal_year_note": "December 31 or March 31 for some firms",
+    "revenue_per_employee": "$100K–$200K",
+    "fuel_pct": "1–3%",
+    "owner_comp_range": "$120K–$300K"
+  },
+  "541611": {
+    "label": "Management Consulting",
+    "wsib_rate": 0.0022,
+    "wsib_group": "Professional Services — Low Risk",
+    "gp_benchmark": "65–80%",
+    "net_benchmark": "25–40%",
+    "labour_pct": "40–60%",
+    "revenue_streams": [
+      "Daily/Hourly Consulting Fees",
+      "Retainer Agreements",
+      "Project-Based Fees",
+      "Training & Workshops",
+      "Speaking Engagements",
+      "Digital Products"
+    ],
+    "cogs_drivers": [
+      "Consultant Wages",
+      "Subcontracted Specialists",
+      "Travel Expenses",
+      "Software Tools"
+    ],
+    "key_expenses": [
+      "Professional Liability Insurance",
+      "Marketing",
+      "Software Subscriptions",
+      "Travel",
+      "Professional Development"
+    ],
+    "seasonal": "Low seasonality. Slows in July/August and December.",
+    "seasonal_note": "Retainer fees must be recognized ratably over the retainer period — not all upfront.",
+    "deferred_revenue": true,
+    "deferred_note": "Retainer fees recognized ratably over the retainer period. Project fees on milestone completion.",
+    "cca_classes": [
+      [
+        "Class 50 — 55% DB",
+        "Laptops, computers"
+      ],
+      [
+        "Class 12 — 100%",
+        "Software licences"
+      ],
+      [
+        "Class 10.1 — 30% DB",
+        "Vehicle over $37,000 — separate class"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements"
+      ]
+    ],
+    "job_types": [
+      "strategy_consulting",
+      "operations",
+      "hr_consulting",
+      "financial_advisory",
+      "marketing",
+      "training",
+      "project_management",
+      "digital_transformation"
+    ],
+    "hst_note": "All services taxable 13% HST. Remote services to non-Canadian clients may be zero-rated.",
+    "common_errors": [
+      "Expense recharges not recognized as income",
+      "Retainer recognized all upfront instead of monthly"
+    ],
+    "fiscal_year_note": "December 31 or April 30 most common",
+    "revenue_per_employee": "$150K–$400K",
+    "fuel_pct": "1–3%",
+    "owner_comp_range": "$100K–$300K"
+  },
+  "541990": {
+    "label": "Professional Services — Other",
+    "wsib_rate": 0.0022,
+    "wsib_group": "Professional Services — Low Risk",
+    "gp_benchmark": "60–75%",
+    "net_benchmark": "20–35%",
+    "labour_pct": "40–60%",
+    "revenue_streams": [
+      "Professional Fees",
+      "Retainers",
+      "Project-Based Fees",
+      "Software/Tools",
+      "Training"
+    ],
+    "cogs_drivers": [
+      "Staff Wages",
+      "Subcontractors",
+      "Software Tools",
+      "Professional Development"
+    ],
+    "key_expenses": [
+      "Professional Liability Insurance",
+      "Software",
+      "Office",
+      "Professional Fees"
+    ],
+    "seasonal": "Low seasonality.",
+    "seasonal_note": "Retainer and project fee timing must be carefully tracked against delivery milestones.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 50 — 55% DB",
+        "Computers, technology"
+      ],
+      [
+        "Class 12 — 100%",
+        "Software, small tools"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements"
+      ]
+    ],
+    "job_types": [
+      "professional_service",
+      "consulting",
+      "advisory",
+      "project",
+      "retainer",
+      "training"
+    ],
+    "hst_note": "Most professional services taxable 13% HST.",
+    "common_errors": [
+      "Retainer not deferred",
+      "Subcontractor T4A obligations missed"
+    ],
+    "fiscal_year_note": "December 31 most common",
+    "revenue_per_employee": "$100K–$250K",
+    "fuel_pct": "1–3%",
+    "owner_comp_range": "$80K–$200K"
+  },
+  "561730": {
+    "label": "Landscaping & Property Services",
+    "wsib_rate": 0.0285,
+    "wsib_group": "Rate Group 695",
+    "gp_benchmark": "35–45%",
+    "net_benchmark": "10–18%",
+    "labour_pct": "30–45%",
+    "revenue_streams": [
+      "Commercial Snow Removal",
+      "Residential Snow Removal",
+      "Lawn Maintenance",
+      "Landscaping & Hardscape",
+      "Property Maintenance",
+      "Irrigation",
+      "Spring/Fall Cleanup"
+    ],
+    "cogs_drivers": [
+      "Direct Labour – Field Operations",
+      "Materials & Supplies",
+      "Equipment Fuel",
+      "WSIB – Direct Labour",
+      "Subcontractor Costs"
+    ],
+    "key_expenses": [
+      "Vehicle & Equipment Maintenance",
+      "Insurance – Equipment & Liability",
+      "Fuel",
+      "Safety Equipment",
+      "Uniforms & Workwear"
+    ],
+    "seasonal": "Highly seasonal: Snow operations Nov 15–Apr 15 (peak revenue), outdoor services Apr 16–Nov 14. Cash flow sensitive between seasons.",
+    "seasonal_note": "Deferred revenue recognition is CRITICAL — prepaid seasonal snow contracts must be deferred and recognized monthly",
+    "deferred_revenue": true,
+    "deferred_note": "Seasonal flat-rate contracts paid upfront (Oct/Nov) recognized ratably over service period (Nov 15–Apr 15 = 5 months)",
+    "cca_classes": [
+      [
+        "Class 10 — 30% DB",
+        "Trucks, plows, snowblowers, skid steers, trailers"
+      ],
+      [
+        "Class 8 — 20% DB",
+        "Commercial mowers, equipment, tools over $500"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools under $500, uniforms, safety gear"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Computer equipment, tablets, business phones"
+      ]
+    ],
+    "job_types": [
+      "snow_commercial",
+      "snow_residential",
+      "lawn_maintenance",
+      "landscaping",
+      "spring_cleanup",
+      "fall_cleanup",
+      "hardscape",
+      "irrigation",
+      "general_property"
+    ],
+    "hst_note": "All snow removal, landscaping, and property services are taxable at 13% Ontario HST. Residential resale real property is exempt but services are not.",
+    "common_errors": [
+      "Seasonal contract not deferred — expensed in month received",
+      "Personal vehicle use mixed with business fuel",
+      "Capital equipment expensed instead of capitalized"
+    ],
+    "fiscal_year_note": "September 1 – August 31 typical for seasonal cash flow alignment",
+    "revenue_per_employee": "$80K–$120K",
+    "fuel_pct": "6–10%",
+    "owner_comp_range": "$75K–$150K"
+  },
+  "621000": {
+    "label": "Healthcare & Medical",
+    "wsib_rate": 0.0068,
+    "wsib_group": "Healthcare — Very Low Risk",
+    "gp_benchmark": "55–70%",
+    "net_benchmark": "20–35%",
+    "labour_pct": "45–60%",
+    "revenue_streams": [
+      "Patient Consultations",
+      "Procedures & Treatments",
+      "Therapy Sessions",
+      "Diagnostic Services",
+      "Prescription Dispensing",
+      "Facility Fees"
+    ],
+    "cogs_drivers": [
+      "Clinical Staff Wages",
+      "Medical Supplies",
+      "Lab Costs",
+      "Subcontracted Services",
+      "Malpractice Insurance"
+    ],
+    "key_expenses": [
+      "Malpractice/Professional Liability",
+      "College Membership Fees",
+      "Medical Equipment",
+      "Software (clinic management)",
+      "Billing Services"
+    ],
+    "seasonal": "Low seasonality. Cold/flu season increases volume Nov–Mar.",
+    "seasonal_note": "Third-party billing (OHIP, insurance) creates timing differences between service and payment receipt.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 8 — 20% DB",
+        "Medical equipment, diagnostic tools"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Computers, clinic software"
+      ],
+      [
+        "Class 12 — 100%",
+        "Disposable supplies, small tools"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements to clinic"
+      ]
+    ],
+    "job_types": [
+      "consultation",
+      "procedure",
+      "therapy",
+      "diagnostic",
+      "prescription",
+      "wellness",
+      "specialist_referral"
+    ],
+    "hst_note": "Most health care services are EXEMPT from HST under Schedule V Part II of the Excise Tax Act. Cosmetic procedures are TAXABLE. Verify each service type — mixed supply practices must allocate ITCs.",
+    "common_errors": [
+      "Claiming ITC on exempt healthcare supplies",
+      "OHIP payments recognized on remittance date instead of service date",
+      "Not tracking cosmetic vs medical revenue separately"
+    ],
+    "fiscal_year_note": "December 31 most common; March 31 for incorporated practices",
+    "revenue_per_employee": "$80K–$200K",
+    "fuel_pct": "0–2%",
+    "owner_comp_range": "$150K–$400K+"
+  },
+  "722511": {
+    "label": "Full-Service Restaurants",
+    "wsib_rate": 0.0161,
+    "wsib_group": "Food Service",
+    "gp_benchmark": "60–70% (food cost 28–35%)",
+    "net_benchmark": "3–9%",
+    "labour_pct": "30–35%",
+    "revenue_streams": [
+      "Dine-In Revenue",
+      "Takeout & Delivery",
+      "Catering",
+      "Private Events",
+      "Bar & Beverage",
+      "Gift Cards"
+    ],
+    "cogs_drivers": [
+      "Food Cost (COGS)",
+      "Beverage Cost",
+      "Kitchen Labour",
+      "Server/FOH Labour",
+      "Delivery Platform Fees (15–30%)"
+    ],
+    "key_expenses": [
+      "Rent (10–12% of revenue)",
+      "Equipment Maintenance",
+      "Liquor Licence",
+      "Food Safety Compliance",
+      "Marketing"
+    ],
+    "seasonal": "Moderate — peak summer patios, holiday season. Slower Jan–Feb.",
+    "seasonal_note": "Cash tips — employees must declare and T4 processing must include declared tips. Tip-out arrangements must be documented.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 8 — 20% DB",
+        "Kitchen equipment, refrigerators, ovens, POS systems"
+      ],
+      [
+        "Class 13 — Straight Line",
+        "Leasehold improvements to restaurant"
+      ],
+      [
+        "Class 10.1 — 30% DB",
+        "Delivery vehicles"
+      ],
+      [
+        "Class 12 — 100%",
+        "Dishes, utensils, small wares (under $500)"
+      ]
+    ],
+    "job_types": [
+      "dine_in",
+      "takeout",
+      "delivery",
+      "catering",
+      "private_event",
+      "bar_beverage"
+    ],
+    "hst_note": "Restaurant meals are taxable 13% HST. Alcoholic beverages taxable. Certain groceries/basic food for home consumption are zero-rated but NOT when sold in a restaurant.",
+    "common_errors": [
+      "Food cost not matched to sales period",
+      "Delivery platform fees not separated from net revenue",
+      "Tip income not properly reported on T4",
+      "Cash sales not recorded"
+    ],
+    "fiscal_year_note": "December 31 most common",
+    "revenue_per_employee": "$40K–$80K",
+    "fuel_pct": "1–3%",
+    "owner_comp_range": "$60K–$150K"
+  },
+  "999999": {
+    "label": "Other Industry",
+    "wsib_rate": 0.03,
+    "wsib_group": "General Business",
+    "gp_benchmark": "35–55%",
+    "net_benchmark": "10–20%",
+    "labour_pct": "30–50%",
+    "revenue_streams": [
+      "Service Revenue",
+      "Product Sales",
+      "Consulting Fees",
+      "Other Revenue"
+    ],
+    "cogs_drivers": [
+      "Direct Labour",
+      "Materials",
+      "Subcontractors",
+      "Direct Costs"
+    ],
+    "key_expenses": [
+      "General Overhead",
+      "Insurance",
+      "Vehicle",
+      "Office Expenses"
+    ],
+    "seasonal": "Varies by business type.",
+    "seasonal_note": "Track all prepaid service arrangements for potential deferred revenue treatment.",
+    "deferred_revenue": false,
+    "cca_classes": [
+      [
+        "Class 8 — 20% DB",
+        "General equipment and machinery"
+      ],
+      [
+        "Class 10 — 30% DB",
+        "Vehicles"
+      ],
+      [
+        "Class 50 — 55% DB",
+        "Computer equipment"
+      ],
+      [
+        "Class 12 — 100%",
+        "Small tools under $500"
+      ]
+    ],
+    "job_types": [
+      "service",
+      "product",
+      "consulting",
+      "project",
+      "other"
+    ],
+    "hst_note": "Most business services and products are taxable at the applicable provincial HST rate.",
+    "common_errors": [
+      "Personal expenses mixed with business",
+      "Capital assets expensed",
+      "Revenue not matched to period of service"
+    ],
+    "fiscal_year_note": "December 31 most common",
+    "revenue_per_employee": "$80K–$200K",
+    "fuel_pct": "2–6%",
+    "owner_comp_range": "$60K–$150K"
+  }
+}

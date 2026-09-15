@@ -8,6 +8,7 @@ reviewer can read one file and understand one area completely.
 from . import (  # noqa: F401  - imported for the registration side effect
     ap,
     ar,
+    benchmarks,
     debt_cash,
     duplicates,
     fixed_assets,
@@ -19,6 +20,6 @@ from . import (  # noqa: F401  - imported for the registration side effect
 )
 
 __all__ = [
-    "integrity", "duplicates", "reconciliation", "variance",
+    "integrity", "duplicates", "reconciliation", "variance", "benchmarks",
     "ar", "ap", "tax", "payroll", "fixed_assets", "debt_cash",
 ]

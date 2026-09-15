@@ -1,0 +1,688 @@
+[
+  {
+    "num": "1000",
+    "name": "Chequing Account — Operating",
+    "type": "Bank",
+    "fs": "Balance Sheet",
+    "note": "Main RBC/TD business chequing"
+  },
+  {
+    "num": "1010",
+    "name": "Chequing Account — Payroll",
+    "type": "Bank",
+    "fs": "Balance Sheet",
+    "note": "Separate payroll account"
+  },
+  {
+    "num": "1020",
+    "name": "Savings / Tax Reserve Account",
+    "type": "Bank",
+    "fs": "Balance Sheet",
+    "note": "Hold HST + income tax reserves here"
+  },
+  {
+    "num": "1050",
+    "name": "Petty Cash",
+    "type": "Other Current Asset",
+    "fs": "Balance Sheet",
+    "note": "On-site float"
+  },
+  {
+    "num": "1100",
+    "name": "Accounts Receivable",
+    "type": "Accounts Receivable",
+    "fs": "Balance Sheet",
+    "note": "All outstanding customer invoices"
+  },
+  {
+    "num": "1105",
+    "name": "Allowance for Doubtful Accounts",
+    "type": "Accounts Receivable",
+    "fs": "Balance Sheet",
+    "note": "Contra-AR — credit balance"
+  },
+  {
+    "num": "1200",
+    "name": "HST/GST Receivable (ITC)",
+    "type": "Other Current Asset",
+    "fs": "Balance Sheet",
+    "note": "Input tax credits claimable from CRA"
+  },
+  {
+    "num": "1300",
+    "name": "Prepaid Insurance",
+    "type": "Other Current Asset",
+    "fs": "Balance Sheet",
+    "note": "Unexpired GL + commercial auto + equipment"
+  },
+  {
+    "num": "1310",
+    "name": "Prepaid Expenses — Other",
+    "type": "Other Current Asset",
+    "fs": "Balance Sheet",
+    "note": "Licences, subs, other prepaid"
+  },
+  {
+    "num": "1400",
+    "name": "Inventory — Materials & Supplies",
+    "type": "Other Current Asset",
+    "fs": "Balance Sheet",
+    "note": "Materials, supplies, and consumables on hand for service delivery"
+  },
+  {
+    "num": "1410",
+    "name": "Inventory — Parts & Equipment",
+    "type": "Other Current Asset",
+    "fs": "Balance Sheet",
+    "note": "Spare parts and small equipment on hand"
+  },
+  {
+    "num": "1500",
+    "name": "Equipment — Direct Operations",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Primary operations equipment — see CCA schedule for class details"
+  },
+  {
+    "num": "1501",
+    "name": "Accum. Depreciation — Ops Equipment",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Contra asset — accumulated depreciation on operations equipment"
+  },
+  {
+    "num": "1510",
+    "name": "Equipment — Secondary Operations",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Secondary/support operations equipment — CCA Class 8 (20% DB)"
+  },
+  {
+    "num": "1511",
+    "name": "Accum. Depreciation — Secondary Equip.",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Contra asset"
+  },
+  {
+    "num": "1600",
+    "name": "Vehicles & Transportation",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Business vehicles — CCA Class 10 (30% DB) or 10.1 if >$37,000"
+  },
+  {
+    "num": "1601",
+    "name": "Accum. Depreciation — Vehicles",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Contra asset"
+  },
+  {
+    "num": "1700",
+    "name": "Equipment — Trailers & Attachments",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Trailers and equipment attachments — CCA Class 10 (30% DB)"
+  },
+  {
+    "num": "1701",
+    "name": "Accum. Depreciation — Trailers/Attach.",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Contra asset"
+  },
+  {
+    "num": "1800",
+    "name": "Leasehold Improvements",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Yard/shop improvements — CCA Class 13 (straight line)"
+  },
+  {
+    "num": "1801",
+    "name": "Accum. Depreciation — Leasehold",
+    "type": "Fixed Asset",
+    "fs": "Balance Sheet",
+    "note": "Contra asset"
+  },
+  {
+    "num": "2000",
+    "name": "Accounts Payable",
+    "type": "Accounts Payable",
+    "fs": "Balance Sheet",
+    "note": "All supplier and subcontractor bills owing"
+  },
+  {
+    "num": "2100",
+    "name": "HST/GST Payable",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "HST collected on taxable supplies"
+  },
+  {
+    "num": "2200",
+    "name": "Payroll Liabilities — CPP Payable",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Employee + employer CPP owing to CRA"
+  },
+  {
+    "num": "2210",
+    "name": "Payroll Liabilities — EI Payable",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Employee + employer EI owing to CRA"
+  },
+  {
+    "num": "2220",
+    "name": "Payroll Liabilities — Income Tax",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Employee income tax withheld"
+  },
+  {
+    "num": "2230",
+    "name": "Payroll Liabilities — Wages Accrued",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Wages earned not yet paid"
+  },
+  {
+    "num": "2300",
+    "name": "WSIB Payable",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "WSIB Ontario premiums owing — 2.85% construction"
+  },
+  {
+    "num": "2400",
+    "name": "Deferred Revenue — Prepaid Service Contracts",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "CRITICAL: Prepaid/advance payments received before services are delivered (ASPE 3400). Recognize monthly as services are performed. This is the #1 compliance issue for service businesses."
+  },
+  {
+    "num": "2410",
+    "name": "Deferred Revenue — Maintenance Contracts",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Seasonal property maintenance prepaid contracts"
+  },
+  {
+    "num": "2500",
+    "name": "Current Portion — Vehicle Loans",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Principal due within 12 months"
+  },
+  {
+    "num": "2510",
+    "name": "Current Portion — Equipment Loans",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Principal due within 12 months"
+  },
+  {
+    "num": "2600",
+    "name": "Vehicle Loans — Long Term",
+    "type": "Long Term Liability",
+    "fs": "Balance Sheet",
+    "note": "Financed vehicle balances beyond 12 months"
+  },
+  {
+    "num": "2610",
+    "name": "Equipment Loans — Long Term",
+    "type": "Long Term Liability",
+    "fs": "Balance Sheet",
+    "note": "Financed equipment balances beyond 12 months"
+  },
+  {
+    "num": "2700",
+    "name": "Shareholder Loans Payable",
+    "type": "Long Term Liability",
+    "fs": "Balance Sheet",
+    "note": "Amounts owed to shareholder/owner"
+  },
+  {
+    "num": "2800",
+    "name": "Corporate Income Tax Payable",
+    "type": "Other Current Liability",
+    "fs": "Balance Sheet",
+    "note": "Federal 9% + Ontario 3.2% SBD = 12.2% combined"
+  },
+  {
+    "num": "3000",
+    "name": "Share Capital — Common Shares",
+    "type": "Equity",
+    "fs": "Balance Sheet",
+    "note": "Issued and outstanding shares"
+  },
+  {
+    "num": "3100",
+    "name": "Retained Earnings",
+    "type": "Equity",
+    "fs": "Balance Sheet",
+    "note": "Cumulative earnings retained"
+  },
+  {
+    "num": "3200",
+    "name": "Owner Drawings / Dividends",
+    "type": "Equity",
+    "fs": "Balance Sheet",
+    "note": "Dividends paid to shareholder (contra equity)"
+  },
+  {
+    "num": "4000",
+    "name": "Revenue — Primary Service Line",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Main service revenue — rename in QBO to match your primary service offering"
+  },
+  {
+    "num": "4010",
+    "name": "Revenue — Secondary Service Line",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Secondary service revenue — rename in QBO to match your service mix"
+  },
+  {
+    "num": "4020",
+    "name": "Revenue — Additional Services",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Additional billable services — materials surcharges, specialized work"
+  },
+  {
+    "num": "4030",
+    "name": "Revenue — Project & Contract Work",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Project-based or contract revenue distinct from regular services"
+  },
+  {
+    "num": "4100",
+    "name": "Revenue — Lawn Care & Maintenance",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Regular mowing, edging, trimming contracts",
+    "season": "summer"
+  },
+  {
+    "num": "4110",
+    "name": "Revenue — Recurring Service Contracts",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Recurring/subscription service contracts — monthly or annual"
+  },
+  {
+    "num": "4120",
+    "name": "Revenue — Spring & Fall Cleanup",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Seasonal property cleanup contracts",
+    "season": "both"
+  },
+  {
+    "num": "4130",
+    "name": "Revenue — Fertilizing & Treatment",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Lawn treatment, weed control, fertilizer application",
+    "season": "summer"
+  },
+  {
+    "num": "4140",
+    "name": "Revenue — Irrigation Services",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Sprinkler system startup, winterization, repairs",
+    "season": "both"
+  },
+  {
+    "num": "4150",
+    "name": "Revenue — Interlocking & Hardscape",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Interlocking, patios, retaining walls",
+    "season": "summer"
+  },
+  {
+    "num": "4200",
+    "name": "Revenue — General Property Maintenance",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Pressure washing, gutter cleaning, misc. services",
+    "season": "summer"
+  },
+  {
+    "num": "4900",
+    "name": "Other Revenue",
+    "type": "Income",
+    "fs": "Income Statement",
+    "note": "Equipment rental, miscellaneous"
+  },
+  {
+    "num": "5000",
+    "name": "Direct Labour — Field Operations",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Direct labour costs for service delivery — technicians, operators, field staff"
+  },
+  {
+    "num": "5010",
+    "name": "Direct Labour — Property Maintenance",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Crew wages on maintenance jobs",
+    "season": "summer"
+  },
+  {
+    "num": "5020",
+    "name": "Payroll Burden — Direct (CPP/EI)",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Employer CPP & EI on direct labour"
+  },
+  {
+    "num": "5030",
+    "name": "WSIB — Direct Labour",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "WSIB premiums on direct labour @ 2.85%"
+  },
+  {
+    "num": "5100",
+    "name": "Subcontractor Costs",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "T4A subcontractors — verify HST registration if over $30K"
+  },
+  {
+    "num": "5200",
+    "name": "Materials & Direct Supplies",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Materials and supplies directly consumed in service delivery"
+  },
+  {
+    "num": "5210",
+    "name": "Subcontracted Services",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Work subcontracted to third parties (T4A/T5018 required for unincorporated subs >$500)"
+  },
+  {
+    "num": "5220",
+    "name": "Materials — General Job Supplies",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Miscellaneous job-specific consumables"
+  },
+  {
+    "num": "5300",
+    "name": "Equipment Rental — Direct Jobs",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Rented equipment used on client jobs only"
+  },
+  {
+    "num": "5400",
+    "name": "Fuel — Direct Operations",
+    "type": "Cost of Goods Sold",
+    "fs": "Income Statement",
+    "note": "Fuel on client routes and job sites — track mileage log"
+  },
+  {
+    "num": "6000",
+    "name": "Salaries — Admin & Management",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Office admin, management compensation"
+  },
+  {
+    "num": "6010",
+    "name": "Owner Salary / Management Fees",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Owner reasonable salary — affects SBD calculation"
+  },
+  {
+    "num": "6020",
+    "name": "Payroll Burden — Admin (CPP/EI)",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Employer portions on admin wages"
+  },
+  {
+    "num": "6100",
+    "name": "Fuel — Overhead Vehicles",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Fuel for non-billable vehicle use — keep mileage log"
+  },
+  {
+    "num": "6110",
+    "name": "Vehicle Insurance",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Commercial auto insurance — HST exempt"
+  },
+  {
+    "num": "6120",
+    "name": "Vehicle Maintenance & Repairs",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Servicing, tires, repairs on all fleet"
+  },
+  {
+    "num": "6130",
+    "name": "Vehicle Registration & Licensing",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "MTO plates, stickers, CVOR, permits"
+  },
+  {
+    "num": "6200",
+    "name": "Equipment Maintenance & Repairs",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Service, parts, repairs on owned equipment"
+  },
+  {
+    "num": "6210",
+    "name": "Equipment Storage",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Off-season storage fees for equipment"
+  },
+  {
+    "num": "6300",
+    "name": "Insurance — General Liability",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "CGL, property, umbrella — HST exempt"
+  },
+  {
+    "num": "6310",
+    "name": "Insurance — Equipment Floater",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Equipment-specific coverage"
+  },
+  {
+    "num": "6400",
+    "name": "Rent — Storage Yard & Office",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Monthly rent on operational premises"
+  },
+  {
+    "num": "6500",
+    "name": "Utilities",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Hydro, gas, water at business premises"
+  },
+  {
+    "num": "6600",
+    "name": "Telephone & Internet",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Cell phones, office lines, internet"
+  },
+  {
+    "num": "6700",
+    "name": "Advertising & Marketing",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Digital ads, flyers, signage, branding"
+  },
+  {
+    "num": "6800",
+    "name": "Professional Fees — Accounting",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Bookkeeping (ProfitForge), tax filing, CPA"
+  },
+  {
+    "num": "6810",
+    "name": "Professional Fees — Legal",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Contract review, legal counsel"
+  },
+  {
+    "num": "6900",
+    "name": "Office Expenses & Supplies",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Stationery, printer, consumables"
+  },
+  {
+    "num": "6910",
+    "name": "Software & Subscriptions",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "QBO, Jobber, apps, software licences"
+  },
+  {
+    "num": "7000",
+    "name": "Safety Equipment & PPE",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Hi-vis, boots, gloves, hard hats"
+  },
+  {
+    "num": "7010",
+    "name": "Small Tools — Expensed",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Tools under $500 capitalization threshold"
+  },
+  {
+    "num": "7100",
+    "name": "Bank Charges & Service Fees",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Monthly fees, wire fees, NSF"
+  },
+  {
+    "num": "7110",
+    "name": "Interest Expense — Vehicle Loans",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Interest on financed vehicles"
+  },
+  {
+    "num": "7120",
+    "name": "Interest Expense — Equipment Loans",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Interest on equipment financing"
+  },
+  {
+    "num": "7130",
+    "name": "Interest Expense — Credit Cards",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Credit card interest charges"
+  },
+  {
+    "num": "7200",
+    "name": "Depreciation & Amortization",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Book depreciation on all capital assets"
+  },
+  {
+    "num": "7300",
+    "name": "Meals & Entertainment",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "50% deductible per ITA s.67.1 — flag all M&E"
+  },
+  {
+    "num": "7400",
+    "name": "Travel & Accommodation",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Business travel, hotels"
+  },
+  {
+    "num": "7500",
+    "name": "Licences & Permits",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Business licence, municipal permits, CVOR"
+  },
+  {
+    "num": "7600",
+    "name": "Bad Debt Expense",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Write-off of uncollectible AR"
+  },
+  {
+    "num": "7700",
+    "name": "Uniforms & Workwear",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Company branded uniforms, boots allowance"
+  },
+  {
+    "num": "7800",
+    "name": "Field Supplies & Small Tools",
+    "type": "Expense",
+    "fs": "Income Statement",
+    "note": "Small tools under $500 (Class 12 — 100% deductible), field supplies and consumables"
+  },
+  {
+    "num": "8000",
+    "name": "Interest Income",
+    "type": "Other Income",
+    "fs": "Income Statement",
+    "note": "Bank account interest earned"
+  },
+  {
+    "num": "8100",
+    "name": "Gain on Disposal of Assets",
+    "type": "Other Income",
+    "fs": "Income Statement",
+    "note": "Proceeds exceed NBV on asset sale"
+  },
+  {
+    "num": "8200",
+    "name": "Loss on Disposal of Assets",
+    "type": "Other Expense",
+    "fs": "Income Statement",
+    "note": "NBV exceeds proceeds on asset sale"
+  },
+  {
+    "num": "8300",
+    "name": "Corporate Income Tax Expense",
+    "type": "Other Expense",
+    "fs": "Income Statement",
+    "note": "Federal 9% + Ontario 3.2% SBD = 12.2%"
+  }
+]

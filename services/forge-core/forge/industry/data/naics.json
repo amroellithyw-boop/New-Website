@@ -1,0 +1,240 @@
+[
+  {
+    "code": "561730",
+    "label": "Landscaping & Property Services",
+    "description": "Lawn care, snow removal, landscaping, grounds maintenance",
+    "examples": "Snow removal, lawn mowing, landscaping, property maintenance",
+    "icon": "🌿"
+  },
+  {
+    "code": "236110",
+    "label": "Residential Building Construction",
+    "description": "New home construction, renovations, additions",
+    "examples": "Home builders, renovators, residential contractors",
+    "icon": "🏠"
+  },
+  {
+    "code": "236210",
+    "label": "Industrial & Commercial Construction",
+    "description": "Commercial buildings, industrial facilities",
+    "examples": "Commercial contractors, industrial builders",
+    "icon": "🏗"
+  },
+  {
+    "code": "238110",
+    "label": "Foundation & Structure Work",
+    "description": "Concrete, masonry, structural work",
+    "examples": "Concrete contractors, masonry, foundation work",
+    "icon": "🧱"
+  },
+  {
+    "code": "238160",
+    "label": "Roofing & Exterior Work",
+    "description": "Roofing, siding, windows, gutters, exterior finishing",
+    "examples": "Roofing contractors, siding, exteriors",
+    "icon": "🏚"
+  },
+  {
+    "code": "238210",
+    "label": "Electrical Contracting",
+    "description": "Electrical installation, wiring, panels, lighting",
+    "examples": "Electricians, electrical contractors",
+    "icon": "⚡"
+  },
+  {
+    "code": "238220",
+    "label": "Plumbing & HVAC",
+    "description": "Plumbing, heating, air conditioning, ventilation",
+    "examples": "Plumbers, HVAC contractors, mechanical",
+    "icon": "🔧"
+  },
+  {
+    "code": "238310",
+    "label": "Drywall & Insulation",
+    "description": "Drywall, insulation, plastering, interior finishing",
+    "examples": "Drywall contractors, insulators",
+    "icon": "🪣"
+  },
+  {
+    "code": "238320",
+    "label": "Painting & Wall Covering",
+    "description": "Interior and exterior painting, wallpaper, coatings",
+    "examples": "Painters, finishing contractors",
+    "icon": "🖌"
+  },
+  {
+    "code": "238330",
+    "label": "Flooring Installation",
+    "description": "Hardwood, tile, carpet, vinyl, epoxy flooring",
+    "examples": "Flooring contractors, tile setters",
+    "icon": "🏠"
+  },
+  {
+    "code": "238990",
+    "label": "Specialty Trades — Other",
+    "description": "Welding, fabrication, demolition, other specialty trade work",
+    "examples": "Welders, fabricators, demolition",
+    "icon": "⚙️"
+  },
+  {
+    "code": "541110",
+    "label": "Legal Services",
+    "description": "Law firms, legal services",
+    "examples": "Lawyers, paralegals",
+    "icon": "⚖️"
+  },
+  {
+    "code": "541310",
+    "label": "Architecture & Engineering",
+    "description": "Architectural and engineering services",
+    "examples": "Architects, engineers, designers",
+    "icon": "📐"
+  },
+  {
+    "code": "541611",
+    "label": "Management Consulting",
+    "description": "Business advisory and management consulting",
+    "examples": "Consultants, business coaches, advisors",
+    "icon": "💼"
+  },
+  {
+    "code": "541990",
+    "label": "Professional Services — Other",
+    "description": "Accounting, bookkeeping, other professional services",
+    "examples": "Accountants, bookkeepers, consultants",
+    "icon": "📋"
+  },
+  {
+    "code": "621000",
+    "label": "Healthcare & Medical",
+    "description": "Medical, dental, chiropractic, wellness services",
+    "examples": "Doctors, dentists, physiotherapists, clinics",
+    "icon": "🏥"
+  },
+  {
+    "code": "722511",
+    "label": "Full-Service Restaurants",
+    "description": "Restaurants, cafes, food service operations",
+    "examples": "Restaurants, cafes, catering companies",
+    "icon": "🍽"
+  },
+  {
+    "code": "441110",
+    "label": "Auto Dealers & Service",
+    "description": "Automotive sales, repair, detailing, body shops",
+    "examples": "Car dealers, mechanics, body shops",
+    "icon": "🚗"
+  },
+  {
+    "code": "454110",
+    "label": "E-Commerce & Online Retail",
+    "description": "Online retail, e-commerce, digital products",
+    "examples": "Online stores, e-commerce brands, dropshipping",
+    "icon": "🛒"
+  },
+  {
+    "code": "311000",
+    "label": "Manufacturing & Production",
+    "description": "Manufacturing, food production, industrial operations",
+    "examples": "Manufacturers, processors, fabricators",
+    "icon": "🏭"
+  },
+  {
+    "code": "532100",
+    "label": "Equipment & Vehicle Rental",
+    "description": "Equipment rental, tool rental, vehicle leasing",
+    "examples": "Rental companies, equipment dealers, fleet",
+    "icon": "🚛"
+  },
+  {
+    "code": "721110",
+    "label": "Hotels & Accommodations",
+    "description": "Hotels, motels, B&Bs, short-term rentals, resorts",
+    "examples": "Hotels, motels, Airbnb operators, lodges, resorts",
+    "icon": "🏨"
+  },
+  {
+    "code": "531210",
+    "label": "Real Estate Brokerage & Sales",
+    "description": "Real estate agents, brokers, property sales",
+    "examples": "Real estate agents, brokers, real estate teams",
+    "icon": "🏘"
+  },
+  {
+    "code": "531311",
+    "label": "Real Estate Property Management",
+    "description": "Residential and commercial property management",
+    "examples": "Property managers, condo management, rental management",
+    "icon": "🔑"
+  },
+  {
+    "code": "518210",
+    "label": "SaaS & Cloud Software",
+    "description": "Software-as-a-service, cloud platforms, subscription tech",
+    "examples": "SaaS companies, B2B software, cloud platforms",
+    "icon": "☁️"
+  },
+  {
+    "code": "541512",
+    "label": "IT & Software Development",
+    "description": "Custom software, IT consulting, application development",
+    "examples": "Software developers, IT consultants, dev shops",
+    "icon": "💻"
+  },
+  {
+    "code": "484110",
+    "label": "Trucking & Transportation",
+    "description": "Freight, courier, logistics, owner-operator trucking",
+    "examples": "Truckers, freight companies, courier services, logistics",
+    "icon": "🚚"
+  },
+  {
+    "code": "492110",
+    "label": "Couriers & Last-Mile Delivery",
+    "description": "Couriers, local delivery, last-mile logistics",
+    "examples": "Couriers, local delivery, gig delivery operators",
+    "icon": "📦"
+  },
+  {
+    "code": "445110",
+    "label": "Retail — Brick & Mortar",
+    "description": "Retail stores, supermarkets, specialty retail",
+    "examples": "Grocery stores, boutiques, specialty retail",
+    "icon": "🏪"
+  },
+  {
+    "code": "448140",
+    "label": "Retail — Apparel & Specialty",
+    "description": "Clothing, footwear, accessories, specialty goods retail",
+    "examples": "Clothing stores, shoe stores, specialty boutiques",
+    "icon": "👕"
+  },
+  {
+    "code": "812990",
+    "label": "Personal Services",
+    "description": "Salons, spas, fitness, personal care, gyms",
+    "examples": "Salons, spas, gyms, personal trainers, beauty",
+    "icon": "💆"
+  },
+  {
+    "code": "611000",
+    "label": "Education & Training",
+    "description": "Tutoring, training, coaching, online courses",
+    "examples": "Tutors, training companies, course creators, coaches",
+    "icon": "🎓"
+  },
+  {
+    "code": "712000",
+    "label": "Arts, Entertainment & Recreation",
+    "description": "Arts, entertainment, sports, recreation services",
+    "examples": "Studios, galleries, recreation centres, entertainment",
+    "icon": "🎭"
+  },
+  {
+    "code": "999999",
+    "label": "Other Industry",
+    "description": "Any other type of business",
+    "examples": "Other types of businesses not listed above",
+    "icon": "🏢"
+  }
+]

@@ -7,7 +7,10 @@ from forge.money import Money
 from forge.rules import REGISTRY, run_rules
 from forge.rules.materiality import compute_materiality
 
-EXPECTED_CONTROL_COUNT = 50
+EXPECTED_CONTROL_COUNT = 55
+# The five benchmark controls are opt-in: they stay silent unless a client's
+# industry is configured, so the clean-book fixtures below do not set one.
+BENCHMARK_CONTROL_COUNT = 5
 MAX_CLEAN_BOOK_FINDINGS = 12
 
 
@@ -16,6 +19,16 @@ def test_catalogue_is_complete_and_uniquely_numbered():
     assert len(ids) == EXPECTED_CONTROL_COUNT
     assert len(set(ids)) == len(ids)
     assert ids == sorted(ids)
+
+
+def test_benchmark_controls_are_opt_in():
+    """A benchmark control must not fire when no industry is configured.
+
+    Guessing an industry would produce confident comparisons against the wrong
+    peer group, which is worse than producing none.
+    """
+    benchmark = [r for r in REGISTRY if r.category == "benchmark"]
+    assert len(benchmark) == BENCHMARK_CONTROL_COUNT
 
 
 def test_every_control_declares_its_contract():

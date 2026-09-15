@@ -1,0 +1,4334 @@
+{
+  "Landscaping & Property Services": {
+    "fixed": [
+      {
+        "name": "Equipment lease/depreciation",
+        "typical_pct": "8–12%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "Shop/yard rent",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Owner salary",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (CGL + fleet)",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & office",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Labour (field crews)",
+        "typical_pct": "30–40%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel & vehicle operating",
+        "typical_pct": "6–10%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials & supplies",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors",
+        "typical_pct": "0–20%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$100K",
+        "target_gm": "45–60%",
+        "target_net": "15–30%",
+        "target_labour_pct": "20–35%",
+        "typical_owner_salary_pct": "40–70%",
+        "employees": "0–1",
+        "notes": "Solo owner-operator; most revenue becomes owner draw"
+      },
+      "micro": {
+        "rev_range": "$100K–$500K",
+        "target_gm": "40–50%",
+        "target_net": "12–22%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "20–35%",
+        "employees": "1–4",
+        "notes": "Owner works the field; first seasonal hires"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "35–45%",
+        "target_net": "8–15%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "10–18%",
+        "employees": "4–15",
+        "notes": "Crews operate; owner transitions to PM/sales"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "30–40%",
+        "target_net": "6–12%",
+        "target_labour_pct": "33–42%",
+        "typical_owner_salary_pct": "5–10%",
+        "employees": "15–50",
+        "notes": "Multi-crew; operations manager; seasonal scaling"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "28–36%",
+        "target_net": "5–9%",
+        "target_labour_pct": "35–44%",
+        "typical_owner_salary_pct": "3–6%",
+        "employees": "50+",
+        "notes": "Regional operator; commercial contracts"
+      }
+    }
+  },
+  "Electrical Contracting": {
+    "fixed": [
+      {
+        "name": "Owner/project manager salary",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Vehicle lease payments",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (liability + E&O)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office/shop overhead",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software & tools",
+        "typical_pct": "0.5–1%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Electricians & apprentices",
+        "typical_pct": "35–50%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials (wire, conduit, panels)",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors (drywall, permits)",
+        "typical_pct": "0–10%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel & vehicle operating",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$100K",
+        "target_gm": "42–55%",
+        "target_net": "14–26%",
+        "target_labour_pct": "25–40%",
+        "typical_owner_salary_pct": "35–65%",
+        "employees": "0–1",
+        "notes": "Solo licensed electrician; residential service calls"
+      },
+      "micro": {
+        "rev_range": "$100K–$500K",
+        "target_gm": "35–45%",
+        "target_net": "10–18%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "18–30%",
+        "employees": "1–4",
+        "notes": "Master + apprentice; residential renovations"
+      },
+      "small": {
+        "rev_range": "$500K–$3M",
+        "target_gm": "28–38%",
+        "target_net": "6–12%",
+        "target_labour_pct": "35–48%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "5–20",
+        "notes": "Mixed residential/commercial; in-house apprentices"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "25–35%",
+        "target_net": "5–10%",
+        "target_labour_pct": "36–48%",
+        "typical_owner_salary_pct": "4–8%",
+        "employees": "20–75",
+        "notes": "Commercial focus; service + project divisions"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "22–30%",
+        "target_net": "4–8%",
+        "target_labour_pct": "38–50%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "75+",
+        "notes": "Industrial/institutional; bonded capacity required"
+      }
+    }
+  },
+  "Full-Service Restaurants": {
+    "fixed": [
+      {
+        "name": "Rent & occupancy",
+        "typical_pct": "6–10%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Owner/manager salary",
+        "typical_pct": "8–12%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment lease",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Marketing & delivery platforms",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "semi-fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Food & beverage cost (COGS)",
+        "typical_pct": "28–35%",
+        "acct_range": [
+          5000,
+          5099
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Kitchen & serving labour",
+        "typical_pct": "28–36%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Utilities (gas, hydro)",
+        "typical_pct": "3–5%",
+        "acct_range": [
+          6450,
+          6499
+        ],
+        "type": "semi-variable"
+      },
+      {
+        "name": "Supplies & paper goods",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$200K",
+        "target_gm": "55–68%",
+        "target_net": "-5–8%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "15–30%",
+        "employees": "2–5",
+        "notes": "Pop-up / ghost kitchen; unprofitable first 6-12mo common"
+      },
+      "micro": {
+        "rev_range": "$200K–$750K",
+        "target_gm": "60–68%",
+        "target_net": "3–8%",
+        "target_labour_pct": "30–38%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "5–15",
+        "notes": "Owner-operator; food cost 32-40%; prime cost <65%"
+      },
+      "small": {
+        "rev_range": "$750K–$2M",
+        "target_gm": "62–70%",
+        "target_net": "5–10%",
+        "target_labour_pct": "30–36%",
+        "typical_owner_salary_pct": "5–10%",
+        "employees": "15–35",
+        "notes": "Single location established; rent <10% critical"
+      },
+      "mid": {
+        "rev_range": "$2M–$8M",
+        "target_gm": "64–72%",
+        "target_net": "6–12%",
+        "target_labour_pct": "28–34%",
+        "typical_owner_salary_pct": "3–6%",
+        "employees": "35–100",
+        "notes": "2-5 locations; economies on food purchasing"
+      },
+      "upper_mid": {
+        "rev_range": "$8M+",
+        "target_gm": "65–72%",
+        "target_net": "7–14%",
+        "target_labour_pct": "28–33%",
+        "typical_owner_salary_pct": "1–3%",
+        "employees": "100+",
+        "notes": "Multi-unit operator; franchise or corporate brand"
+      }
+    }
+  },
+  "Legal Services": {
+    "fixed": [
+      {
+        "name": "Principal/partner draw",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office rent",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Malpractice insurance",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Support staff",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          6150,
+          6199
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "Software & research subscriptions",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Associate/contract lawyer billings",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "File disbursements (court, search)",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Marketing & referral fees",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "75–88%",
+        "target_net": "30–60%",
+        "target_labour_pct": "10–25%",
+        "typical_owner_salary_pct": "40–75%",
+        "employees": "0–1",
+        "notes": "Solo practitioner; home office common"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "70–82%",
+        "target_net": "25–45%",
+        "target_labour_pct": "18–30%",
+        "typical_owner_salary_pct": "30–50%",
+        "employees": "1–3",
+        "notes": "Solo + paralegal/admin; first office lease"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "65–78%",
+        "target_net": "18–32%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "15–30%",
+        "employees": "3–10",
+        "notes": "Boutique firm; 2-4 lawyers; partner track begins"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "60–72%",
+        "target_net": "15–28%",
+        "target_labour_pct": "35–45%",
+        "typical_owner_salary_pct": "10–20%",
+        "employees": "10–40",
+        "notes": "Multi-partner firm; specialty practice groups"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "55–68%",
+        "target_net": "12–22%",
+        "target_labour_pct": "38–48%",
+        "typical_owner_salary_pct": "5–12%",
+        "employees": "40+",
+        "notes": "Regional firm; capital partner distributions"
+      }
+    }
+  },
+  "Management Consulting": {
+    "fixed": [
+      {
+        "name": "Principal salary/draw",
+        "typical_pct": "25–40%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office & co-working space",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance & E&O",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Sales & business development",
+        "typical_pct": "5–10%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "semi-fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Contractor / subcontracted labour",
+        "typical_pct": "15–35%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Travel & client entertainment",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          6800,
+          6849
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Research & data subscriptions",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "85–95%",
+        "target_net": "40–70%",
+        "target_labour_pct": "5–15%",
+        "typical_owner_salary_pct": "50–80%",
+        "employees": "0–1",
+        "notes": "Solo consultant; near-pure services, low overhead"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "75–88%",
+        "target_net": "30–50%",
+        "target_labour_pct": "15–28%",
+        "typical_owner_salary_pct": "35–55%",
+        "employees": "1–3",
+        "notes": "Principal + associate(s); utilization 60-75%"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "65–78%",
+        "target_net": "18–32%",
+        "target_labour_pct": "35–48%",
+        "typical_owner_salary_pct": "15–25%",
+        "employees": "3–12",
+        "notes": "Managing partner + consultants; utilization 65%+"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "58–70%",
+        "target_net": "15–25%",
+        "target_labour_pct": "40–52%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "12–50",
+        "notes": "Practice area leads; proposal-driven pipeline"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "52–65%",
+        "target_net": "12–22%",
+        "target_labour_pct": "42–55%",
+        "typical_owner_salary_pct": "4–8%",
+        "employees": "50+",
+        "notes": "Multi-office; named partners; leverage model"
+      }
+    }
+  },
+  "Residential Building Construction": {
+    "fixed": [
+      {
+        "name": "Project management / owner salary",
+        "typical_pct": "8–14%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office & admin overhead",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment lease/depreciation",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "Insurance (GL + builder's risk)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Bonds & permits overhead",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "semi-fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Subcontractors (trades)",
+        "typical_pct": "35–55%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials (lumber, concrete, etc.)",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Direct labour (own workforce)",
+        "typical_pct": "5–15%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Equipment rental",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$200K",
+        "target_gm": "30–42%",
+        "target_net": "12–25%",
+        "target_labour_pct": "12–22%",
+        "typical_owner_salary_pct": "25–50%",
+        "employees": "0–2",
+        "notes": "Solo GC + subs; reno/addition focus"
+      },
+      "micro": {
+        "rev_range": "$200K–$1M",
+        "target_gm": "22–32%",
+        "target_net": "8–15%",
+        "target_labour_pct": "18–30%",
+        "typical_owner_salary_pct": "12–22%",
+        "employees": "2–8",
+        "notes": "Custom home builder; 1-2 homes/yr"
+      },
+      "small": {
+        "rev_range": "$1M–$5M",
+        "target_gm": "18–26%",
+        "target_net": "5–10%",
+        "target_labour_pct": "20–32%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "8–25",
+        "notes": "Volume custom; 3-10 homes/yr; superintendent hire"
+      },
+      "mid": {
+        "rev_range": "$5M–$25M",
+        "target_gm": "16–22%",
+        "target_net": "4–8%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "3–6%",
+        "employees": "25–80",
+        "notes": "Subdivision/semi-production builder"
+      },
+      "upper_mid": {
+        "rev_range": "$25M+",
+        "target_gm": "14–20%",
+        "target_net": "3–7%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "1–3%",
+        "employees": "80+",
+        "notes": "Production builder; land development component"
+      }
+    }
+  },
+  "Plumbing & HVAC": {
+    "fixed": [
+      {
+        "name": "Owner/foreman salary",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Truck fleet lease/insurance",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Liability & tools insurance",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office & dispatch",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Plumbers/HVAC techs wages",
+        "typical_pct": "32–45%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Parts & materials",
+        "typical_pct": "20–30%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel & vehicle operating",
+        "typical_pct": "4–7%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontracted specialists",
+        "typical_pct": "0–10%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "45–58%",
+        "target_net": "15–28%",
+        "target_labour_pct": "22–35%",
+        "typical_owner_salary_pct": "35–65%",
+        "employees": "0–1",
+        "notes": "Solo journeyman; 24/7 service calls"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "38–48%",
+        "target_net": "10–18%",
+        "target_labour_pct": "30–40%",
+        "typical_owner_salary_pct": "18–30%",
+        "employees": "1–4",
+        "notes": "Residential service + installs; one van per tech"
+      },
+      "small": {
+        "rev_range": "$500K–$3M",
+        "target_gm": "32–42%",
+        "target_net": "7–13%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "4–18",
+        "notes": "Service + replacement/install split; dispatcher role"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "28–36%",
+        "target_net": "5–10%",
+        "target_labour_pct": "34–44%",
+        "typical_owner_salary_pct": "3–8%",
+        "employees": "18–70",
+        "notes": "Multi-tech ops; commercial maintenance contracts"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "25–32%",
+        "target_net": "4–8%",
+        "target_labour_pct": "36–46%",
+        "typical_owner_salary_pct": "2–4%",
+        "employees": "70+",
+        "notes": "Commercial/industrial; mechanical contracting"
+      }
+    }
+  },
+  "Roofing & Exterior Work": {
+    "fixed": [
+      {
+        "name": "Owner/GM salary",
+        "typical_pct": "8–14%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment & lift depreciation",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "Insurance (roofers have high rates)",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office overhead",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Roofing crew wages",
+        "typical_pct": "28–40%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials (shingles, membrane, etc.)",
+        "typical_pct": "25–38%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors (gutters, etc.)",
+        "typical_pct": "0–8%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel & equipment rental",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "38–50%",
+        "target_net": "12–22%",
+        "target_labour_pct": "18–30%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–2",
+        "notes": "Owner-crew; summer-heavy seasonal"
+      },
+      "micro": {
+        "rev_range": "$150K–$750K",
+        "target_gm": "32–42%",
+        "target_net": "8–15%",
+        "target_labour_pct": "25–38%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "2–8",
+        "notes": "Residential reroof; 1-2 crews; WSIB 5-6% rate"
+      },
+      "small": {
+        "rev_range": "$750K–$3M",
+        "target_gm": "28–38%",
+        "target_net": "6–12%",
+        "target_labour_pct": "28–40%",
+        "typical_owner_salary_pct": "7–14%",
+        "employees": "8–25",
+        "notes": "Mixed residential/commercial; sub-heavy"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "24–32%",
+        "target_net": "5–9%",
+        "target_labour_pct": "30–42%",
+        "typical_owner_salary_pct": "3–7%",
+        "employees": "25–80",
+        "notes": "Commercial roofing; warranty claims reserve"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "22–30%",
+        "target_net": "4–8%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "1–4%",
+        "employees": "80+",
+        "notes": "Industrial + institutional; bonded projects"
+      }
+    }
+  },
+  "Architecture & Engineering": {
+    "fixed": [
+      {
+        "name": "Principal/partner draw",
+        "typical_pct": "22–32%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office rent & overhead",
+        "typical_pct": "5–9%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Malpractice / E&O insurance",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (CAD, BIM, Revit)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Support staff",
+        "typical_pct": "6–12%",
+        "acct_range": [
+          6150,
+          6199
+        ],
+        "type": "semi-fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Billable design/engineering staff",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Consultant fees & subconsultants",
+        "typical_pct": "5–20%",
+        "acct_range": [
+          5210,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Printing & model making",
+        "typical_pct": "0.5–2%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "80–92%",
+        "target_net": "35–65%",
+        "target_labour_pct": "10–22%",
+        "typical_owner_salary_pct": "45–75%",
+        "employees": "0–1",
+        "notes": "Solo P.Eng/architect; home office; PI insurance ~$3-5K"
+      },
+      "micro": {
+        "rev_range": "$150K–$600K",
+        "target_gm": "68–80%",
+        "target_net": "22–40%",
+        "target_labour_pct": "25–38%",
+        "typical_owner_salary_pct": "25–42%",
+        "employees": "1–4",
+        "notes": "Principal + junior staff; utilization 65-75%"
+      },
+      "small": {
+        "rev_range": "$600K–$3M",
+        "target_gm": "60–72%",
+        "target_net": "15–28%",
+        "target_labour_pct": "38–50%",
+        "typical_owner_salary_pct": "12–22%",
+        "employees": "4–18",
+        "notes": "Multi-discipline; project managers; bids + RFPs"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "55–65%",
+        "target_net": "12–22%",
+        "target_labour_pct": "42–54%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "18–75",
+        "notes": "Regional firm; specialty practice areas"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "50–60%",
+        "target_net": "10–18%",
+        "target_labour_pct": "45–56%",
+        "typical_owner_salary_pct": "3–6%",
+        "employees": "75+",
+        "notes": "National; partner-track model; joint ventures"
+      }
+    }
+  },
+  "Healthcare & Medical": {
+    "fixed": [
+      {
+        "name": "Physician/practitioner draw",
+        "typical_pct": "30–50%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Clinic rent & overhead",
+        "typical_pct": "8–14%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Malpractice insurance (CMPA + facility)",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & reception staff",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          6150,
+          6199
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "EMR software & equipment",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Supplies & medical consumables",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Lab & diagnostic costs",
+        "typical_pct": "2–8%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Contracted specialists / locums",
+        "typical_pct": "0–15%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$250K",
+        "target_gm": "60–75%",
+        "target_net": "20–40%",
+        "target_labour_pct": "20–35%",
+        "typical_owner_salary_pct": "35–60%",
+        "employees": "1–2",
+        "notes": "Solo practitioner; OHIP billing or direct-pay"
+      },
+      "micro": {
+        "rev_range": "$250K–$750K",
+        "target_gm": "55–68%",
+        "target_net": "18–32%",
+        "target_labour_pct": "28–40%",
+        "typical_owner_salary_pct": "25–40%",
+        "employees": "2–5",
+        "notes": "Single-practitioner clinic; associate begins"
+      },
+      "small": {
+        "rev_range": "$750K–$3M",
+        "target_gm": "50–62%",
+        "target_net": "15–25%",
+        "target_labour_pct": "32–44%",
+        "typical_owner_salary_pct": "15–25%",
+        "employees": "5–20",
+        "notes": "Multi-practitioner; hygienists/assistants; equipment financing"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "45–55%",
+        "target_net": "12–20%",
+        "target_labour_pct": "35–48%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "20–75",
+        "notes": "Multi-location clinic or large specialty practice"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "42–52%",
+        "target_net": "10–18%",
+        "target_labour_pct": "38–50%",
+        "typical_owner_salary_pct": "3–8%",
+        "employees": "75+",
+        "notes": "DSO/MSO model; private equity backing common"
+      }
+    }
+  },
+  "Retail — Brick & Mortar": {
+    "fixed": [
+      {
+        "name": "Store rent (often 8–12% of rev)",
+        "typical_pct": "8–12%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Owner/manager salary",
+        "typical_pct": "8–14%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance & utilities",
+        "typical_pct": "3–5%",
+        "acct_range": [
+          6300,
+          6399
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "POS, software & security",
+        "typical_pct": "0.5–1.5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Cost of goods sold (product cost)",
+        "typical_pct": "45–65%",
+        "acct_range": [
+          5000,
+          5099
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Hourly sales staff",
+        "typical_pct": "10–20%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Marketing & local advertising",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Credit card processing fees (2–3%)",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6850,
+          6899
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "35–48%",
+        "target_net": "-5–8%",
+        "target_labour_pct": "18–32%",
+        "typical_owner_salary_pct": "15–35%",
+        "employees": "1–3",
+        "notes": "New store; unprofitable first 12-18mo common"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "38–48%",
+        "target_net": "3–10%",
+        "target_labour_pct": "20–32%",
+        "typical_owner_salary_pct": "10–20%",
+        "employees": "3–8",
+        "notes": "Owner on floor; inventory turn 3-5x/yr"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "38–48%",
+        "target_net": "5–12%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "8–20",
+        "notes": "Single location mature; rent <8% critical"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "40–50%",
+        "target_net": "6–14%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "3–6%",
+        "employees": "20–75",
+        "notes": "2-5 locations; central buying leverage"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "42–52%",
+        "target_net": "8–16%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "1–3%",
+        "employees": "75+",
+        "notes": "Multi-store operator; private label margin boost"
+      }
+    }
+  },
+  "SaaS & Cloud Software": {
+    "fixed": [
+      {
+        "name": "Engineering & product team",
+        "typical_pct": "30–45%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "Cloud infrastructure (AWS/Azure)",
+        "typical_pct": "5–12%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "Sales & marketing team",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "semi-fixed"
+      },
+      {
+        "name": "G&A (legal, finance, HR)",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office & tools",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          6400,
+          6499
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Payment processing fees (Stripe ~2.9%)",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6850,
+          6899
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Sales commissions",
+        "typical_pct": "5–10%",
+        "acct_range": [
+          6750,
+          6799
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Customer success & support staff",
+        "typical_pct": "5–15%",
+        "acct_range": [
+          6150,
+          6199
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$250K",
+        "target_gm": "60–78%",
+        "target_net": "-50–5%",
+        "target_labour_pct": "60–110%",
+        "typical_owner_salary_pct": "20–50%",
+        "employees": "1–5",
+        "notes": "Pre-PMF; burn phase; SR&ED refunds material"
+      },
+      "micro": {
+        "rev_range": "$250K–$1M",
+        "target_gm": "68–82%",
+        "target_net": "-20–10%",
+        "target_labour_pct": "50–85%",
+        "typical_owner_salary_pct": "15–30%",
+        "employees": "5–15",
+        "notes": "Early traction; CAC payback 12-24mo; still investing"
+      },
+      "small": {
+        "rev_range": "$1M–$5M",
+        "target_gm": "72–85%",
+        "target_net": "-5–18%",
+        "target_labour_pct": "45–70%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "15–50",
+        "notes": "Scale-up; Rule of 40; NRR 100%+ target"
+      },
+      "mid": {
+        "rev_range": "$5M–$25M",
+        "target_gm": "75–85%",
+        "target_net": "8–22%",
+        "target_labour_pct": "42–62%",
+        "typical_owner_salary_pct": "3–8%",
+        "employees": "50–150",
+        "notes": "Efficient growth; LTV/CAC 3x+; NRR 110%+"
+      },
+      "upper_mid": {
+        "rev_range": "$25M+",
+        "target_gm": "76–86%",
+        "target_net": "12–28%",
+        "target_labour_pct": "40–58%",
+        "typical_owner_salary_pct": "1–3%",
+        "employees": "150+",
+        "notes": "Rule of 40 at scale; acquisition-ready metrics"
+      }
+    }
+  },
+  "Trucking & Transportation": {
+    "fixed": [
+      {
+        "name": "Owner/dispatcher salary",
+        "typical_pct": "8–14%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Truck payments/lease",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (commercial auto + cargo)",
+        "typical_pct": "8–14%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "CVOR/permits/licensing",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Fuel",
+        "typical_pct": "20–30%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Driver wages",
+        "typical_pct": "25–35%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Maintenance & repairs",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          6900,
+          6949
+        ],
+        "type": "semi-variable"
+      },
+      {
+        "name": "Driver subcontractors (O/O)",
+        "typical_pct": "0–20%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$250K",
+        "target_gm": "28–40%",
+        "target_net": "8–18%",
+        "target_labour_pct": "5–15%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–1",
+        "notes": "Owner-operator 1 truck; fuel = biggest variable"
+      },
+      "micro": {
+        "rev_range": "$250K–$750K",
+        "target_gm": "22–32%",
+        "target_net": "5–12%",
+        "target_labour_pct": "12–22%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "1–3",
+        "notes": "2-3 trucks; lease+purchase mix; fuel cards essential"
+      },
+      "small": {
+        "rev_range": "$750K–$3M",
+        "target_gm": "18–28%",
+        "target_net": "4–9%",
+        "target_labour_pct": "20–30%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "3–15",
+        "notes": "Small fleet; dispatcher role; backhaul optimization"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "15–22%",
+        "target_net": "3–7%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "15–75",
+        "notes": "Regional fleet; dedicated lanes; safety ratings"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "12–20%",
+        "target_net": "3–6%",
+        "target_labour_pct": "25–35%",
+        "typical_owner_salary_pct": "1–2%",
+        "employees": "75+",
+        "notes": "National carrier; terminal network; 3PL services"
+      }
+    }
+  },
+  "Hotels & Accommodations": {
+    "fixed": [
+      {
+        "name": "Hotel management/owner salary",
+        "typical_pct": "6–12%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Property mortgage/rent",
+        "typical_pct": "15–25%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (property + liability)",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Management software (PMS)",
+        "typical_pct": "0.5–1%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Housekeeping labour",
+        "typical_pct": "12–20%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "OTA commissions (Booking/Expedia)",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          6750,
+          6799
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "F&B cost of goods",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          5000,
+          5099
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Utilities (hydro, gas, water)",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          6450,
+          6499
+        ],
+        "type": "semi-variable"
+      },
+      {
+        "name": "Maintenance & supplies",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          6900,
+          6949
+        ],
+        "type": "semi-variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$500K",
+        "target_gm": "55–70%",
+        "target_net": "-10–10%",
+        "target_labour_pct": "22–35%",
+        "typical_owner_salary_pct": "10–25%",
+        "employees": "2–8",
+        "notes": "B&B/small motel; mortgage-heavy; slow ramp to profit"
+      },
+      "micro": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "60–72%",
+        "target_net": "5–15%",
+        "target_labour_pct": "24–34%",
+        "typical_owner_salary_pct": "6–15%",
+        "employees": "8–25",
+        "notes": "Limited-service hotel; 30-60 rooms; franchise fees"
+      },
+      "small": {
+        "rev_range": "$2M–$8M",
+        "target_gm": "62–75%",
+        "target_net": "8–18%",
+        "target_labour_pct": "24–34%",
+        "typical_owner_salary_pct": "3–8%",
+        "employees": "25–75",
+        "notes": "Select-service; 60-150 rooms; GOP focus"
+      },
+      "mid": {
+        "rev_range": "$8M–$30M",
+        "target_gm": "58–70%",
+        "target_net": "10–20%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "1–4%",
+        "employees": "75–200",
+        "notes": "Full-service; F&B operations; banquet revenue"
+      },
+      "upper_mid": {
+        "rev_range": "$30M+",
+        "target_gm": "55–68%",
+        "target_net": "10–22%",
+        "target_labour_pct": "30–40%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "200+",
+        "notes": "Resort or luxury; ADR + occupancy optimization"
+      }
+    }
+  },
+  "Manufacturing & Production": {
+    "fixed": [
+      {
+        "name": "Plant manager / supervisors",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Factory rent / mortgage",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment depreciation",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          6800,
+          6849
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (property + liability + product)",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "ERP / production software",
+        "typical_pct": "0.5–1.5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Raw materials",
+        "typical_pct": "30–45%",
+        "acct_range": [
+          5000,
+          5099
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Direct factory labour",
+        "typical_pct": "15–25%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Utilities (hydro, gas)",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          6450,
+          6499
+        ],
+        "type": "semi-variable"
+      },
+      {
+        "name": "Freight in / out",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6750,
+          6799
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Equipment maintenance & repairs",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6900,
+          6949
+        ],
+        "type": "semi-variable"
+      },
+      {
+        "name": "Scrap / waste",
+        "typical_pct": "0.5–2%",
+        "acct_range": [
+          5100,
+          5149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$200K",
+        "target_gm": "35–52%",
+        "target_net": "5–20%",
+        "target_labour_pct": "15–30%",
+        "typical_owner_salary_pct": "25–50%",
+        "employees": "1–3",
+        "notes": "Maker/small batch; e-comm + wholesale mix"
+      },
+      "micro": {
+        "rev_range": "$200K–$1M",
+        "target_gm": "28–42%",
+        "target_net": "5–15%",
+        "target_labour_pct": "20–32%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "3–12",
+        "notes": "Production shop; 1-2 shifts; SR&ED potential"
+      },
+      "small": {
+        "rev_range": "$1M–$5M",
+        "target_gm": "25–38%",
+        "target_net": "5–12%",
+        "target_labour_pct": "22–34%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "12–40",
+        "notes": "Multi-line production; ERP + inventory disciplines"
+      },
+      "mid": {
+        "rev_range": "$5M–$25M",
+        "target_gm": "22–32%",
+        "target_net": "5–10%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "40–150",
+        "notes": "Multi-shift; engineered products; major customers"
+      },
+      "upper_mid": {
+        "rev_range": "$25M+",
+        "target_gm": "20–30%",
+        "target_net": "5–10%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "1–3%",
+        "employees": "150+",
+        "notes": "Established manufacturer; export + distribution"
+      }
+    }
+  },
+  "E-Commerce & Online Retail": {
+    "fixed": [
+      {
+        "name": "Founder/operator salary",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Warehouse rent / 3PL minimums",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "E-commerce platform (Shopify, BigCommerce)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Apps & software stack (email, reviews, CRM)",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          6610,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Cost of goods sold (product cost)",
+        "typical_pct": "30–45%",
+        "acct_range": [
+          5000,
+          5099
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Paid ads (Meta, Google, TikTok)",
+        "typical_pct": "15–30%",
+        "acct_range": [
+          6550,
+          6599
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fulfillment / pick-pack-ship",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          6750,
+          6799
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Payment processor fees (Stripe, PayPal)",
+        "typical_pct": "2–3.5%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Returns & refund processing",
+        "typical_pct": "2–6%",
+        "acct_range": [
+          5200,
+          5249
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Customer support (in-house or outsourced)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6100,
+          6199
+        ],
+        "type": "semi-variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$100K",
+        "target_gm": "35–55%",
+        "target_net": "-10–15%",
+        "target_labour_pct": "5–20%",
+        "typical_owner_salary_pct": "10–35%",
+        "employees": "0–2",
+        "notes": "Founder-run; inventory risk; paid ads heavy"
+      },
+      "micro": {
+        "rev_range": "$100K–$500K",
+        "target_gm": "38–52%",
+        "target_net": "-5–12%",
+        "target_labour_pct": "10–25%",
+        "typical_owner_salary_pct": "10–25%",
+        "employees": "2–5",
+        "notes": "CAC vs AOV math critical; platform fees 10-15%"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "40–55%",
+        "target_net": "3–12%",
+        "target_labour_pct": "12–25%",
+        "typical_owner_salary_pct": "5–12%",
+        "employees": "5–20",
+        "notes": "Brand-building; repeat rate 25%+; warehouse lease"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "42–56%",
+        "target_net": "6–15%",
+        "target_labour_pct": "14–26%",
+        "typical_owner_salary_pct": "2–6%",
+        "employees": "20–70",
+        "notes": "Omni-channel; wholesale + DTC; inventory turn 5x+"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "44–58%",
+        "target_net": "8–18%",
+        "target_labour_pct": "16–28%",
+        "typical_owner_salary_pct": "<2%",
+        "employees": "70+",
+        "notes": "National brand; retail partnerships; acquisition target"
+      }
+    }
+  },
+  "Industrial & Commercial Construction": {
+    "fixed": [
+      {
+        "name": "Senior PM / estimator salaries",
+        "typical_pct": "5–10%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office lease + utilities",
+        "typical_pct": "1–2.5%",
+        "acct_range": [
+          6400,
+          6499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (CGL + Builder's Risk)",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (estimating/PM)",
+        "typical_pct": "0.3–0.8%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Bonding / surety premiums",
+        "typical_pct": "0.5–1.5%",
+        "acct_range": [
+          6800,
+          6849
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & accounting",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Subcontractors",
+        "typical_pct": "40–65%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Direct labour (field)",
+        "typical_pct": "8–18%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials (supplied)",
+        "typical_pct": "10–25%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Equipment rental & fuel",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          7100,
+          7199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Site costs (temp, hoarding, cleanup)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$500K",
+        "target_gm": "14–22%",
+        "target_net": "4–10%",
+        "target_labour_pct": "8–16%",
+        "typical_owner_salary_pct": "20–40%",
+        "employees": "1–3",
+        "notes": "Sub-trade owner; bonding capacity limits prime bids"
+      },
+      "micro": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "12–18%",
+        "target_net": "3–8%",
+        "target_labour_pct": "10–18%",
+        "typical_owner_salary_pct": "10–20%",
+        "employees": "3–10",
+        "notes": "Small prime contractor; WSIB group 747 ~3.6%"
+      },
+      "small": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "10–16%",
+        "target_net": "3–6%",
+        "target_labour_pct": "12–20%",
+        "typical_owner_salary_pct": "4–8%",
+        "employees": "10–40",
+        "notes": "Bondable to $10M+; project manager division"
+      },
+      "mid": {
+        "rev_range": "$10M–$50M",
+        "target_gm": "9–14%",
+        "target_net": "2–5%",
+        "target_labour_pct": "12–20%",
+        "typical_owner_salary_pct": "1–3%",
+        "employees": "40–150",
+        "notes": "GC scale; estimating team; preconstruction services"
+      },
+      "upper_mid": {
+        "rev_range": "$50M+",
+        "target_gm": "8–12%",
+        "target_net": "2–5%",
+        "target_labour_pct": "14–22%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "150+",
+        "notes": "Major GC; self-perform capacity; CM-at-risk model"
+      }
+    }
+  },
+  "Foundation & Structure Work": {
+    "fixed": [
+      {
+        "name": "Owner / supervisor salary",
+        "typical_pct": "6–12%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment lease/depreciation",
+        "typical_pct": "4–8%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (CGL heavy trades)",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Shop/yard rent",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & office",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Field labour + benefits",
+        "typical_pct": "22–32%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Concrete + rebar materials",
+        "typical_pct": "22–35%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Equipment fuel + operating",
+        "typical_pct": "3–6%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors (pumping etc.)",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$200K",
+        "target_gm": "28–40%",
+        "target_net": "8–18%",
+        "target_labour_pct": "22–35%",
+        "typical_owner_salary_pct": "25–50%",
+        "employees": "0–2",
+        "notes": "Small pours; residential footings; WSIB group ~5%"
+      },
+      "micro": {
+        "rev_range": "$200K–$1M",
+        "target_gm": "22–32%",
+        "target_net": "5–12%",
+        "target_labour_pct": "24–34%",
+        "typical_owner_salary_pct": "12–22%",
+        "employees": "2–10",
+        "notes": "Residential foundations; own pump + forms"
+      },
+      "small": {
+        "rev_range": "$1M–$5M",
+        "target_gm": "18–26%",
+        "target_net": "4–9%",
+        "target_labour_pct": "26–36%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "10–35",
+        "notes": "Commercial/ICI work begins; bonding required"
+      },
+      "mid": {
+        "rev_range": "$5M–$20M",
+        "target_gm": "15–22%",
+        "target_net": "3–7%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "35–100",
+        "notes": "Full ICI foundation/structural; superintendent layer"
+      },
+      "upper_mid": {
+        "rev_range": "$20M+",
+        "target_gm": "13–18%",
+        "target_net": "3–6%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "100+",
+        "notes": "Major ICI; self-perform on tower/commercial projects"
+      }
+    }
+  },
+  "Drywall & Insulation": {
+    "fixed": [
+      {
+        "name": "Owner/foreman salary",
+        "typical_pct": "6–12%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Shop rent + storage",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Vehicle lease + admin",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Installer labour (taped rate)",
+        "typical_pct": "30–45%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials (drywall, mud, ins.)",
+        "typical_pct": "22–32%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors (specialty)",
+        "typical_pct": "2–8%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel + delivery",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "30–42%",
+        "target_net": "8–18%",
+        "target_labour_pct": "28–40%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–2",
+        "notes": "Owner-installer; piecework pricing"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "25–35%",
+        "target_net": "6–12%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "15–25%",
+        "employees": "2–6",
+        "notes": "1-2 crews; residential reno focus"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "22–30%",
+        "target_net": "5–10%",
+        "target_labour_pct": "34–44%",
+        "typical_owner_salary_pct": "7–14%",
+        "employees": "6–20",
+        "notes": "Multi-crew; new construction subcontracts"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "18–26%",
+        "target_net": "4–8%",
+        "target_labour_pct": "36–46%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "20–75",
+        "notes": "Commercial/multi-res; dedicated estimator"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "16–22%",
+        "target_net": "3–6%",
+        "target_labour_pct": "38–48%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "75+",
+        "notes": "Major commercial drywall; acoustic + fire-rated specialty"
+      }
+    }
+  },
+  "Painting & Wall Covering": {
+    "fixed": [
+      {
+        "name": "Owner salary + admin",
+        "typical_pct": "8–16%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Shop/storage rent",
+        "typical_pct": "1–2.5%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance + WSIB admin",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Vehicle lease",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment (sprayers, lifts)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          7500,
+          7549
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Painter labour",
+        "typical_pct": "30–42%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Paint + supplies",
+        "typical_pct": "12–22%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors (specialty)",
+        "typical_pct": "0–8%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel + travel",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$100K",
+        "target_gm": "40–55%",
+        "target_net": "15–28%",
+        "target_labour_pct": "20–35%",
+        "typical_owner_salary_pct": "35–60%",
+        "employees": "0–1",
+        "notes": "Solo painter; residential interior focus"
+      },
+      "micro": {
+        "rev_range": "$100K–$400K",
+        "target_gm": "32–42%",
+        "target_net": "10–18%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "20–35%",
+        "employees": "1–4",
+        "notes": "Owner + 1-3 painters; seasonal exterior peak"
+      },
+      "small": {
+        "rev_range": "$400K–$1.5M",
+        "target_gm": "26–34%",
+        "target_net": "6–12%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "10–18%",
+        "employees": "4–15",
+        "notes": "2-3 crews; commercial + residential mix"
+      },
+      "mid": {
+        "rev_range": "$1.5M–$8M",
+        "target_gm": "22–30%",
+        "target_net": "4–9%",
+        "target_labour_pct": "34–44%",
+        "typical_owner_salary_pct": "3–7%",
+        "employees": "15–50",
+        "notes": "Commercial/ICI focus; multi-crew operations"
+      },
+      "upper_mid": {
+        "rev_range": "$8M+",
+        "target_gm": "20–26%",
+        "target_net": "3–6%",
+        "target_labour_pct": "36–46%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "50+",
+        "notes": "Major commercial painter; industrial coatings specialty"
+      }
+    }
+  },
+  "Flooring Installation": {
+    "fixed": [
+      {
+        "name": "Owner/estimator salary",
+        "typical_pct": "6–14%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Showroom/warehouse rent",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Vehicle + equipment lease",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Installer labour",
+        "typical_pct": "18–28%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Flooring materials (COGS)",
+        "typical_pct": "40–55%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors (subfloor etc.)",
+        "typical_pct": "0–5%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Freight + fuel",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "32–44%",
+        "target_net": "10–20%",
+        "target_labour_pct": "18–28%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–2",
+        "notes": "Owner-installer; residential renovation focus"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "28–36%",
+        "target_net": "7–14%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "2–5",
+        "notes": "Small showroom + 1-2 install teams"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "24–32%",
+        "target_net": "5–10%",
+        "target_labour_pct": "24–32%",
+        "typical_owner_salary_pct": "7–14%",
+        "employees": "5–15",
+        "notes": "Retail + new-construction split"
+      },
+      "mid": {
+        "rev_range": "$2M–$8M",
+        "target_gm": "22–28%",
+        "target_net": "4–8%",
+        "target_labour_pct": "24–32%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "15–50",
+        "notes": "Commercial contracts; multi-showroom"
+      },
+      "upper_mid": {
+        "rev_range": "$8M+",
+        "target_gm": "20–26%",
+        "target_net": "3–6%",
+        "target_labour_pct": "26–34%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "50+",
+        "notes": "Regional commercial flooring; national account clients"
+      }
+    }
+  },
+  "Specialty Trades — Other": {
+    "fixed": [
+      {
+        "name": "Owner salary",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Shop rent + utilities",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment lease/dep",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & software",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Field labour",
+        "typical_pct": "25–38%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Materials",
+        "typical_pct": "15–28%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors",
+        "typical_pct": "3–12%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel + vehicle operating",
+        "typical_pct": "3–5%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "35–50%",
+        "target_net": "12–24%",
+        "target_labour_pct": "20–35%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–2",
+        "notes": "Welding/fabrication/demolition solo; niche trade pricing"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "28–38%",
+        "target_net": "8–15%",
+        "target_labour_pct": "28–38%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "2–6",
+        "notes": "Small specialty shop; mixed residential/commercial"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "22–30%",
+        "target_net": "5–10%",
+        "target_labour_pct": "30–40%",
+        "typical_owner_salary_pct": "7–14%",
+        "employees": "6–20",
+        "notes": "Established niche; repeat commercial clients"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "18–26%",
+        "target_net": "4–8%",
+        "target_labour_pct": "32–42%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "20–75",
+        "notes": "Multi-site; supervisor layer; bonded"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "16–22%",
+        "target_net": "3–6%",
+        "target_labour_pct": "34–44%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "75+",
+        "notes": "Major specialty; regional or industrial niche"
+      }
+    }
+  },
+  "Professional Services — Other": {
+    "fixed": [
+      {
+        "name": "Owner/partner salary",
+        "typical_pct": "20–40%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office lease",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (E&O + PI)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software subscriptions",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & bookkeeping",
+        "typical_pct": "2–4%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Associate + support labour",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors / referral fees",
+        "typical_pct": "0–10%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Client-specific direct costs",
+        "typical_pct": "2–8%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "75–90%",
+        "target_net": "30–60%",
+        "target_labour_pct": "10–22%",
+        "typical_owner_salary_pct": "40–70%",
+        "employees": "0–1",
+        "notes": "Solo accountant/bookkeeper/consultant; home office"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "68–80%",
+        "target_net": "25–42%",
+        "target_labour_pct": "18–30%",
+        "typical_owner_salary_pct": "30–50%",
+        "employees": "1–3",
+        "notes": "Practitioner + admin; first office space"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "60–72%",
+        "target_net": "18–30%",
+        "target_labour_pct": "30–42%",
+        "typical_owner_salary_pct": "15–25%",
+        "employees": "3–12",
+        "notes": "Small firm; partner + staff; utilization focus"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "55–65%",
+        "target_net": "15–25%",
+        "target_labour_pct": "35–45%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "12–50",
+        "notes": "Multi-partner professional firm"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "50–62%",
+        "target_net": "12–20%",
+        "target_labour_pct": "38–48%",
+        "typical_owner_salary_pct": "4–8%",
+        "employees": "50+",
+        "notes": "Regional pro firm; specialty practice areas"
+      }
+    }
+  },
+  "IT & Software Development": {
+    "fixed": [
+      {
+        "name": "Owner/principal salary",
+        "typical_pct": "15–35%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office/co-working space",
+        "typical_pct": "2–6%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (E&O + cyber)",
+        "typical_pct": "0.5–2%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software + cloud infrastructure",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin & finance",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Developer / engineer salaries",
+        "typical_pct": "25–48%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Subcontractors / freelancers",
+        "typical_pct": "3–15%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Client project direct costs",
+        "typical_pct": "1–5%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "78–92%",
+        "target_net": "30–60%",
+        "target_labour_pct": "10–25%",
+        "typical_owner_salary_pct": "45–75%",
+        "employees": "0–1",
+        "notes": "Solo developer; contract work; SR&ED eligible"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "65–80%",
+        "target_net": "20–38%",
+        "target_labour_pct": "25–40%",
+        "typical_owner_salary_pct": "25–45%",
+        "employees": "1–4",
+        "notes": "Dev shop start; utilization 70-80%; SR&ED material"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "55–68%",
+        "target_net": "12–22%",
+        "target_labour_pct": "38–52%",
+        "typical_owner_salary_pct": "12–22%",
+        "employees": "4–15",
+        "notes": "Custom dev firm; project-based revenue; PM layer"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "50–62%",
+        "target_net": "10–20%",
+        "target_labour_pct": "42–55%",
+        "typical_owner_salary_pct": "5–12%",
+        "employees": "15–60",
+        "notes": "IT services or product-dev firm; specialty practice"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "45–58%",
+        "target_net": "8–16%",
+        "target_labour_pct": "45–58%",
+        "typical_owner_salary_pct": "2–6%",
+        "employees": "60+",
+        "notes": "Regional IT services; enterprise accounts; offshore mix"
+      }
+    }
+  },
+  "Real Estate Brokerage & Sales": {
+    "fixed": [
+      {
+        "name": "Broker of Record salary",
+        "typical_pct": "8–18%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office lease + signage",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (E&O mandatory)",
+        "typical_pct": "1–2.5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (MLS/CRM/trust acct)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Franchise fees (if applicable)",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          6800,
+          6849
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Marketing + admin",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6700,
+          6799
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Agent commission payouts (70-90%)",
+        "typical_pct": "65–85%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Cooperating brokerage splits",
+        "typical_pct": "0–5%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Transaction/listing direct costs",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$500K GCI",
+        "target_gm": "15–30%",
+        "target_net": "5–15%",
+        "target_labour_pct": "65–80%",
+        "typical_owner_salary_pct": "10–30%",
+        "employees": "1–3",
+        "notes": "New brokerage; Broker of Record + 1-3 agents; RECO commission trust required"
+      },
+      "micro": {
+        "rev_range": "$500K–$2M GCI",
+        "target_gm": "18–28%",
+        "target_net": "6–14%",
+        "target_labour_pct": "70–82%",
+        "typical_owner_salary_pct": "6–15%",
+        "employees": "3–15",
+        "notes": "Small brokerage; 5-20 agents; franchise fees affect margin"
+      },
+      "small": {
+        "rev_range": "$2M–$8M GCI",
+        "target_gm": "15–22%",
+        "target_net": "4–10%",
+        "target_labour_pct": "75–85%",
+        "typical_owner_salary_pct": "2–6%",
+        "employees": "15–60",
+        "notes": "20-100 agents; dedicated admin team; multiple trust accounts"
+      },
+      "mid": {
+        "rev_range": "$8M–$30M GCI",
+        "target_gm": "12–18%",
+        "target_net": "3–7%",
+        "target_labour_pct": "78–86%",
+        "typical_owner_salary_pct": "<2%",
+        "employees": "60–200",
+        "notes": "Multi-office; 100-400 agents; regional brand"
+      },
+      "upper_mid": {
+        "rev_range": "$30M+ GCI",
+        "target_gm": "10–16%",
+        "target_net": "3–6%",
+        "target_labour_pct": "80–88%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "200+",
+        "notes": "Major regional brand or franchise operator; 400+ agents"
+      }
+    }
+  },
+  "Auto Dealers & Service": {
+    "fixed": [
+      {
+        "name": "Owner/GM salaries",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Dealership lease/mortgage",
+        "typical_pct": "1–2.5%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Floor-plan financing interest",
+        "typical_pct": "0.8–2%",
+        "acct_range": [
+          7100,
+          7199
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (inventory + lot + CGL)",
+        "typical_pct": "0.3–0.8%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (DMS + CRM)",
+        "typical_pct": "0.2–0.5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Advertising (OEM co-op)",
+        "typical_pct": "0.8–1.8%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Vehicle COGS (new+used inventory)",
+        "typical_pct": "82–90%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Sales commissions",
+        "typical_pct": "1.5–3.5%",
+        "acct_range": [
+          5100,
+          5149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Service/parts labour + materials",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Reconditioning (used vehicles)",
+        "typical_pct": "0.5–1.5%",
+        "acct_range": [
+          5400,
+          5449
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$2M",
+        "target_gm": "10–18%",
+        "target_net": "-2–5%",
+        "target_labour_pct": "4–10%",
+        "typical_owner_salary_pct": "3–10%",
+        "employees": "3–10",
+        "notes": "Small used-only dealer; no floor plan; cash or rep-line inventory"
+      },
+      "micro": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "10–16%",
+        "target_net": "1–4%",
+        "target_labour_pct": "4–10%",
+        "typical_owner_salary_pct": "1–4%",
+        "employees": "10–25",
+        "notes": "Independent used or small franchise; F&I = 20-30% of GP"
+      },
+      "small": {
+        "rev_range": "$10M–$40M",
+        "target_gm": "12–18%",
+        "target_net": "2–5%",
+        "target_labour_pct": "5–10%",
+        "typical_owner_salary_pct": "<1.5%",
+        "employees": "25–75",
+        "notes": "Single-point franchise; new+used+service+F&I profit centers"
+      },
+      "mid": {
+        "rev_range": "$40M–$150M",
+        "target_gm": "13–18%",
+        "target_net": "2–5%",
+        "target_labour_pct": "5–10%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "75–200",
+        "notes": "2-5 rooftops; dealer-group operations; fixed-ops focus"
+      },
+      "upper_mid": {
+        "rev_range": "$150M+",
+        "target_gm": "13–17%",
+        "target_net": "2–5%",
+        "target_labour_pct": "5–10%",
+        "typical_owner_salary_pct": "<0.5%",
+        "employees": "200+",
+        "notes": "Auto group (AutoCanada, Dilawri-scale); public or PE-backed"
+      }
+    }
+  },
+  "Equipment & Vehicle Rental": {
+    "fixed": [
+      {
+        "name": "Owner/manager salary",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment depreciation + interest",
+        "typical_pct": "15–28%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Yard/facility lease",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (fleet + CGL)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (rental mgmt)",
+        "typical_pct": "0.5–1.5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Maintenance labour + parts",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Counter/driver labour",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel + delivery",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Damage/loss write-downs",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$300K",
+        "target_gm": "40–55%",
+        "target_net": "8–20%",
+        "target_labour_pct": "12–25%",
+        "typical_owner_salary_pct": "20–40%",
+        "employees": "1–3",
+        "notes": "Small equipment rental; cap-heavy; depreciation dominates"
+      },
+      "micro": {
+        "rev_range": "$300K–$1M",
+        "target_gm": "38–50%",
+        "target_net": "6–15%",
+        "target_labour_pct": "15–25%",
+        "typical_owner_salary_pct": "10–20%",
+        "employees": "3–8",
+        "notes": "Single-location; tool + compact equipment rental"
+      },
+      "small": {
+        "rev_range": "$1M–$5M",
+        "target_gm": "35–46%",
+        "target_net": "5–12%",
+        "target_labour_pct": "18–28%",
+        "typical_owner_salary_pct": "5–10%",
+        "employees": "8–25",
+        "notes": "Full-line contractor rental; delivery fleet"
+      },
+      "mid": {
+        "rev_range": "$5M–$25M",
+        "target_gm": "32–42%",
+        "target_net": "5–10%",
+        "target_labour_pct": "20–30%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "25–100",
+        "notes": "Multi-yard operation; equipment utilization 55-70%"
+      },
+      "upper_mid": {
+        "rev_range": "$25M+",
+        "target_gm": "30–40%",
+        "target_net": "4–10%",
+        "target_labour_pct": "22–32%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "100+",
+        "notes": "Regional/national rental chain; fleet >$50M book value"
+      }
+    }
+  },
+  "Real Estate Property Management": {
+    "fixed": [
+      {
+        "name": "Owner/principal salary",
+        "typical_pct": "15–28%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Office lease",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (E&O + CGL)",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (PM platform + acct)",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Admin support staff",
+        "typical_pct": "10–20%",
+        "acct_range": [
+          6500,
+          6599
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Property manager salaries",
+        "typical_pct": "25–40%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Field/site staff (varied)",
+        "typical_pct": "5–15%",
+        "acct_range": [
+          5150,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Marketing (leasing)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "75–88%",
+        "target_net": "25–45%",
+        "target_labour_pct": "15–30%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–2",
+        "notes": "Solo manager; 50-150 units under management (AUM)"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "65–78%",
+        "target_net": "18–32%",
+        "target_labour_pct": "25–38%",
+        "typical_owner_salary_pct": "18–30%",
+        "employees": "2–6",
+        "notes": "Small PM firm; 150-600 AUM; owner + 2-4 PMs"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "55–68%",
+        "target_net": "12–22%",
+        "target_labour_pct": "35–48%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "6–20",
+        "notes": "600-2000 AUM; condo/apartment mix; specialty departments"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "48–60%",
+        "target_net": "10–18%",
+        "target_labour_pct": "40–52%",
+        "typical_owner_salary_pct": "3–8%",
+        "employees": "20–75",
+        "notes": "2000-8000 AUM; multi-office; commercial + residential"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "42–55%",
+        "target_net": "8–15%",
+        "target_labour_pct": "42–55%",
+        "typical_owner_salary_pct": "<2%",
+        "employees": "75+",
+        "notes": "Regional/national PM; 8000+ AUM; institutional clients"
+      }
+    }
+  },
+  "Couriers & Last-Mile Delivery": {
+    "fixed": [
+      {
+        "name": "Owner/dispatch salary",
+        "typical_pct": "6–14%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Warehouse/depot lease",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (CGL + fleet)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (routing + dispatch)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Vehicle lease (owned fleet)",
+        "typical_pct": "3–10%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Driver contractor payments (T4A)",
+        "typical_pct": "40–60%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Fuel + tolls",
+        "typical_pct": "8–15%",
+        "acct_range": [
+          7100,
+          7149
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Vehicle maintenance",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          7150,
+          7199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Platform fees (if applicable)",
+        "typical_pct": "0–15%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "25–40%",
+        "target_net": "8–20%",
+        "target_labour_pct": "8–20%",
+        "typical_owner_salary_pct": "30–55%",
+        "employees": "0–2",
+        "notes": "Owner-driver 1 van; local same-day; cash-flow sensitive"
+      },
+      "micro": {
+        "rev_range": "$150K–$750K",
+        "target_gm": "20–32%",
+        "target_net": "4–12%",
+        "target_labour_pct": "12–22%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "2–8",
+        "notes": "Small fleet; 3-10 drivers; mixed employee + T4A"
+      },
+      "small": {
+        "rev_range": "$750K–$3M",
+        "target_gm": "16–26%",
+        "target_net": "3–8%",
+        "target_labour_pct": "15–25%",
+        "typical_owner_salary_pct": "7–14%",
+        "employees": "8–30",
+        "notes": "Regional courier; dispatcher role; contract clients"
+      },
+      "mid": {
+        "rev_range": "$3M–$15M",
+        "target_gm": "14–22%",
+        "target_net": "3–7%",
+        "target_labour_pct": "18–28%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "30–100",
+        "notes": "Last-mile for e-comm; DSP model; multi-depot"
+      },
+      "upper_mid": {
+        "rev_range": "$15M+",
+        "target_gm": "12–20%",
+        "target_net": "2–6%",
+        "target_labour_pct": "20–30%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "100+",
+        "notes": "Regional logistics operator; Amazon/Purolator/Canpar contracts"
+      }
+    }
+  },
+  "Retail — Apparel & Specialty": {
+    "fixed": [
+      {
+        "name": "Owner/manager salary",
+        "typical_pct": "6–15%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Retail rent (mall/street)",
+        "typical_pct": "8–18%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance + security",
+        "typical_pct": "1–2%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "POS + software",
+        "typical_pct": "0.5–1.5%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Marketing + visual merch",
+        "typical_pct": "3–7%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Apparel/goods COGS",
+        "typical_pct": "45–58%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Sales associate labour",
+        "typical_pct": "10–18%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Merchant fees (cards)",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6800,
+          6849
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Markdowns/shrink",
+        "typical_pct": "3–8%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$150K",
+        "target_gm": "45–58%",
+        "target_net": "-5–10%",
+        "target_labour_pct": "15–28%",
+        "typical_owner_salary_pct": "10–30%",
+        "employees": "1–3",
+        "notes": "New boutique; first 12-18mo unprofitable typical; inventory-heavy"
+      },
+      "micro": {
+        "rev_range": "$150K–$500K",
+        "target_gm": "48–58%",
+        "target_net": "3–10%",
+        "target_labour_pct": "18–28%",
+        "typical_owner_salary_pct": "10–20%",
+        "employees": "2–6",
+        "notes": "Single-location boutique; owner on floor; inventory turn 3-4x/yr"
+      },
+      "small": {
+        "rev_range": "$500K–$2M",
+        "target_gm": "50–60%",
+        "target_net": "6–12%",
+        "target_labour_pct": "20–28%",
+        "typical_owner_salary_pct": "5–12%",
+        "employees": "6–18",
+        "notes": "Established boutique or small chain; brand identity mature"
+      },
+      "mid": {
+        "rev_range": "$2M–$10M",
+        "target_gm": "52–62%",
+        "target_net": "8–15%",
+        "target_labour_pct": "20–28%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "18–60",
+        "notes": "2-8 locations; central buying; inventory turn 5x+"
+      },
+      "upper_mid": {
+        "rev_range": "$10M+",
+        "target_gm": "55–65%",
+        "target_net": "10–18%",
+        "target_labour_pct": "20–28%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "60+",
+        "notes": "Regional chain or DTC brand; private-label margin lift"
+      }
+    }
+  },
+  "Personal Services": {
+    "fixed": [
+      {
+        "name": "Owner/manager salary",
+        "typical_pct": "15–30%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Salon/studio rent",
+        "typical_pct": "8–18%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance + professional reg",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment financing",
+        "typical_pct": "1–4%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (booking/POS)",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Service staff wages (T4)",
+        "typical_pct": "20–35%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Booth renters / commission (T4A)",
+        "typical_pct": "0–30%",
+        "acct_range": [
+          5200,
+          5299
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Product COGS (retail)",
+        "typical_pct": "5–15%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Supplies (service consumables)",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$100K",
+        "target_gm": "50–70%",
+        "target_net": "15–35%",
+        "target_labour_pct": "15–30%",
+        "typical_owner_salary_pct": "40–65%",
+        "employees": "0–1",
+        "notes": "Solo practitioner; chair rental or home-based; most revenue = owner draw"
+      },
+      "micro": {
+        "rev_range": "$100K–$400K",
+        "target_gm": "45–60%",
+        "target_net": "10–22%",
+        "target_labour_pct": "25–40%",
+        "typical_owner_salary_pct": "15–30%",
+        "employees": "1–5",
+        "notes": "Small salon/spa/studio; mix of staff + booth renters"
+      },
+      "small": {
+        "rev_range": "$400K–$1.5M",
+        "target_gm": "42–55%",
+        "target_net": "8–15%",
+        "target_labour_pct": "30–42%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "5–18",
+        "notes": "Established salon/gym/spa; product retail adds margin"
+      },
+      "mid": {
+        "rev_range": "$1.5M–$6M",
+        "target_gm": "40–52%",
+        "target_net": "6–12%",
+        "target_labour_pct": "32–44%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "18–60",
+        "notes": "Multi-location or large flagship; manager layer"
+      },
+      "upper_mid": {
+        "rev_range": "$6M+",
+        "target_gm": "38–50%",
+        "target_net": "5–10%",
+        "target_labour_pct": "34–46%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "60+",
+        "notes": "Regional chain; franchise-ready or spa/fitness brand"
+      }
+    }
+  },
+  "Education & Training": {
+    "fixed": [
+      {
+        "name": "Owner/director salary",
+        "typical_pct": "15–30%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Facility/classroom lease",
+        "typical_pct": "6–15%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (E&O + CGL)",
+        "typical_pct": "1–2.5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software (LMS + CRM)",
+        "typical_pct": "2–6%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Marketing + enrollment",
+        "typical_pct": "5–15%",
+        "acct_range": [
+          6700,
+          6749
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Instructor wages (T4 or T4A)",
+        "typical_pct": "25–45%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Curriculum + materials",
+        "typical_pct": "3–10%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Exam/certification fees",
+        "typical_pct": "0–5%",
+        "acct_range": [
+          5400,
+          5499
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$100K",
+        "target_gm": "70–85%",
+        "target_net": "25–50%",
+        "target_labour_pct": "15–30%",
+        "typical_owner_salary_pct": "35–65%",
+        "employees": "0–2",
+        "notes": "Solo tutor/coach or online course creator; near-zero marginal cost"
+      },
+      "micro": {
+        "rev_range": "$100K–$400K",
+        "target_gm": "60–75%",
+        "target_net": "15–30%",
+        "target_labour_pct": "25–40%",
+        "typical_owner_salary_pct": "20–35%",
+        "employees": "1–5",
+        "notes": "Small training school; 1-3 classrooms; contract instructors"
+      },
+      "small": {
+        "rev_range": "$400K–$1.5M",
+        "target_gm": "55–68%",
+        "target_net": "12–22%",
+        "target_labour_pct": "35–48%",
+        "typical_owner_salary_pct": "8–15%",
+        "employees": "5–18",
+        "notes": "Established private school/training; multi-cohort scheduling"
+      },
+      "mid": {
+        "rev_range": "$1.5M–$6M",
+        "target_gm": "50–60%",
+        "target_net": "10–18%",
+        "target_labour_pct": "40–52%",
+        "typical_owner_salary_pct": "3–7%",
+        "employees": "18–60",
+        "notes": "Multi-location; specialty programs; institutional clients"
+      },
+      "upper_mid": {
+        "rev_range": "$6M+",
+        "target_gm": "45–58%",
+        "target_net": "8–15%",
+        "target_labour_pct": "42–54%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "60+",
+        "notes": "Regional training provider; government-funded programs; PSE partnerships"
+      }
+    }
+  },
+  "Arts, Entertainment & Recreation": {
+    "fixed": [
+      {
+        "name": "Owner/manager salary",
+        "typical_pct": "10–22%",
+        "acct_range": [
+          6200,
+          6249
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Facility rent/mortgage",
+        "typical_pct": "12–25%",
+        "acct_range": [
+          6400,
+          6449
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Insurance (CGL premium for high-risk)",
+        "typical_pct": "2–5%",
+        "acct_range": [
+          6300,
+          6349
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Equipment financing + dep",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          7400,
+          7499
+        ],
+        "type": "fixed"
+      },
+      {
+        "name": "Software + booking",
+        "typical_pct": "1–3%",
+        "acct_range": [
+          6600,
+          6649
+        ],
+        "type": "fixed"
+      }
+    ],
+    "variable": [
+      {
+        "name": "Instructor/trainer wages",
+        "typical_pct": "15–28%",
+        "acct_range": [
+          5100,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Front-desk/support staff",
+        "typical_pct": "6–12%",
+        "acct_range": [
+          5150,
+          5199
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Supplies + program costs",
+        "typical_pct": "4–10%",
+        "acct_range": [
+          5300,
+          5399
+        ],
+        "type": "variable"
+      },
+      {
+        "name": "Merchant fees (memberships)",
+        "typical_pct": "1.5–3%",
+        "acct_range": [
+          6800,
+          6849
+        ],
+        "type": "variable"
+      }
+    ],
+    "size_benchmarks": {
+      "startup": {
+        "rev_range": "<$200K",
+        "target_gm": "55–70%",
+        "target_net": "-10–15%",
+        "target_labour_pct": "15–30%",
+        "typical_owner_salary_pct": "20–45%",
+        "employees": "1–4",
+        "notes": "New studio/gym/venue; first 12-24mo unprofitable common; member acquisition heavy"
+      },
+      "micro": {
+        "rev_range": "$200K–$600K",
+        "target_gm": "55–68%",
+        "target_net": "5–15%",
+        "target_labour_pct": "20–35%",
+        "typical_owner_salary_pct": "15–28%",
+        "employees": "3–10",
+        "notes": "Single-location studio/gym; owner-operator; member retention focus"
+      },
+      "small": {
+        "rev_range": "$600K–$2M",
+        "target_gm": "50–62%",
+        "target_net": "8–16%",
+        "target_labour_pct": "25–38%",
+        "typical_owner_salary_pct": "6–12%",
+        "employees": "10–30",
+        "notes": "Established facility; 500-2000 members or active users"
+      },
+      "mid": {
+        "rev_range": "$2M–$8M",
+        "target_gm": "45–58%",
+        "target_net": "8–15%",
+        "target_labour_pct": "28–40%",
+        "typical_owner_salary_pct": "2–5%",
+        "employees": "30–80",
+        "notes": "Multi-location or large flagship; ancillary revenue (pro shop/F&B)"
+      },
+      "upper_mid": {
+        "rev_range": "$8M+",
+        "target_gm": "42–55%",
+        "target_net": "6–14%",
+        "target_labour_pct": "30–42%",
+        "typical_owner_salary_pct": "<1%",
+        "employees": "80+",
+        "notes": "Regional chain or major attraction; high-margin membership model"
+      }
+    }
+  }
+}
