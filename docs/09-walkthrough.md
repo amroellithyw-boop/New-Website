@@ -64,7 +64,7 @@ the profile, so a proposal is never made up.
 | | Before this round | Now |
 | --- | --- | --- |
 | Controls | 55 | 56 |
-| Tests | 170 | 0 |
+| Tests | 170 | 340 |
 | Model providers reachable | 1 | 12 |
 | Independent model families | 1 | up to 12 |
 | ForgeBench detection | 15 of 15 | 15 of 15 |
