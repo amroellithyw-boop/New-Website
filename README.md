@@ -35,6 +35,7 @@ forge tax calendar        # every filing deadline the profile implies
 forge brief               # the five things the owner needs to hear
 forge qbo connect --tenant sandbox   # authorise a QuickBooks company, read-only
 forge engagement plan     # a non-resident's fourplex: tax, ownership, HST and project plan
+forge client engage jane letter.pdf   # read an engagement letter; documents to request, questions to ask
 ```
 
 No database, no API key and no network are required. A seeded synthetic
@@ -61,6 +62,7 @@ in about a tenth of a second.
 | Learning | Per-client outcome log; dismissals suppress, acceptances become known patterns; critical never suppressed |
 | Operations | One-command client run, job plan per client, firm queue and daily brief across every client |
 | Growth | Pricing from the profile, proposals from the diagnostic, outreach drafts, pipeline |
+| Client context | One folder per client: engagement letter read into phases and fees, every document classified and its figures extracted, replies matched to open questions, proposals applied by a person |
 | Real estate | Development and rental engagements: self-supply and rebates, ownership comparison with transfer taxes, departure and non-resident filings, cost to complete, owner finance pack, six construction controls, the written action plan |
 | Work items | 16-state machine; cannot approve over an open note or act beyond approved scope |
 | Industry packs | 22 Canadian industries, 33 cost structures, 5 revenue tiers |
@@ -97,6 +99,8 @@ services/forge-core/          the engine, controls, agents and bench
   forge/operations/           client runs, job plans, the firm queue, the daily brief
   forge/growth/               pricing, proposals, outreach, pipeline
   forge/realestate/           development and rental engagements, the action plan
+  forge/engagements/          engagement letters into phases, deliverables, documents owed
+  forge/clients/context.py    the per-client folder every document and reply lands in
   forge/agents/               contracts, model gateway, review loop
   forge/workitems/            risk scoring, routing, state machine
   forge/bench/                seeded defects and the release gate
@@ -111,6 +115,7 @@ docs/                         constitution, architecture, strategy, decisions
 | `docs/10-operating-manual.md` | How to run it day to day, what it cannot do yet and why, what is not right |
 | `docs/11-handover-checklist.md` | The six things only the owner can supply, step by step, and what is already done for each |
 | `docs/12-scope-language-for-legal-review.md` | Every sentence a client reads, ready for a lawyer |
+| `docs/14-getting-started.md` | Start here: install, first client, every document and reply, the daily run |
 | `docs/13-real-estate-engagement.md` | The fourplex engagement, deliverable by deliverable: automated, judged, still yours |
 | `docs/00-product-constitution.md` | The rules that cannot be traded away for a demo |
 | `docs/01-architecture.md` | The layers, the decisions taken, and what each one costs |

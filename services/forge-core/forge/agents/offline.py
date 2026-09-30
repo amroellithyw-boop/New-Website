@@ -68,6 +68,14 @@ def synthesise(*, system: str, user: str, schema: dict[str, Any] | None) -> dict
                 "notes": "Offline provider proposes no entries."}
     if "ClientEmail" in title:
         return {"subject": "Questions about a few transactions", "body": "Offline draft.", "transaction_count": 0}
+    if "IntakeExtract" in title:
+        return {"kind": "other", "summary": "Offline: no model extraction performed.", "issuer": "", "document_date": None,
+                "facts": [], "questions_answered": [], "follow_ups": [], "confidence": 0}
+    if "EngagementLetterExtract" in title:
+        return {"client_name": "", "other_parties": [], "subject": "", "letter_date": None, "phases": [], "assumptions": [],
+                "client_responsibilities": [], "exclusions": [], "hourly_rate": None, "confidence": 0}
+    if "ResponseExtract" in title:
+        return {"answers": [], "facts": [], "follow_ups": [], "summary": "Offline: response recorded, not interpreted.", "confidence": 0}
     if "OnboardingPlan" in title:
         return {"welcome": "Offline plan.", "engagement_summary": "", "week_1": [], "week_2": [],
                 "month_1": [], "documents_needed": [], "immediate_compliance_risks": [],

@@ -84,6 +84,8 @@ exists. Dropped: not worth carrying, with the reason.
 | Firm queue and daily brief | Built | `forge/operations/firm.py`, `forge run-all` |
 | Pricing, proposal, outreach, pipeline | Built | `forge/growth/`, `forge sales`, `forge brief --proposal` |
 | Job profitability and margin outliers | Built | `forge/cfo/jobs.py`, control FOS-R056 |
+| Client context: documents and replies into one folder per client | Built | `forge/clients/context.py`, `forge/documents/intake.py`, `forge client` |
+| Engagement letters read into phases, deliverables, requests | Built | `forge/engagements/`, nine engagement types |
 | Real-estate development and rental engagements | Built | `forge/realestate/`, `forge engagement`; controls FOS-R057 to R062; `docs/13-real-estate-engagement.md` |
 
 ## Platform

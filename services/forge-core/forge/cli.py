@@ -475,7 +475,10 @@ def run_all(
     from .growth import SalesPipeline
     from .operations import build_firm_queue, daily_brief
 
-    runs = [_client_run(p, period_end, 1, data_dir) for p in sorted(clients.glob("*.json"))]
+    profiles = sorted(clients.glob("*.json")) + sorted(clients.glob("*/profile.json")) + sorted((data_dir / "clients").glob("*/profile.json"))
+    runs = []
+    for p in dict.fromkeys(profiles):
+        runs.append(_client_run(p, period_end, 1, p.parent if p.name == "profile.json" else data_dir))
     if not runs:
         typer.echo("No profiles found; `forge onboard <intake.json> --out clients/<id>.json` creates one.")
         raise typer.Exit(1)
@@ -1066,3 +1069,261 @@ def engagement_chart(as_json: bool = typer.Option(False, "--json")) -> None:
         return
     for a in rows:
         typer.echo(f"  {a['number']}  {a['name']:<52s} {a['type']:<9s} {('Class ' + a['cca_class']) if a['cca_class'] and a['cca_class'] != 'n/a' else '':<9s} {a['note']}")
+
+
+# ---------------------------------------------------------------------------
+# Clients: one folder per client that everything they send lands in.
+# ---------------------------------------------------------------------------
+
+client_app = typer.Typer(help="Per-client context: create, engage, add documents and replies, status, facts, run.", no_args_is_help=True)
+app.add_typer(client_app, name="client")
+
+
+def _ctx(client_id: str, data_dir: Path):
+    from .clients.context import ClientContext
+
+    if not ClientContext.exists(client_id, data_dir):
+        raise typer.BadParameter(f"no client '{client_id}' under {ClientContext.root(data_dir)}; create one with `forge client new {client_id} --name ...`")
+    return ClientContext.load(client_id, data_dir)
+
+
+def _gateway_if_configured() -> ModelGateway | None:
+    import os
+
+    from .agents.catalogue import PROVIDER_ENV
+
+    return ModelGateway.from_environment() if any(os.environ.get(v[0]) for v in PROVIDER_ENV.values() if v[0]) else None
+
+
+@client_app.command("new")
+def client_new(
+    client_id: str = typer.Argument(..., help="Short id with no spaces, e.g. acme or jane-fourplex"),
+    name: str = typer.Option(None, help="Business or client name"),
+    intake: Path | None = typer.Option(None, help="Intake questionnaire JSON (legacy or profile shape)"),
+    province: str = typer.Option("ON"),
+    naics: str | None = typer.Option(None, help="Industry code, e.g. 238210 electrical, 531110 residential rental"),
+    data_dir: Path = typer.Option(Path("data")),
+) -> None:
+    """Create the client's folder from a name or an intake file."""
+    from .clients.context import ClientContext
+
+    if intake:
+        raw = json.loads(intake.read_text())
+        profile = ClientProfile.from_dict({**raw, "client_id": client_id}) if "client_id" in raw or "business_name" in raw else ClientProfile.from_legacy_intake(raw)
+        profile = ClientProfile.from_dict({**profile.to_dict(), "client_id": client_id})
+    else:
+        if not name:
+            raise typer.BadParameter("--name or --intake is required")
+        profile = ClientProfile(client_id=client_id, business_name=name, province=province, naics_code=naics)
+    ctx = ClientContext.create(client_id, data_dir, profile)
+    typer.echo(f"Created {ctx.directory}\n  {ctx.client_line}\nNext: forge client engage {client_id} <engagement-letter.pdf>")
+
+
+@client_app.command("engage")
+def client_engage(
+    client_id: str = typer.Argument(...),
+    letter: Path = typer.Argument(..., help="The engagement letter: PDF or text"),
+    today: str = typer.Option(date.today().isoformat()),
+    data_dir: Path = typer.Option(Path("data")),
+    kind: list[str] = typer.Option(None, "--type", help="Force engagement type(s) instead of detecting, e.g. monthly_bookkeeping"),
+) -> None:
+    """Read the engagement letter: phases, fees, deliverables, documents to request, questions to ask."""
+    from .engagements import ENGAGEMENT_TYPES
+
+    ctx = _ctx(client_id, data_dir)
+    if kind:
+        unknown = [k for k in kind if k not in ENGAGEMENT_TYPES]
+        if unknown:
+            raise typer.BadParameter(f"unknown type(s) {unknown}; choose from {', '.join(ENGAGEMENT_TYPES)}")
+    data = letter.read_bytes()
+    gw = _gateway_if_configured()
+    rec = ctx.add_document(data, letter.name, today=date.fromisoformat(today), source="upload", gateway=gw)
+    if ctx.engagement is None or kind:
+        from .documents.intake import extract_text
+
+        text = extract_text(data, rec.media_type)
+        ctx.engage(text, today=date.fromisoformat(today), gateway=gw, types=kind or None, document_id=rec.document_id)
+    e = ctx.engagement
+    typer.echo(f"\n{e.engagement_id}: {', '.join(e.types) or 'no type detected; pass --type'}   parsed by {e.letter.parsed_by}")
+    for w in e.letter.warnings:
+        typer.echo(f"  ! {w}")
+    for p in e.letter.phases:
+        typer.echo(f"  Phase {p.number} {p.title}: {p.fee.format() if p.fee else 'fee?'} {p.cadence}, {'authorised' if p.authorised else 'not yet authorised'}, {len(p.deliverables)} deliverables")
+    typer.echo(f"\nDocuments to request ({len(e.document_requests)}):")
+    for r in e.document_requests:
+        typer.echo(f"  {r.request_id} {r.description}")
+    typer.echo(f"\nQuestions to ask ({len(e.question_ids)}):")
+    for qid in e.question_ids:
+        typer.echo(f"  {qid} {ctx.knowledge.questions[qid].question}")
+    typer.echo(f"\nServices now: {', '.join(ctx.profile.services)}")
+    if e.facts_schema:
+        typer.echo(f"Facts file to fill: {ctx.facts_path(e.facts_schema)}  (documents you add will propose values; `forge client facts {client_id}` shows them)")
+
+
+@client_app.command("add")
+def client_add(
+    client_id: str = typer.Argument(...),
+    files: list[Path] = typer.Argument(..., help="One or more files the client sent"),
+    source: str = typer.Option("upload", help="upload | email | portal | scan"),
+    note: str = typer.Option(""),
+    today: str = typer.Option(date.today().isoformat()),
+    data_dir: Path = typer.Option(Path("data")),
+) -> None:
+    """Add documents to the client's context: stored, classified, facts extracted, requests matched."""
+    ctx = _ctx(client_id, data_dir)
+    gw = _gateway_if_configured()
+    for f in files:
+        rec = ctx.add_document(f.read_bytes(), f.name, today=date.fromisoformat(today), source=source, note=note, gateway=gw)
+        if rec.duplicate_of:
+            typer.echo(f"  {f.name}: already on file as {rec.duplicate_of}")
+            continue
+        typer.echo(f"  {rec.document_id} {f.name}: {rec.kind}" + (f", matches request {rec.matched_request}" if rec.matched_request else ""))
+        for k, v in rec.facts.items():
+            typer.echo(f"      {k} = {v}")
+        if rec.summary:
+            typer.echo(f"      {rec.summary}")
+        for u in rec.proposed_updates:
+            typer.echo(f"      proposes {u['schema']}.{u['path']} <- {u['value']}")
+        for q in rec.answered_questions:
+            typer.echo(f"      answers {q}")
+        for fu in rec.follow_ups:
+            typer.echo(f"      follow up: {fu}")
+    if ctx.pending_updates():
+        typer.echo(f"\n{len(ctx.pending_updates())} proposed fact update(s) waiting: forge client facts {client_id} --apply")
+
+
+@client_app.command("reply")
+def client_reply(
+    client_id: str = typer.Argument(...),
+    text: str | None = typer.Argument(None, help="The reply text, or use --file"),
+    file: Path | None = typer.Option(None, help="A saved email or message file"),
+    sender: str = typer.Option("client"),
+    subject: str = typer.Option(""),
+    today: str = typer.Option(date.today().isoformat()),
+    data_dir: Path = typer.Option(Path("data")),
+) -> None:
+    """Record what the client said. Lines like "Q3: yes" answer open questions directly; a model matches the rest."""
+    ctx = _ctx(client_id, data_dir)
+    body = file.read_text(encoding="utf-8", errors="replace") if file else (text or "")
+    if not body.strip():
+        raise typer.BadParameter("give the reply text or --file")
+    rec = ctx.add_response(body, today=date.fromisoformat(today), sender=sender, subject=subject, gateway=_gateway_if_configured())
+    typer.echo(f"{rec.document_id}: {rec.summary}")
+    for q in rec.answered_questions:
+        typer.echo(f"  answered {q}: {ctx.knowledge.questions[q].answer}")
+    left = list(ctx.knowledge.unanswered())
+    if left:
+        typer.echo(f"  still open: {', '.join(q.question_id for q in left)}")
+
+
+@client_app.command("ask")
+def client_ask(client_id: str = typer.Argument(...), question: str = typer.Argument(...), data_dir: Path = typer.Option(Path("data"))) -> None:
+    """Add a question for the client. It stays open until a reply or `forge client answer` closes it."""
+    ctx = _ctx(client_id, data_dir)
+    typer.echo(f"{ctx.ask(question)}: {question}")
+
+
+@client_app.command("answer")
+def client_answer(client_id: str = typer.Argument(...), question_id: str = typer.Argument(...), answer: str = typer.Argument(...),
+                  by: str = typer.Option("operator"), data_dir: Path = typer.Option(Path("data"))) -> None:
+    """Close a question with what you learned by phone or in a meeting."""
+    ctx = _ctx(client_id, data_dir)
+    ctx.answer(question_id, answer, by=by)
+    typer.echo(f"{question_id} answered")
+
+
+@client_app.command("facts")
+def client_facts(client_id: str = typer.Argument(...), apply: bool = typer.Option(False, "--apply", help="Write the proposed values into the facts file"),
+                 data_dir: Path = typer.Option(Path("data"))) -> None:
+    """Show, and optionally apply, the fact updates proposed by received documents."""
+    ctx = _ctx(client_id, data_dir)
+    pending = ctx.pending_updates()
+    if not pending:
+        typer.echo("No proposed updates.")
+    for d, u in pending:
+        typer.echo(f"  {d.document_id} ({d.kind}): {u.schema}.{u.path} <- {u.value}   [{u.basis}]")
+    if apply and pending:
+        for line in ctx.apply_updates():
+            typer.echo(f"  applied {line}")
+    if ctx.engagement and ctx.engagement.facts_schema:
+        facts = ctx.load_facts(ctx.engagement.facts_schema) or {}
+        empty = [k for k, v in facts.items() if v in (None, "", [], {}) and not k.startswith("_")]
+        if empty:
+            typer.echo(f"\nStill empty in {ctx.facts_path(ctx.engagement.facts_schema).name}: {', '.join(empty)}")
+
+
+@client_app.command("status")
+def client_status(client_id: str = typer.Argument(...), data_dir: Path = typer.Option(Path("data")), as_json: bool = typer.Option(False, "--json")) -> None:
+    """Everything known: engagement progress, documents on file and outstanding, open questions, facts, timeline."""
+    ctx = _ctx(client_id, data_dir)
+    s = ctx.status()
+    if as_json:
+        typer.echo(json.dumps(s, indent=2))
+        return
+    typer.echo(f"\n{s['client']}\n  services: {', '.join(s['services'])}")
+    if s["engagement"]:
+        e = s["engagement"]
+        typer.echo(f"  engagement: {', '.join(e['types'])}; phases {e['phases']}, authorised {e['authorised_phases']}; deliverables {e['deliverables_delivered']}/{e['deliverables_authorised']}; "
+                   f"fees fixed ${e['fixed_fees']} monthly ${e['monthly_fees']}")
+    typer.echo(f"  documents on file: {s['documents']} {s['documents_by_kind']}")
+    if s["documents_outstanding"]:
+        typer.echo("  still to receive:")
+        for r in s["documents_outstanding"]:
+            typer.echo(f"    {r}")
+    if s["open_questions"]:
+        typer.echo("  open questions:")
+        for q in s["open_questions"]:
+            typer.echo(f"    {q}")
+    typer.echo(f"  facts known {s['facts_known']}, precedents {s['precedents']}, outcomes recorded {s['outcomes_recorded']}, pending updates {s['pending_updates']}")
+    typer.echo("  recent:")
+    for e in ctx.timeline(8):
+        typer.echo(f"    {e['at'][:16]}  {e['kind']:<20s} {e['detail'][:90]}")
+
+
+@client_app.command("list")
+def client_list(data_dir: Path = typer.Option(Path("data"))) -> None:
+    """Every client folder and where each stands."""
+    from .clients.context import ClientContext
+
+    ids = ClientContext.list_ids(data_dir)
+    if not ids:
+        typer.echo(f"No clients under {ClientContext.root(data_dir)}")
+    for cid in ids:
+        s = ClientContext.load(cid, data_dir).status()
+        e = s["engagement"]
+        typer.echo(f"  {cid:<16s} {s['client'][:44]:<44s} docs {s['documents']:>3}  open q {len(s['open_questions']):>2}  " +
+                   (f"{','.join(e['types'])[:28]} {e['deliverables_delivered']}/{e['deliverables_authorised']}" if e else "no engagement"))
+
+
+@client_app.command("run")
+def client_run(
+    client_id: str = typer.Argument(...),
+    period_end: str = typer.Option(date.today().isoformat()),
+    data_dir: Path = typer.Option(Path("data")),
+    with_review: bool = typer.Option(False, "--with-review"),
+) -> None:
+    """Run the finance team for this client with its own knowledge and outcomes, and its engagement plan if it has one."""
+    from .operations import run_client
+
+    ctx = _ctx(client_id, data_dir)
+    start, end = _period(period_end, 1)
+    company = build_contractor_company()
+    gw = ModelGateway.from_environment() if with_review else None
+    cr = run_client(ctx.profile, company.ledger, period_start=start, period_end=end, statements=company.statements,
+                    gateway=gw, review=with_review, data_dir=ctx.directory)
+    typer.echo(json.dumps(cr.summary(), indent=2, default=str))
+    typer.echo("(ledger: the demonstration company until the QuickBooks mappers are finished)")
+    if ctx.engagement and ctx.engagement.facts_schema == "realestate":
+        from .firm import load_firm
+        from .realestate import render_action_plan
+        from .realestate.facts import EngagementFacts
+
+        raw = ctx.load_facts("realestate") or {}
+        try:
+            facts = EngagementFacts.from_dict({k: v for k, v in raw.items() if not k.startswith("_")})
+            out = ctx.directory / f"plan-{end.isoformat()}.md"
+            out.write_text(render_action_plan(facts, today=end, firm=load_firm().name, preparer=load_firm().sender), encoding="utf-8")
+            ctx.event("plan_rendered", str(out))
+            typer.echo(f"Action plan written to {out}")
+        except Exception as exc:  # noqa: BLE001
+            typer.echo(f"Action plan not rendered: {exc}. Fill the facts file first (forge client facts {client_id}).")

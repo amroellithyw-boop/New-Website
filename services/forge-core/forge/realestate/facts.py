@@ -203,10 +203,11 @@ class EngagementFacts:
             elif k in date_keys:
                 kwargs[k] = _d(v)
             elif k in decimal_keys:
-                kwargs[k] = Decimal(str(v))
+                if v not in (None, ""):
+                    kwargs[k] = Decimal(str(v))
             elif k in tuple_keys:
-                kwargs[k] = tuple(int(x) if k == "principal_residence_years" else str(x) for x in v)
-            else:
+                kwargs[k] = tuple(int(x) if k == "principal_residence_years" else str(x) for x in (v or ()))
+            elif v is not None:
                 kwargs[k] = v
         return cls(complexes=complexes, facilities=facilities, phases=phases, **kwargs)
 
