@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 
 import typer
@@ -19,7 +20,7 @@ from .bench import BenchThresholds, build_seeded_case, run_bench
 from .cfo import cash_forecast, health_score, working_capital
 from .clients import ClientProfile
 from .connectors.fixture_contractor import build_contractor_company
-from .pipeline import run_continuous_controller
+from .pipeline import DEFAULT_POLICY, run_continuous_controller
 from .report import render_diagnostic, write_evidence_bundle
 from .rules import REGISTRY
 
@@ -871,3 +872,197 @@ def setup(
 
     typer.echo(f"\nDone. {target} written with {sum(1 for v in values.values() if v)} values.")
     typer.echo("Next: `forge providers` to see the models, `forge qbo connect --tenant sandbox` to link QuickBooks.")
+
+
+# ---------------------------------------------------------------------------
+# Real-estate engagements: the fourplex kind of client.
+# ---------------------------------------------------------------------------
+
+engagement_app = typer.Typer(help="Development and rental engagements: plan, HST, ownership, residency, project, rental, pack.", no_args_is_help=True)
+app.add_typer(engagement_app, name="engagement")
+
+
+def _facts(path: Path | None):
+    from .realestate.facts import EXAMPLE_FACTS, EngagementFacts, load_facts
+
+    if path is None:
+        return EngagementFacts.from_dict(EXAMPLE_FACTS)
+    return load_facts(path)
+
+
+@engagement_app.command("example")
+def engagement_example(out: Path = typer.Argument(Path("clients/fourplex.engagement.json"))) -> None:
+    """Write the example facts file (the engagement letter's figures, names replaced) to edit for a real client."""
+    from .realestate.facts import EXAMPLE_FACTS
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(EXAMPLE_FACTS, indent=2))
+    typer.echo(f"Wrote {out}. Put the real names and any corrected figures in, then: forge engagement plan {out}")
+
+
+@engagement_app.command("plan")
+def engagement_plan(
+    facts: Path | None = typer.Argument(None, help="Engagement facts JSON; the example is used without one"),
+    today: str = typer.Option(date.today().isoformat()),
+    out: Path | None = typer.Option(None, help="Write the plan (Markdown) here"),
+) -> None:
+    """The Phase 1 deliverable: Canadian tax, ownership, GST/HST and project action plan."""
+    from .firm import load_firm
+    from .realestate import render_action_plan
+
+    fc = load_firm()
+    text = render_action_plan(_facts(facts), today=date.fromisoformat(today), firm=fc.name, preparer=fc.sender)
+    if out:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(text, encoding="utf-8")
+        typer.echo(f"Plan written to {out} ({len(text.splitlines())} lines)")
+    else:
+        typer.echo(text)
+
+
+@engagement_app.command("hst")
+def engagement_hst(facts: Path | None = typer.Argument(None), today: str = typer.Option(date.today().isoformat())) -> None:
+    """Self-supply, rebates and credits per building, with dates."""
+    from .realestate import hst_position
+
+    h = hst_position(_facts(facts), today=date.fromisoformat(today))
+    for r in h.results:
+        typer.echo(f"\n{r.complex_name}: {r.units} unit(s), FMV {r.fmv.format()}")
+        typer.echo(f"  self-supply HST {r.total_tax.format()} (federal {r.federal_tax.format()}, Ontario {r.provincial_tax.format()})")
+        typer.echo(f"  enhanced rebate: {'qualifies' if r.pbrh.eligible else 'does not qualify'}; " + "; ".join(r.pbrh.reasons))
+        typer.echo(f"  rebates: federal {r.federal_rebate.format()}, Ontario {r.ontario_rebate.format()}; net payable {r.net_payable.format()}")
+        if not r.pbrh.eligible:
+            for u in r.per_unit:
+                typer.echo(f"    unit {u.unit}: FMV {u.fmv.format()} federal {u.federal.format()} Ontario {u.ontario.format()}")
+        for c in r.confirm:
+            typer.echo(f"  confirm: {c}")
+    typer.echo(f"\nInput tax credits over the build: about {h.itc_estimate.format()} ({h.itc_basis})")
+    typer.echo(f"Net HST at completion {h.net_payable_at_completion.format()}; net cash effect over the project {h.net_cash_effect_over_project.format()}")
+    for w in h.warnings:
+        typer.echo(f"  ! {w}")
+    typer.echo("\nDates")
+    for d in h.deadlines:
+        typer.echo(f"  {d.due_on}  {d.description}" + ("  (confirm)" if d.confirm else ""))
+
+
+@engagement_app.command("ownership")
+def engagement_ownership(facts: Path | None = typer.Argument(None), at_completion: bool = typer.Option(False, "--at-completion")) -> None:
+    """Personal, partnership, corporation, family transfer and unit sale, side by side."""
+    from .realestate import ownership_scenarios, rental_pro_forma
+
+    f = _facts(facts)
+    pro = rental_pro_forma(f)
+    income = pro.net_rental_before_cca if pro.net_rental_before_cca.minor_units > 0 else pro.net_operating_income
+    value = (f.appraised_completed_value if at_completion else f.land_fmv_at_change_of_use) or f.purchase_price
+    typer.echo(f"\nAnnual income compared: {income.format()}; transfer value {value.format()}\n")
+    for s in ownership_scenarios(f, net_rental_income=income, transfer_value=value):
+        tax = s.annual_tax_on_net_rental.format() if s.annual_tax_on_net_rental is not None else "not modelled"
+        typer.echo(f"{s.name}  [{s.fits}]")
+        typer.echo(f"  one-time {s.one_time_total.format()}   annual tax {tax}   compliance {s.annual_compliance.format()}")
+        for k, v in s.one_time_costs:
+            typer.echo(f"    {k}: {v.format()}")
+        for r in s.requirements:
+            typer.echo(f"  requires: {r}")
+        for r in s.risks:
+            typer.echo(f"  risk: {r}")
+        for c in s.confirm:
+            typer.echo(f"  confirm: {c}")
+        typer.echo("")
+
+
+@engagement_app.command("residency")
+def engagement_residency(facts: Path | None = typer.Argument(None), today: str = typer.Option(date.today().isoformat())) -> None:
+    """Departure, filing history, change of use, and the non-resident rental calendar."""
+    from .realestate import change_of_use, departure_review, non_resident_rental_calendar
+
+    f = _facts(facts)
+    for i in departure_review(f, today=date.fromisoformat(today)):
+        typer.echo(f"\n[{i.kind}] {i.title}" + ("  (confirm)" if i.confirm else ""))
+        typer.echo(f"  {i.detail}")
+        typer.echo(f"  action: {i.action}" + (f"  by {i.deadline}" if i.deadline else "") + (f"  exposure {i.exposure.format()}" if i.exposure else ""))
+    pre = change_of_use(f)
+    if pre:
+        typer.echo(f"\nChange of use: proceeds {pre.proceeds.format()}, ACB {pre.adjusted_cost_base.format()}, gain {pre.gain.format()}, "
+                   f"exempt {pre.exempt_fraction:.4f} = {pre.exempt_gain.format()}, taxable capital gain {pre.taxable_capital_gain.format()}")
+    if f.expected_completion:
+        typer.echo(f"\nRental calendar from {f.expected_completion}")
+        for d in non_resident_rental_calendar(f.expected_completion, year=f.expected_completion.year)[:8]:
+            typer.echo(f"  {d.due_on}  {d.description}")
+
+
+@engagement_app.command("project")
+def engagement_project(facts: Path | None = typer.Argument(None), today: str = typer.Option(date.today().isoformat())) -> None:
+    """Cost to complete, financing headroom, owner equity required, month by month."""
+    from .realestate import cash_requirement_schedule, project_status
+
+    f = _facts(facts)
+    t = date.fromisoformat(today)
+    s = project_status(f, today=t)
+    typer.echo(f"\nBudget {s.budget.format()}  spent {s.spent.format()} ({s.percent_spent:.0%})  cost to complete {s.cost_to_complete.format()} over {s.months_remaining} months")
+    typer.echo(f"Facilities {s.facility_limit.format()}  drawn {s.drawn.format()}  undrawn {s.undrawn.format()}  owner equity required {s.owner_equity_required.format()}")
+    typer.echo(f"Capitalised interest {s.capitalised_interest_estimate.format()}  total cost {s.total_project_cost.format()}  LTC {s.loan_to_cost:.0%}  LTV {s.loan_to_value:.0%}  equity created {s.equity_created.format() if s.equity_created else 'n/a'}")
+    typer.echo(f"\n  {'month':<9} {'spend':>13} {'draw':>13} {'owner':>13} {'interest':>11} {'loan balance':>14}")
+    for m in cash_requirement_schedule(f, today=t):
+        typer.echo(f"  {m.month.strftime('%b %Y'):<9} {m.spend.format():>13} {m.draw.format():>13} {m.owner_contribution.format():>13} {m.interest.format():>11} {m.facility_balance.format():>14}")
+
+
+@engagement_app.command("rental")
+def engagement_rental(facts: Path | None = typer.Argument(None)) -> None:
+    """The stabilised pro forma: NOI, coverage, cap rate, CCA, s.216 tax and withholding."""
+    from .realestate import rental_pro_forma
+    from .realestate.rental import PBRH_ACCELERATED_RATE
+
+    f = _facts(facts)
+    for label, p in (("Class 1 at 4%", rental_pro_forma(f)), ("Purpose-built rental at 10% (confirm)", rental_pro_forma(f, cca_rate=PBRH_ACCELERATED_RATE))):
+        typer.echo(f"\n{label}")
+        typer.echo(f"  gross rent {p.gross_potential_rent.format()}  vacancy {p.vacancy.format()}  opex {p.operating_expenses.format()}  mgmt {p.management_fee.format()}  NOI {p.net_operating_income.format()}")
+        typer.echo(f"  debt service {p.annual_debt_service.format()}  DSCR {p.dscr:.2f}x  cap rate {p.cap_rate:.2%}  cash flow {p.cash_flow_before_tax.format()}")
+        typer.echo(f"  supportable debt at {p.coverage_target}x {p.max_supportable_debt.format()}  over by {p.debt_over_supportable.format()}")
+        typer.echo(f"  net before CCA {p.net_rental_before_cca.format()}  CCA available {p.cca_available_year_one.format()}  claim {p.cca_claim.format()}  taxable {p.taxable_net_rental.format()}  s.216 tax (split) {p.section_216_tax_split.format()}")
+        typer.echo(f"  withholding without NR6 {p.withholding_without_nr6.format()}  with NR6 {p.withholding_with_nr6.format()}")
+
+
+@engagement_app.command("pack")
+def engagement_pack(
+    facts: Path | None = typer.Argument(None),
+    period_end: str = typer.Option("2026-09-30"),
+    out: Path | None = typer.Option(None),
+) -> None:
+    """The monthly Owner Finance Pack, on the synthetic project ledger until a live file is connected."""
+    from .connectors.fixture_development import build_development_project
+    from .realestate import owner_finance_pack, render_finance_pack
+    from .rules import RuleContext, run_rules
+
+    f = _facts(facts)
+    end = date.fromisoformat(period_end)
+    fx = build_development_project(f, end=end)
+    policy = dict(DEFAULT_POLICY)
+    policy.update({"authorised_posters": {"sync", "migration"}, "gst_registered": f.gst_registered,
+                   "construction_start_date": f.construction_start.isoformat() if f.construction_start else None,
+                   "project_completion_date": f.expected_completion.isoformat() if f.expected_completion else None,
+                   "facility_limits": {aid: str(fa.limit.to_decimal()) for aid, fa in zip(("2700", "2710"), f.facilities, strict=False)}})
+    ctx = RuleContext(ledger=fx.ledger, period_start=date(end.year, end.month, 1), period_end=end, fiscal_year_start=date(end.year, 1, 1),
+                      statements=tuple(fx.statements), policy=policy).prepare()
+    findings = run_rules(ctx, registry=REGISTRY).findings
+    budget = f.budget_mid
+    budgets = {"hard_costs": budget.scale(Decimal("0.78")), "soft_costs": budget.scale(Decimal("0.12")), "capitalised_interest": budget.scale(Decimal("0.03")),
+               "garden_suite": budget.scale(Decimal("0.07"))} if budget else {}
+    text = render_finance_pack(owner_finance_pack(ctx, f, findings, budget_by_category=budgets))
+    if out:
+        out.write_text(text, encoding="utf-8")
+        typer.echo(f"Finance pack written to {out}")
+    else:
+        typer.echo(text)
+
+
+@engagement_app.command("chart")
+def engagement_chart(as_json: bool = typer.Option(False, "--json")) -> None:
+    """The construction accounting chart of accounts to set up in QuickBooks."""
+    from .realestate.chart import chart_for_setup
+
+    rows = chart_for_setup()
+    if as_json:
+        typer.echo(json.dumps(rows, indent=2))
+        return
+    for a in rows:
+        typer.echo(f"  {a['number']}  {a['name']:<52s} {a['type']:<9s} {('Class ' + a['cca_class']) if a['cca_class'] and a['cca_class'] != 'n/a' else '':<9s} {a['note']}")

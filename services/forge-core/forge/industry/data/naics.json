@@ -236,5 +236,12 @@
     "description": "Any other type of business",
     "examples": "Other types of businesses not listed above",
     "icon": "🏢"
+  },
+  {
+    "code": "531110",
+    "label": "Residential Rental Property",
+    "description": "Owners and lessors of residential buildings and dwellings, including small multi-unit and purpose-built rental",
+    "examples": "Fourplex and small apartment owners, garden-suite and laneway rentals, purpose-built rental",
+    "icon": "🏢"
   }
 ]

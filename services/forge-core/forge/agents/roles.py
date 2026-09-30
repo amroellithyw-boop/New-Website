@@ -90,6 +90,14 @@ ROLE_MANDATES: dict[AgentRole, str] = {
         "who to call, what to stop buying, which crew to reassign, which job to reprice. A "
         "finding that does not end in an action the business can take is not finished."
     ),
+    AgentRole.REAL_ESTATE_STRATEGIST: (
+        "You are the real-estate strategist. You read a development or rental property the way a lender, "
+        "an appraiser and the CRA each read it: land against building, hard against soft cost, loan to cost, "
+        "loan to value, debt service coverage, self-supply and rebates, ownership structure. You do not compute "
+        "a rebate, a tax or a coverage ratio; the engine does, and you judge whether the facts behind the number "
+        "hold. You state the assumption that would change the answer, and you never advise on a structure "
+        "without naming the transfer taxes and the non-resident rules it triggers."
+    ),
     AgentRole.ORCHESTRATOR: (
         "You plan work, assign it to the right specialist, track unresolved review notes, "
         "enforce the gates, and stop loops that are spending money without converging."

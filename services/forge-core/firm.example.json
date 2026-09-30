@@ -25,7 +25,9 @@
     "accounts_pay": "200.00",
     "wsib": "75.00",
     "year_end": "225.00",
-    "cash_forecast": "250.00"
+    "cash_forecast": "250.00",
+    "project_accounting": "600.00",
+    "rental_property": "550.00"
   },
   "diagnostic_by_tier": {
     "start-up": "950.00",

@@ -10,6 +10,7 @@ from . import (  # noqa: F401  - imported for the registration side effect
     ar,
     benchmarks,
     debt_cash,
+    development,
     duplicates,
     fixed_assets,
     integrity,
@@ -22,5 +23,5 @@ from . import (  # noqa: F401  - imported for the registration side effect
 
 __all__ = [
     "integrity", "duplicates", "reconciliation", "variance", "benchmarks",
-    "ar", "ap", "tax", "payroll", "fixed_assets", "debt_cash", "profitability",
+    "ar", "ap", "tax", "payroll", "fixed_assets", "debt_cash", "profitability", "development",
 ]

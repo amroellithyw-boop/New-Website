@@ -69,6 +69,12 @@ SERVICES: dict[str, ServicePackage] = {
                        "Complete year-end file for the external CPA", ("year_end",), ("close", "fixed assets", "debt")),
         ServicePackage("cash_forecast", "Cash Flow Forecasting",
                        "13-week rolling cash forecast", ("cash_forecast",), ("treasury",)),
+        ServicePackage("project_accounting", "Construction Accounting + Owner Finance Pack",
+                       "Project books, draws, holdbacks, capitalised interest, GST/HST support file, monthly owner pack",
+                       ("development", "documents"), ("development", "integrity", "reconciliation", "tax")),
+        ServicePackage("rental_property", "Rental Property Accounting + Non-Resident Administration",
+                       "Rental bookkeeping, property reporting, NR6/NR4/s.216 administration, year-end schedules",
+                       ("rental", "tax_readiness"), ("integrity", "reconciliation", "tax", "fixed assets", "debt")),
         ServicePackage("cleanup", "Books Cleanup / Catch-Up",
                        "Historical cleanup for prior periods", ("cleanup",), ("integrity", "period control")),
     )

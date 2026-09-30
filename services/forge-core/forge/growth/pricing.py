@@ -24,6 +24,7 @@ SERVICE_FEES: dict[str, str] = {
     "hst": "150.00", "payroll": "45.00", "corporate_tax": "175.00", "management_rep": "300.00",
     "cfo_advisory": "900.00", "job_costing": "350.00", "accounts_rec": "200.00", "accounts_pay": "200.00",
     "wsib": "75.00", "year_end": "225.00", "cash_forecast": "250.00", "cleanup": "0.00",
+    "project_accounting": "600.00", "rental_property": "550.00",
 }
 PAYROLL_PER_EMPLOYEE = "18.00"
 VOLUME_PER_100_TXNS = "120.00"

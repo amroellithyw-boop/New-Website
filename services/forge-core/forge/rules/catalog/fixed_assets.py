@@ -131,6 +131,7 @@ class DepreciationReasonableness(Rule):
             (
                 r.presentation_balance
                 for r in ctx.tb.rows_of(subtype=AccountSubtype.FIXED_ASSET)
+                if "land" not in r.account.name.lower()
             ),
             ctx.currency,
         )

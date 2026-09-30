@@ -265,6 +265,7 @@ PREPARERS: dict[str, AgentRole] = {
     "risk": AgentRole.FPA_MANAGER,
     "benchmark": AgentRole.COMMERCIAL_ANALYST,
     "profitability": AgentRole.COMMERCIAL_ANALYST,
+    "development": AgentRole.CLOSE_ACCOUNTANT,
 }
 
 # Specialists added to the chain for material work in their own domain.
@@ -277,6 +278,7 @@ SPECIALIST_FOR: dict[str, AgentRole] = {
     "profitability": AgentRole.FINANCE_BUSINESS_PARTNER,
     "planning": AgentRole.FPA_MANAGER,
     "risk": AgentRole.FINANCE_BUSINESS_PARTNER,
+    "development": AgentRole.REAL_ESTATE_STRATEGIST,
 }
 
 

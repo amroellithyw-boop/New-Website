@@ -34,6 +34,7 @@ forge close --seeded      # the month-end checklist, each task proven
 forge tax calendar        # every filing deadline the profile implies
 forge brief               # the five things the owner needs to hear
 forge qbo connect --tenant sandbox   # authorise a QuickBooks company, read-only
+forge engagement plan     # a non-resident's fourplex: tax, ownership, HST and project plan
 ```
 
 No database, no API key and no network are required. A seeded synthetic
@@ -47,7 +48,7 @@ in about a tenth of a second.
 | Exact money arithmetic | Integer minor units; floats rejected at the constructor |
 | Canonical financial model | Accounts, transactions, parties, jobs, debt, open items, lineage on every record |
 | Deterministic engine | Trial balance, statements, aging, bank reconciliation, roll-forwards, anomaly features |
-| Control catalogue | 56 versioned controls, each with purpose, severity, evidence contract and remediation |
+| Control catalogue | 62 versioned controls, each with purpose, severity, evidence contract and remediation |
 | Evidence packets | Bounded, checksummed, with untrusted source text fenced as data |
 | Risk router | Deterministic tiering R0 to R4 that records its reasons |
 | Review hierarchy | Preparer, manager, controller, adversary, policy, VP, CFO, human |
@@ -60,6 +61,7 @@ in about a tenth of a second.
 | Learning | Per-client outcome log; dismissals suppress, acceptances become known patterns; critical never suppressed |
 | Operations | One-command client run, job plan per client, firm queue and daily brief across every client |
 | Growth | Pricing from the profile, proposals from the diagnostic, outreach drafts, pipeline |
+| Real estate | Development and rental engagements: self-supply and rebates, ownership comparison with transfer taxes, departure and non-resident filings, cost to complete, owner finance pack, six construction controls, the written action plan |
 | Work items | 16-state machine; cannot approve over an open note or act beyond approved scope |
 | Industry packs | 22 Canadian industries, 33 cost structures, 5 revenue tiers |
 | Canadian payroll | 2026 CPP, CPP2, EI, federal and Ontario tax, exact to the cent |
@@ -94,6 +96,7 @@ services/forge-core/          the engine, controls, agents and bench
   forge/learning/             outcomes that become suppressions and known patterns
   forge/operations/           client runs, job plans, the firm queue, the daily brief
   forge/growth/               pricing, proposals, outreach, pipeline
+  forge/realestate/           development and rental engagements, the action plan
   forge/agents/               contracts, model gateway, review loop
   forge/workitems/            risk scoring, routing, state machine
   forge/bench/                seeded defects and the release gate
@@ -108,6 +111,7 @@ docs/                         constitution, architecture, strategy, decisions
 | `docs/10-operating-manual.md` | How to run it day to day, what it cannot do yet and why, what is not right |
 | `docs/11-handover-checklist.md` | The six things only the owner can supply, step by step, and what is already done for each |
 | `docs/12-scope-language-for-legal-review.md` | Every sentence a client reads, ready for a lawyer |
+| `docs/13-real-estate-engagement.md` | The fourplex engagement, deliverable by deliverable: automated, judged, still yours |
 | `docs/00-product-constitution.md` | The rules that cannot be traded away for a demo |
 | `docs/01-architecture.md` | The layers, the decisions taken, and what each one costs |
 | `docs/02-commercial-strategy.md` | How this earns money, in what order, at what price |
